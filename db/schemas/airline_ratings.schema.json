@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "airhelp_score": {
+      "type": "number"
+    },
+    "iata": {
+      "pattern": "^[A-Z0-9]{2}$",
+      "type": "string"
+    },
+    "last_verified": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "skytrax_rating": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "iata",
+    "name",
+    "skytrax_rating",
+    "airhelp_score",
+    "last_verified"
+  ],
+  "title": "airline_ratings",
+  "type": "object"
+}

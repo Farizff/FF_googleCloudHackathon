@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "accommodation": {
+      "type": "object"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "days": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "disruption_log": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "flights": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "itinerary_id": {
+      "type": "string"
+    },
+    "share_url_token": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "confirmed",
+        "active",
+        "completed"
+      ]
+    },
+    "trip_id": {
+      "type": "string"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "type": "string"
+    }
+  },
+  "required": [
+    "itinerary_id",
+    "trip_id",
+    "created_at",
+    "updated_at",
+    "status",
+    "accommodation",
+    "days",
+    "flights"
+  ],
+  "title": "itineraries",
+  "type": "object"
+}

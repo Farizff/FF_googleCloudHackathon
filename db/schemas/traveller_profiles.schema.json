@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "age": {
+      "type": "number"
+    },
+    "budget_private": {
+      "type": "object"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "dietary": {
+      "type": "object"
+    },
+    "home_city_iata": {
+      "pattern": "^[A-Z]{3}$",
+      "type": "string"
+    },
+    "home_currency": {
+      "pattern": "^[A-Z]{3}$",
+      "type": "string"
+    },
+    "home_timezone": {
+      "type": "string"
+    },
+    "languages_spoken": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "mobility": {
+      "enum": [
+        "full",
+        "limited",
+        "wheelchair"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "nationality": {
+      "pattern": "^[A-Z]{3}$",
+      "type": "string"
+    },
+    "observance_blocks": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "passport_country": {
+      "pattern": "^[A-Z]{3}$",
+      "type": "string"
+    },
+    "physical_fitness": {
+      "enum": [
+        "low",
+        "average",
+        "high"
+      ]
+    },
+    "preferences": {
+      "type": "object"
+    },
+    "travel_dna": {
+      "type": "object"
+    },
+    "user_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_id",
+    "created_at",
+    "name",
+    "passport_country",
+    "home_currency",
+    "home_timezone",
+    "home_city_iata",
+    "dietary",
+    "mobility",
+    "preferences"
+  ],
+  "title": "traveller_profiles",
+  "type": "object"
+}

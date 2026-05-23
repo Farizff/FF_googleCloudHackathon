@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "admin_resolution": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "flock_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "message": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "pending",
+        "accepted",
+        "modified",
+        "declined"
+      ]
+    },
+    "submitted_by_user_id": {
+      "type": "string"
+    },
+    "suggestion_id": {
+      "type": "string"
+    },
+    "supporter_user_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "target_scope": {
+      "enum": [
+        "main_trip",
+        "flock",
+        "itinerary",
+        "expense"
+      ]
+    },
+    "trip_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "suggestion_id",
+    "trip_id",
+    "submitted_by_user_id",
+    "created_at",
+    "status",
+    "target_scope",
+    "message"
+  ],
+  "title": "suggestions",
+  "type": "object"
+}

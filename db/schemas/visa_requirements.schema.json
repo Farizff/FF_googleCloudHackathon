@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "destination_iso": {
+      "pattern": "^[A-Z]{3}$",
+      "type": "string"
+    },
+    "fee_usd_estimate": {
+      "type": "number"
+    },
+    "last_verified": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "official_url": {
+      "format": "uri",
+      "type": "string"
+    },
+    "passport_iso": {
+      "pattern": "^[A-Z]{3}$",
+      "type": "string"
+    },
+    "processing_days_max": {
+      "type": "number"
+    },
+    "processing_days_min": {
+      "type": "number"
+    },
+    "visa_required": {
+      "type": "boolean"
+    },
+    "visa_type": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "passport_iso",
+    "destination_iso",
+    "visa_required",
+    "visa_type",
+    "official_url",
+    "last_verified"
+  ],
+  "title": "visa_requirements",
+  "type": "object"
+}

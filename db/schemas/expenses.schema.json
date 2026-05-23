@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "amount": {
+      "type": "number"
+    },
+    "amount_usd": {
+      "type": "number"
+    },
+    "category": {
+      "enum": [
+        "food",
+        "transport",
+        "accommodation",
+        "activity",
+        "shopping",
+        "other"
+      ]
+    },
+    "currency": {
+      "pattern": "^[A-Z]{3}$",
+      "type": "string"
+    },
+    "custom_splits": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "day_number": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "exchange_rate_used": {
+      "type": "number"
+    },
+    "expense_id": {
+      "type": "string"
+    },
+    "flock_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "logged_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "logged_by_user_id": {
+      "type": "string"
+    },
+    "logging_mode": {
+      "enum": [
+        "everyone",
+        "specific_people",
+        "my_flock",
+        "just_me"
+      ]
+    },
+    "participants": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "split_type": {
+      "enum": [
+        "equal",
+        "custom"
+      ]
+    },
+    "trip_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "expense_id",
+    "trip_id",
+    "logged_by_user_id",
+    "logged_at",
+    "amount",
+    "currency",
+    "amount_usd",
+    "participants",
+    "logging_mode",
+    "split_type"
+  ],
+  "title": "expenses",
+  "type": "object"
+}

@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "all_members_budget_ok": {
+      "type": "boolean"
+    },
+    "contacts": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "destination_city": {
+      "type": "string"
+    },
+    "destination_country": {
+      "type": "string"
+    },
+    "destination_iata": {
+      "pattern": "^[A-Z]{3}$",
+      "type": "string"
+    },
+    "group_type": {
+      "enum": [
+        "friends",
+        "family",
+        "office"
+      ]
+    },
+    "invite_token": {
+      "type": "string"
+    },
+    "jet_lag_override": {
+      "type": "boolean"
+    },
+    "members": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "office_details": {
+      "type": "object"
+    },
+    "shared_budget_estimate_usd": {
+      "type": "number"
+    },
+    "special_occasion": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "enum": [
+        "planning",
+        "confirmed",
+        "active",
+        "completed"
+      ]
+    },
+    "trip_id": {
+      "type": "string"
+    },
+    "trip_mode": {
+      "enum": [
+        "international",
+        "domestic"
+      ]
+    }
+  },
+  "required": [
+    "trip_id",
+    "created_at",
+    "invite_token",
+    "group_type",
+    "trip_mode",
+    "status",
+    "destination_city",
+    "destination_country",
+    "destination_iata",
+    "members"
+  ],
+  "title": "group_trips",
+  "type": "object"
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "airline_iata": {
+      "pattern": "^[A-Z0-9]{2}$",
+      "type": "string"
+    },
+    "average_delay_minutes": {
+      "type": "number"
+    },
+    "cancellation_pct": {
+      "type": "number"
+    },
+    "departure_time_reliability": {
+      "type": "object"
+    },
+    "destination_iata": {
+      "pattern": "^[A-Z]{3}$",
+      "type": "string"
+    },
+    "flight_number": {
+      "type": "string"
+    },
+    "last_verified": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "on_time_pct": {
+      "type": "number"
+    },
+    "origin_iata": {
+      "pattern": "^[A-Z]{3}$",
+      "type": "string"
+    },
+    "route_key": {
+      "type": "string"
+    },
+    "sample_size": {
+      "type": "number"
+    },
+    "seasonal_risk": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "route_key",
+    "airline_iata",
+    "origin_iata",
+    "destination_iata",
+    "on_time_pct",
+    "departure_time_reliability",
+    "seasonal_risk"
+  ],
+  "title": "flight_performance",
+  "type": "object"
+}

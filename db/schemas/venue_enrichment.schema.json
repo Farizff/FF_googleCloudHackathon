@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "category_pattern": {
+      "type": "string"
+    },
+    "child_friendly": {
+      "type": "boolean"
+    },
+    "crowd_peak_weekday": {
+      "type": "object"
+    },
+    "crowd_peak_weekend": {
+      "type": "object"
+    },
+    "customs": {
+      "type": "object"
+    },
+    "dietary_relevance": {
+      "type": "string"
+    },
+    "elderly_friendly": {
+      "type": "boolean"
+    },
+    "estimated_duration_minutes": {
+      "type": "number"
+    },
+    "google_place_types": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "physical_intensity": {
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "wheelchair_accessibility": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "category_pattern",
+    "google_place_types",
+    "physical_intensity",
+    "estimated_duration_minutes",
+    "customs"
+  ],
+  "title": "venue_enrichment",
+  "type": "object"
+}

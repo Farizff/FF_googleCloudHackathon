@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "channel": {
+      "enum": [
+        "email",
+        "in_app",
+        "sms"
+      ]
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "error": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "language": {
+      "type": "string"
+    },
+    "notification_id": {
+      "type": "string"
+    },
+    "recipient": {
+      "type": "object"
+    },
+    "sent_at": {
+      "format": "date-time",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "enum": [
+        "pending",
+        "sent",
+        "failed",
+        "skipped"
+      ]
+    },
+    "template": {
+      "type": "string"
+    },
+    "trip_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "notification_id",
+    "trip_id",
+    "recipient",
+    "channel",
+    "status",
+    "created_at"
+  ],
+  "title": "notification_log",
+  "type": "object"
+}
