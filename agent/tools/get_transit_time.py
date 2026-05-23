@@ -39,7 +39,4 @@ def _group_transport_note(group_size: int) -> str | None:
         return None
 
     taxi_count = ceil(group_size / TAXI_CAPACITY)
-    return (
-        f"For {group_size} people, consider a chartered minibus (~0 transfers) "
-        f"or {taxi_count} taxis (~5 total)."
-    )
+    return f"{group_size} people: chartered minibus (~$80) or {taxi_count} taxis (~$95 total)."

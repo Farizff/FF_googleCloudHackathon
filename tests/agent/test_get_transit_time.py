@@ -109,5 +109,5 @@ def test_get_transit_time_adds_group_transport_note_for_large_groups():
         "duration_minutes": 15,
         "distance_km": 4.2,
         "mode": "driving",
-        "group_transport_note": "For 10 people, consider a chartered minibus (~0 transfers) or 3 taxis (~5 total).",
+        "group_transport_note": "10 people: chartered minibus (~$80) or 3 taxis (~$95 total).",
     }
