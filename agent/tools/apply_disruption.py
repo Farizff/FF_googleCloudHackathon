@@ -78,6 +78,7 @@ def apply_disruption(
     return {
         "alternatives": _label_three_options(ranked),
         "available_window_minutes": available_minutes,
+        "last_disruption_at": created_at,
         "notification_context": {
             "event_description": description,
             "changes_summary": "Day rebuilt with alternatives near current location.",

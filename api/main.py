@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 
+from api.routes.disruptions import router as disruptions_router
+
 app = FastAPI(title="Bounce API", version="v0")
+app.include_router(disruptions_router)
 
 
 @app.get("/health")
