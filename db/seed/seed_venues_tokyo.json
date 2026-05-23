@@ -1,0 +1,653 @@
+[
+  {
+    "venue_id": "tokyo_001_sensoji_temple",
+    "name": "Senso-ji Temple",
+    "category": "temple",
+    "coordinates": {
+      "lat": 35.7148,
+      "lng": 139.7967
+    },
+    "cluster": "asakusa_ueno",
+    "opening_hours": {
+      "open": "06:00",
+      "close": "17:00"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 75,
+    "price_level": "free",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_002_asakusa_nakamise",
+    "name": "Nakamise-dori Street",
+    "category": "shopping_street",
+    "coordinates": {
+      "lat": 35.7118,
+      "lng": 139.7964
+    },
+    "cluster": "asakusa_ueno",
+    "opening_hours": {
+      "open": "10:00",
+      "close": "18:00"
+    },
+    "dietary_tags": [
+      "street_food",
+      "vegetarian"
+    ],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": false
+    },
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 60,
+    "price_level": "low",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_003_ueno_park",
+    "name": "Ueno Park",
+    "category": "park",
+    "coordinates": {
+      "lat": 35.7156,
+      "lng": 139.7745
+    },
+    "cluster": "asakusa_ueno",
+    "opening_hours": {
+      "open": "05:00",
+      "close": "23:00"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 120,
+    "price_level": "free",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_004_tokyo_national_museum",
+    "name": "Tokyo National Museum",
+    "category": "museum",
+    "coordinates": {
+      "lat": 35.7188,
+      "lng": 139.7765
+    },
+    "cluster": "asakusa_ueno",
+    "opening_hours": {
+      "open": "09:30",
+      "close": "17:00"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 150,
+    "price_level": "medium",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_005_yanaka_ginza",
+    "name": "Yanaka Ginza",
+    "category": "shopping_street",
+    "coordinates": {
+      "lat": 35.7278,
+      "lng": 139.7668
+    },
+    "cluster": "asakusa_ueno",
+    "opening_hours": {
+      "open": "10:00",
+      "close": "18:00"
+    },
+    "dietary_tags": [
+      "street_food",
+      "dessert"
+    ],
+    "mobility": {
+      "wheelchair_accessible": false,
+      "stairs_required": true,
+      "rest_seating": false
+    },
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 90,
+    "price_level": "low",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_006_tsukiji_outer_market",
+    "name": "Tsukiji Outer Market",
+    "category": "market",
+    "coordinates": {
+      "lat": 35.6655,
+      "lng": 139.7707
+    },
+    "cluster": "ginza_tsukiji",
+    "opening_hours": {
+      "open": "05:00",
+      "close": "14:00"
+    },
+    "dietary_tags": [
+      "seafood",
+      "street_food"
+    ],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": false
+    },
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 120,
+    "price_level": "medium",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_007_ginza_six",
+    "name": "GINZA SIX",
+    "category": "department_store",
+    "coordinates": {
+      "lat": 35.6696,
+      "lng": 139.764
+    },
+    "cluster": "ginza_tsukiji",
+    "opening_hours": {
+      "open": "10:30",
+      "close": "20:30"
+    },
+    "dietary_tags": [
+      "vegetarian",
+      "dessert"
+    ],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 90,
+    "price_level": "high",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_008_hamarikyu_gardens",
+    "name": "Hama-rikyu Gardens",
+    "category": "garden",
+    "coordinates": {
+      "lat": 35.6597,
+      "lng": 139.7635
+    },
+    "cluster": "ginza_tsukiji",
+    "opening_hours": {
+      "open": "09:00",
+      "close": "17:00"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 90,
+    "price_level": "low",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_009_tokyo_station",
+    "name": "Tokyo Station Marunouchi",
+    "category": "transit_landmark",
+    "coordinates": {
+      "lat": 35.6812,
+      "lng": 139.7671
+    },
+    "cluster": "ginza_tsukiji",
+    "opening_hours": {
+      "open": "05:00",
+      "close": "23:30"
+    },
+    "dietary_tags": [
+      "vegetarian",
+      "halal_options"
+    ],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 45,
+    "price_level": "free",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_010_mori_art_museum",
+    "name": "Mori Art Museum",
+    "category": "museum",
+    "coordinates": {
+      "lat": 35.6605,
+      "lng": 139.7292
+    },
+    "cluster": "roppongi_azabudai",
+    "opening_hours": {
+      "open": "10:00",
+      "close": "22:00"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 120,
+    "price_level": "medium",
+    "booking_required": true
+  },
+  {
+    "venue_id": "tokyo_011_tokyo_city_view",
+    "name": "Tokyo City View",
+    "category": "observation_deck",
+    "coordinates": {
+      "lat": 35.6604,
+      "lng": 139.7291
+    },
+    "cluster": "roppongi_azabudai",
+    "opening_hours": {
+      "open": "10:00",
+      "close": "22:00"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 75,
+    "price_level": "medium",
+    "booking_required": true
+  },
+  {
+    "venue_id": "tokyo_012_teamlab_borderless",
+    "name": "teamLab Borderless",
+    "category": "immersive_museum",
+    "coordinates": {
+      "lat": 35.6427,
+      "lng": 139.7404
+    },
+    "cluster": "odaiba_azabudai",
+    "opening_hours": {
+      "open": "10:00",
+      "close": "21:00"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": false
+    },
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 150,
+    "price_level": "high",
+    "booking_required": true
+  },
+  {
+    "venue_id": "tokyo_013_tokyo_tower",
+    "name": "Tokyo Tower",
+    "category": "observation_deck",
+    "coordinates": {
+      "lat": 35.6586,
+      "lng": 139.7454
+    },
+    "cluster": "roppongi_azabudai",
+    "opening_hours": {
+      "open": "09:00",
+      "close": "22:30"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 90,
+    "price_level": "medium",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_014_zojoji_temple",
+    "name": "Zojo-ji Temple",
+    "category": "temple",
+    "coordinates": {
+      "lat": 35.6574,
+      "lng": 139.7482
+    },
+    "cluster": "roppongi_azabudai",
+    "opening_hours": {
+      "open": "09:00",
+      "close": "17:00"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 60,
+    "price_level": "free",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_015_takeshita_street",
+    "name": "Takeshita Street",
+    "category": "shopping_street",
+    "coordinates": {
+      "lat": 35.6717,
+      "lng": 139.705
+    },
+    "cluster": "harajuku_shibuya",
+    "opening_hours": {
+      "open": "10:00",
+      "close": "20:00"
+    },
+    "dietary_tags": [
+      "dessert",
+      "street_food",
+      "vegetarian"
+    ],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": false
+    },
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 90,
+    "price_level": "low",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_016_meiji_jingu",
+    "name": "Meiji Jingu Shrine",
+    "category": "shrine",
+    "coordinates": {
+      "lat": 35.6764,
+      "lng": 139.6993
+    },
+    "cluster": "harajuku_shibuya",
+    "opening_hours": {
+      "open": "05:00",
+      "close": "18:00"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 90,
+    "price_level": "free",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_017_yoyogi_park",
+    "name": "Yoyogi Park",
+    "category": "park",
+    "coordinates": {
+      "lat": 35.6717,
+      "lng": 139.6949
+    },
+    "cluster": "harajuku_shibuya",
+    "opening_hours": {
+      "open": "05:00",
+      "close": "20:00"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 90,
+    "price_level": "free",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_018_shibuya_crossing",
+    "name": "Shibuya Crossing",
+    "category": "landmark",
+    "coordinates": {
+      "lat": 35.6595,
+      "lng": 139.7005
+    },
+    "cluster": "harajuku_shibuya",
+    "opening_hours": {
+      "open": "05:00",
+      "close": "23:30"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": false
+    },
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 45,
+    "price_level": "free",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_019_shibuya_sky",
+    "name": "Shibuya Sky",
+    "category": "observation_deck",
+    "coordinates": {
+      "lat": 35.6585,
+      "lng": 139.702
+    },
+    "cluster": "harajuku_shibuya",
+    "opening_hours": {
+      "open": "10:00",
+      "close": "22:30"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 75,
+    "price_level": "medium",
+    "booking_required": true
+  },
+  {
+    "venue_id": "tokyo_020_omotesando_hills",
+    "name": "Omotesando Hills",
+    "category": "department_store",
+    "coordinates": {
+      "lat": 35.6675,
+      "lng": 139.708
+    },
+    "cluster": "harajuku_shibuya",
+    "opening_hours": {
+      "open": "11:00",
+      "close": "20:00"
+    },
+    "dietary_tags": [
+      "vegetarian",
+      "dessert"
+    ],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 75,
+    "price_level": "high",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_021_shinjuku_station_east_exit",
+    "name": "Shinjuku Station East Exit",
+    "category": "meeting_point",
+    "coordinates": {
+      "lat": 35.6917,
+      "lng": 139.7013
+    },
+    "cluster": "shinjuku",
+    "opening_hours": {
+      "open": "05:00",
+      "close": "23:30"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": false
+    },
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 30,
+    "price_level": "free",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_022_shinjuku_gyoen",
+    "name": "Shinjuku Gyoen National Garden",
+    "category": "garden",
+    "coordinates": {
+      "lat": 35.6852,
+      "lng": 139.71
+    },
+    "cluster": "shinjuku",
+    "opening_hours": {
+      "open": "09:00",
+      "close": "17:30"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 120,
+    "price_level": "low",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_023_tokyo_metropolitan_government_observatory",
+    "name": "Tokyo Metropolitan Government Observatory",
+    "category": "observation_deck",
+    "coordinates": {
+      "lat": 35.6896,
+      "lng": 139.6917
+    },
+    "cluster": "shinjuku",
+    "opening_hours": {
+      "open": "09:30",
+      "close": "22:00"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 60,
+    "price_level": "free",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_024_omoide_yokocho",
+    "name": "Omoide Yokocho",
+    "category": "restaurant",
+    "coordinates": {
+      "lat": 35.6934,
+      "lng": 139.7007
+    },
+    "cluster": "shinjuku",
+    "opening_hours": {
+      "open": "12:00",
+      "close": "23:00"
+    },
+    "dietary_tags": [
+      "yakitori",
+      "vegetarian_limited"
+    ],
+    "mobility": {
+      "wheelchair_accessible": false,
+      "stairs_required": false,
+      "rest_seating": false
+    },
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 90,
+    "price_level": "medium",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_025_golden_gai",
+    "name": "Golden Gai",
+    "category": "nightlife",
+    "coordinates": {
+      "lat": 35.6941,
+      "lng": 139.7046
+    },
+    "cluster": "shinjuku",
+    "opening_hours": {
+      "open": "17:00",
+      "close": "23:30"
+    },
+    "dietary_tags": [
+      "vegetarian_limited"
+    ],
+    "mobility": {
+      "wheelchair_accessible": false,
+      "stairs_required": true,
+      "rest_seating": false
+    },
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 120,
+    "price_level": "medium",
+    "booking_required": false
+  },
+  {
+    "venue_id": "tokyo_026_odaiba_seaside_park",
+    "name": "Odaiba Seaside Park",
+    "category": "park",
+    "coordinates": {
+      "lat": 35.6297,
+      "lng": 139.7775
+    },
+    "cluster": "odaiba_azabudai",
+    "opening_hours": {
+      "open": "05:00",
+      "close": "23:00"
+    },
+    "dietary_tags": [],
+    "mobility": {
+      "wheelchair_accessible": true,
+      "stairs_required": false,
+      "rest_seating": true
+    },
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 90,
+    "price_level": "free",
+    "booking_required": false
+  }
+]
