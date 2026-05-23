@@ -1,0 +1,211 @@
+[
+  {
+    "category_pattern": "market",
+    "google_place_types": [
+      "market",
+      "tourist_attraction",
+      "food"
+    ],
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 90,
+    "crowd_peak_weekday": {
+      "start": "10:00",
+      "end": "13:00"
+    },
+    "crowd_peak_weekend": {
+      "start": "09:00",
+      "end": "15:00"
+    },
+    "customs": {
+      "photography_allowed": "ask vendors before close-ups",
+      "behavioural_notes": "keep to walking lanes, queue politely, and avoid touching produce unless buying"
+    },
+    "dietary_relevance": "high",
+    "child_friendly": true,
+    "elderly_friendly": true,
+    "wheelchair_accessibility": "varies"
+  },
+  {
+    "category_pattern": "meeting_point",
+    "google_place_types": [
+      "point_of_interest",
+      "transit_station",
+      "tourist_attraction"
+    ],
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 30,
+    "crowd_peak_weekday": {
+      "start": "08:00",
+      "end": "10:00"
+    },
+    "crowd_peak_weekend": {
+      "start": "12:00",
+      "end": "16:00"
+    },
+    "customs": {
+      "photography_allowed": "usually allowed",
+      "behavioural_notes": "choose a visible landmark, confirm exits or gate numbers, and keep group messages brief"
+    },
+    "dietary_relevance": "none",
+    "child_friendly": true,
+    "elderly_friendly": true,
+    "wheelchair_accessibility": "full"
+  },
+  {
+    "category_pattern": "museum",
+    "google_place_types": [
+      "museum",
+      "art_gallery",
+      "tourist_attraction"
+    ],
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 120,
+    "crowd_peak_weekday": {
+      "start": "11:00",
+      "end": "15:00"
+    },
+    "crowd_peak_weekend": {
+      "start": "10:00",
+      "end": "17:00"
+    },
+    "customs": {
+      "photography_allowed": "no flash unless explicitly permitted",
+      "behavioural_notes": "keep voices low, avoid food or drink in galleries, and follow exhibit flow"
+    },
+    "dietary_relevance": "low",
+    "child_friendly": true,
+    "elderly_friendly": true,
+    "wheelchair_accessibility": "full"
+  },
+  {
+    "category_pattern": "observation_deck",
+    "google_place_types": [
+      "tourist_attraction",
+      "point_of_interest"
+    ],
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 75,
+    "crowd_peak_weekday": {
+      "start": "16:00",
+      "end": "19:00"
+    },
+    "crowd_peak_weekend": {
+      "start": "15:00",
+      "end": "20:00"
+    },
+    "customs": {
+      "photography_allowed": "usually allowed without tripods",
+      "behavioural_notes": "book timed entry when possible, keep balcony rails clear, and expect sunset queues"
+    },
+    "dietary_relevance": "none",
+    "child_friendly": true,
+    "elderly_friendly": true,
+    "wheelchair_accessibility": "full"
+  },
+  {
+    "category_pattern": "park",
+    "google_place_types": [
+      "park",
+      "tourist_attraction",
+      "point_of_interest"
+    ],
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 90,
+    "crowd_peak_weekday": {
+      "start": "11:00",
+      "end": "14:00"
+    },
+    "crowd_peak_weekend": {
+      "start": "10:00",
+      "end": "16:00"
+    },
+    "customs": {
+      "photography_allowed": "allowed in public areas",
+      "behavioural_notes": "stay on marked paths, pack out rubbish, and check seasonal closure areas"
+    },
+    "dietary_relevance": "low",
+    "child_friendly": true,
+    "elderly_friendly": true,
+    "wheelchair_accessibility": "partial"
+  },
+  {
+    "category_pattern": "restaurant",
+    "google_place_types": [
+      "restaurant",
+      "food",
+      "point_of_interest"
+    ],
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 90,
+    "crowd_peak_weekday": {
+      "start": "12:00",
+      "end": "14:00"
+    },
+    "crowd_peak_weekend": {
+      "start": "18:00",
+      "end": "21:00"
+    },
+    "customs": {
+      "photography_allowed": "ask before photographing staff or other diners",
+      "behavioural_notes": "confirm allergies early, arrive on time for reservations, and follow local tipping norms"
+    },
+    "dietary_relevance": "high",
+    "child_friendly": true,
+    "elderly_friendly": true,
+    "wheelchair_accessibility": "varies"
+  },
+  {
+    "category_pattern": "shopping_street",
+    "google_place_types": [
+      "shopping_mall",
+      "store",
+      "tourist_attraction"
+    ],
+    "physical_intensity": "medium",
+    "estimated_duration_minutes": 90,
+    "crowd_peak_weekday": {
+      "start": "15:00",
+      "end": "18:00"
+    },
+    "crowd_peak_weekend": {
+      "start": "12:00",
+      "end": "19:00"
+    },
+    "customs": {
+      "photography_allowed": "usually allowed in streets; ask inside shops",
+      "behavioural_notes": "keep left or follow local walking flow, do not block storefronts, and set a regroup point"
+    },
+    "dietary_relevance": "medium",
+    "child_friendly": true,
+    "elderly_friendly": false,
+    "wheelchair_accessibility": "varies"
+  },
+  {
+    "category_pattern": "temple",
+    "google_place_types": [
+      "place_of_worship",
+      "tourist_attraction",
+      "point_of_interest"
+    ],
+    "physical_intensity": "low",
+    "estimated_duration_minutes": 60,
+    "crowd_peak_weekday": {
+      "start": "10:00",
+      "end": "14:00"
+    },
+    "crowd_peak_weekend": {
+      "start": "09:00",
+      "end": "16:00"
+    },
+    "customs": {
+      "dress_code": "covered shoulders and knees recommended",
+      "shoes_off": true,
+      "photography_allowed": "exterior usually allowed; ask before interiors or rituals",
+      "behavioural_notes": "remain quiet, avoid pointing feet at altars, and follow cleansing or offering signs"
+    },
+    "dietary_relevance": "none",
+    "child_friendly": true,
+    "elderly_friendly": true,
+    "wheelchair_accessibility": "varies"
+  }
+]
