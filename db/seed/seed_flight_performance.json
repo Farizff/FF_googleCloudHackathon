@@ -1,0 +1,797 @@
+[
+  {
+    "route_id": "jfk_nrt_budget_ua79",
+    "route_key": "JFK-NRT",
+    "origin_iata": "JFK",
+    "destination_iata": "NRT",
+    "airline_iata": "UA",
+    "airline_name": "United Airlines",
+    "flight_number": "UA79",
+    "option_tier": "budget",
+    "stops": 1,
+    "connection_minutes": 105,
+    "scheduled_departure_local": "2026-07-03T11:15:00-04:00",
+    "scheduled_arrival_local": "2026-07-04T15:10:00+09:00",
+    "duration_minutes": 955,
+    "estimated_price_usd": 790,
+    "risk_score": 66,
+    "risk_tier": "moderate",
+    "on_time_pct": 0.68,
+    "average_delay_minutes": 34,
+    "cancellation_pct": 0.022,
+    "sample_size": 760,
+    "departure_time_reliability": {
+      "early_morning": 88,
+      "morning": 82,
+      "afternoon": 70,
+      "evening": 65
+    },
+    "seasonal_risk": {
+      "01": {
+        "risk_multiplier": 1.05,
+        "notes": "Winter weather can cause delays."
+      },
+      "03": {
+        "risk_multiplier": 1.0,
+        "notes": "Typical spring performance."
+      },
+      "07": {
+        "risk_multiplier": 1.12,
+        "notes": "Summer storms and peak travel add delay risk."
+      },
+      "12": {
+        "risk_multiplier": 1.08,
+        "notes": "Holiday volume increases congestion."
+      }
+    },
+    "judge_fallback": {
+      "enabled": false,
+      "demo_event": null,
+      "fallback_reason": null,
+      "status_override": null
+    },
+    "last_verified": "2026-05-23"
+  },
+  {
+    "route_id": "jfk_nrt_premium_jl5",
+    "route_key": "JFK-NRT",
+    "origin_iata": "JFK",
+    "destination_iata": "NRT",
+    "airline_iata": "JL",
+    "airline_name": "Japan Airlines",
+    "flight_number": "JL5",
+    "option_tier": "premium",
+    "stops": 0,
+    "connection_minutes": 0,
+    "scheduled_departure_local": "2026-07-03T13:30:00-04:00",
+    "scheduled_arrival_local": "2026-07-04T17:00:00+09:00",
+    "duration_minutes": 870,
+    "estimated_price_usd": 1380,
+    "risk_score": 79,
+    "risk_tier": "low",
+    "on_time_pct": 0.81,
+    "average_delay_minutes": 20,
+    "cancellation_pct": 0.011,
+    "sample_size": 910,
+    "departure_time_reliability": {
+      "early_morning": 88,
+      "morning": 82,
+      "afternoon": 70,
+      "evening": 65
+    },
+    "seasonal_risk": {
+      "01": {
+        "risk_multiplier": 1.05,
+        "notes": "Winter weather can cause delays."
+      },
+      "03": {
+        "risk_multiplier": 1.0,
+        "notes": "Typical spring performance."
+      },
+      "07": {
+        "risk_multiplier": 1.12,
+        "notes": "Summer storms and peak travel add delay risk."
+      },
+      "12": {
+        "risk_multiplier": 1.08,
+        "notes": "Holiday volume increases congestion."
+      }
+    },
+    "judge_fallback": {
+      "enabled": false,
+      "demo_event": null,
+      "fallback_reason": null,
+      "status_override": null
+    },
+    "last_verified": "2026-05-23"
+  },
+  {
+    "route_id": "jfk_nrt_recommended_nh109",
+    "route_key": "JFK-NRT",
+    "origin_iata": "JFK",
+    "destination_iata": "NRT",
+    "airline_iata": "NH",
+    "airline_name": "All Nippon Airways",
+    "flight_number": "NH109",
+    "option_tier": "recommended",
+    "stops": 0,
+    "connection_minutes": 0,
+    "scheduled_departure_local": "2026-07-03T13:05:00-04:00",
+    "scheduled_arrival_local": "2026-07-04T16:40:00+09:00",
+    "duration_minutes": 875,
+    "estimated_price_usd": 1040,
+    "risk_score": 81,
+    "risk_tier": "low",
+    "on_time_pct": 0.83,
+    "average_delay_minutes": 18,
+    "cancellation_pct": 0.009,
+    "sample_size": 980,
+    "departure_time_reliability": {
+      "early_morning": 88,
+      "morning": 82,
+      "afternoon": 70,
+      "evening": 65
+    },
+    "seasonal_risk": {
+      "01": {
+        "risk_multiplier": 1.05,
+        "notes": "Winter weather can cause delays."
+      },
+      "03": {
+        "risk_multiplier": 1.0,
+        "notes": "Typical spring performance."
+      },
+      "07": {
+        "risk_multiplier": 1.12,
+        "notes": "Summer storms and peak travel add delay risk."
+      },
+      "12": {
+        "risk_multiplier": 1.08,
+        "notes": "Holiday volume increases congestion."
+      }
+    },
+    "judge_fallback": {
+      "enabled": false,
+      "demo_event": null,
+      "fallback_reason": null,
+      "status_override": null
+    },
+    "last_verified": "2026-05-23"
+  },
+  {
+    "route_id": "lax_nrt_budget_dl166",
+    "route_key": "LAX-NRT",
+    "origin_iata": "LAX",
+    "destination_iata": "NRT",
+    "airline_iata": "DL",
+    "airline_name": "Delta Air Lines",
+    "flight_number": "DL166",
+    "option_tier": "budget",
+    "stops": 1,
+    "connection_minutes": 85,
+    "scheduled_departure_local": "2026-07-03T09:45:00-07:00",
+    "scheduled_arrival_local": "2026-07-04T14:30:00+09:00",
+    "duration_minutes": 825,
+    "estimated_price_usd": 640,
+    "risk_score": 69,
+    "risk_tier": "moderate",
+    "on_time_pct": 0.71,
+    "average_delay_minutes": 28,
+    "cancellation_pct": 0.02,
+    "sample_size": 810,
+    "departure_time_reliability": {
+      "early_morning": 88,
+      "morning": 82,
+      "afternoon": 70,
+      "evening": 65
+    },
+    "seasonal_risk": {
+      "01": {
+        "risk_multiplier": 1.05,
+        "notes": "Winter weather can cause delays."
+      },
+      "03": {
+        "risk_multiplier": 1.0,
+        "notes": "Typical spring performance."
+      },
+      "07": {
+        "risk_multiplier": 1.12,
+        "notes": "Summer storms and peak travel add delay risk."
+      },
+      "12": {
+        "risk_multiplier": 1.08,
+        "notes": "Holiday volume increases congestion."
+      }
+    },
+    "judge_fallback": {
+      "enabled": false,
+      "demo_event": null,
+      "fallback_reason": null,
+      "status_override": null
+    },
+    "last_verified": "2026-05-23"
+  },
+  {
+    "route_id": "lax_nrt_premium_nh105",
+    "route_key": "LAX-NRT",
+    "origin_iata": "LAX",
+    "destination_iata": "NRT",
+    "airline_iata": "NH",
+    "airline_name": "All Nippon Airways",
+    "flight_number": "NH105",
+    "option_tier": "premium",
+    "stops": 0,
+    "connection_minutes": 0,
+    "scheduled_departure_local": "2026-07-03T00:50:00-07:00",
+    "scheduled_arrival_local": "2026-07-04T05:00:00+09:00",
+    "duration_minutes": 700,
+    "estimated_price_usd": 1220,
+    "risk_score": 80,
+    "risk_tier": "low",
+    "on_time_pct": 0.82,
+    "average_delay_minutes": 18,
+    "cancellation_pct": 0.01,
+    "sample_size": 920,
+    "departure_time_reliability": {
+      "early_morning": 88,
+      "morning": 82,
+      "afternoon": 70,
+      "evening": 65
+    },
+    "seasonal_risk": {
+      "01": {
+        "risk_multiplier": 1.05,
+        "notes": "Winter weather can cause delays."
+      },
+      "03": {
+        "risk_multiplier": 1.0,
+        "notes": "Typical spring performance."
+      },
+      "07": {
+        "risk_multiplier": 1.12,
+        "notes": "Summer storms and peak travel add delay risk."
+      },
+      "12": {
+        "risk_multiplier": 1.08,
+        "notes": "Holiday volume increases congestion."
+      }
+    },
+    "judge_fallback": {
+      "enabled": false,
+      "demo_event": null,
+      "fallback_reason": null,
+      "status_override": null
+    },
+    "last_verified": "2026-05-23"
+  },
+  {
+    "route_id": "lax_nrt_recommended_jl62",
+    "route_key": "LAX-NRT",
+    "origin_iata": "LAX",
+    "destination_iata": "NRT",
+    "airline_iata": "JL",
+    "airline_name": "Japan Airlines",
+    "flight_number": "JL62",
+    "option_tier": "recommended",
+    "stops": 0,
+    "connection_minutes": 0,
+    "scheduled_departure_local": "2026-07-03T13:20:00-07:00",
+    "scheduled_arrival_local": "2026-07-04T16:45:00+09:00",
+    "duration_minutes": 685,
+    "estimated_price_usd": 870,
+    "risk_score": 82,
+    "risk_tier": "low",
+    "on_time_pct": 0.84,
+    "average_delay_minutes": 16,
+    "cancellation_pct": 0.008,
+    "sample_size": 1100,
+    "departure_time_reliability": {
+      "early_morning": 88,
+      "morning": 82,
+      "afternoon": 70,
+      "evening": 65
+    },
+    "seasonal_risk": {
+      "01": {
+        "risk_multiplier": 1.05,
+        "notes": "Winter weather can cause delays."
+      },
+      "03": {
+        "risk_multiplier": 1.0,
+        "notes": "Typical spring performance."
+      },
+      "07": {
+        "risk_multiplier": 1.12,
+        "notes": "Summer storms and peak travel add delay risk."
+      },
+      "12": {
+        "risk_multiplier": 1.08,
+        "notes": "Holiday volume increases congestion."
+      }
+    },
+    "judge_fallback": {
+      "enabled": false,
+      "demo_event": null,
+      "fallback_reason": null,
+      "status_override": null
+    },
+    "last_verified": "2026-05-23"
+  },
+  {
+    "route_id": "ord_nrt_budget_ua881",
+    "route_key": "ORD-NRT",
+    "origin_iata": "ORD",
+    "destination_iata": "NRT",
+    "airline_iata": "UA",
+    "airline_name": "United Airlines",
+    "flight_number": "UA881",
+    "option_tier": "budget",
+    "stops": 1,
+    "connection_minutes": 110,
+    "scheduled_departure_local": "2026-07-03T10:00:00-05:00",
+    "scheduled_arrival_local": "2026-07-04T18:05:00+09:00",
+    "duration_minutes": 965,
+    "estimated_price_usd": 720,
+    "risk_score": 64,
+    "risk_tier": "moderate",
+    "on_time_pct": 0.66,
+    "average_delay_minutes": 38,
+    "cancellation_pct": 0.025,
+    "sample_size": 670,
+    "departure_time_reliability": {
+      "early_morning": 88,
+      "morning": 82,
+      "afternoon": 70,
+      "evening": 65
+    },
+    "seasonal_risk": {
+      "01": {
+        "risk_multiplier": 1.05,
+        "notes": "Winter weather can cause delays."
+      },
+      "03": {
+        "risk_multiplier": 1.0,
+        "notes": "Typical spring performance."
+      },
+      "07": {
+        "risk_multiplier": 1.12,
+        "notes": "Summer storms and peak travel add delay risk."
+      },
+      "12": {
+        "risk_multiplier": 1.08,
+        "notes": "Holiday volume increases congestion."
+      }
+    },
+    "judge_fallback": {
+      "enabled": false,
+      "demo_event": null,
+      "fallback_reason": null,
+      "status_override": null
+    },
+    "last_verified": "2026-05-23"
+  },
+  {
+    "route_id": "ord_nrt_premium_jl9",
+    "route_key": "ORD-NRT",
+    "origin_iata": "ORD",
+    "destination_iata": "NRT",
+    "airline_iata": "JL",
+    "airline_name": "Japan Airlines",
+    "flight_number": "JL9",
+    "option_tier": "premium",
+    "stops": 1,
+    "connection_minutes": 75,
+    "scheduled_departure_local": "2026-07-03T09:35:00-05:00",
+    "scheduled_arrival_local": "2026-07-04T16:40:00+09:00",
+    "duration_minutes": 905,
+    "estimated_price_usd": 1290,
+    "risk_score": 77,
+    "risk_tier": "low",
+    "on_time_pct": 0.79,
+    "average_delay_minutes": 21,
+    "cancellation_pct": 0.012,
+    "sample_size": 710,
+    "departure_time_reliability": {
+      "early_morning": 88,
+      "morning": 82,
+      "afternoon": 70,
+      "evening": 65
+    },
+    "seasonal_risk": {
+      "01": {
+        "risk_multiplier": 1.05,
+        "notes": "Winter weather can cause delays."
+      },
+      "03": {
+        "risk_multiplier": 1.0,
+        "notes": "Typical spring performance."
+      },
+      "07": {
+        "risk_multiplier": 1.12,
+        "notes": "Summer storms and peak travel add delay risk."
+      },
+      "12": {
+        "risk_multiplier": 1.08,
+        "notes": "Holiday volume increases congestion."
+      }
+    },
+    "judge_fallback": {
+      "enabled": false,
+      "demo_event": null,
+      "fallback_reason": null,
+      "status_override": null
+    },
+    "last_verified": "2026-05-23"
+  },
+  {
+    "route_id": "ord_nrt_recommended_nh12",
+    "route_key": "ORD-NRT",
+    "origin_iata": "ORD",
+    "destination_iata": "NRT",
+    "airline_iata": "NH",
+    "airline_name": "All Nippon Airways",
+    "flight_number": "NH12",
+    "option_tier": "recommended",
+    "stops": 0,
+    "connection_minutes": 0,
+    "scheduled_departure_local": "2026-07-03T11:50:00-05:00",
+    "scheduled_arrival_local": "2026-07-04T15:10:00+09:00",
+    "duration_minutes": 800,
+    "estimated_price_usd": 950,
+    "risk_score": 82,
+    "risk_tier": "low",
+    "on_time_pct": 0.84,
+    "average_delay_minutes": 17,
+    "cancellation_pct": 0.008,
+    "sample_size": 930,
+    "departure_time_reliability": {
+      "early_morning": 88,
+      "morning": 82,
+      "afternoon": 70,
+      "evening": 65
+    },
+    "seasonal_risk": {
+      "01": {
+        "risk_multiplier": 1.05,
+        "notes": "Winter weather can cause delays."
+      },
+      "03": {
+        "risk_multiplier": 1.0,
+        "notes": "Typical spring performance."
+      },
+      "07": {
+        "risk_multiplier": 1.12,
+        "notes": "Summer storms and peak travel add delay risk."
+      },
+      "12": {
+        "risk_multiplier": 1.08,
+        "notes": "Holiday volume increases congestion."
+      }
+    },
+    "judge_fallback": {
+      "enabled": false,
+      "demo_event": null,
+      "fallback_reason": null,
+      "status_override": null
+    },
+    "last_verified": "2026-05-23"
+  },
+  {
+    "route_id": "sea_nrt_budget_dl637",
+    "route_key": "SEA-NRT",
+    "origin_iata": "SEA",
+    "destination_iata": "NRT",
+    "airline_iata": "DL",
+    "airline_name": "Delta Air Lines",
+    "flight_number": "DL637",
+    "option_tier": "budget",
+    "stops": 1,
+    "connection_minutes": 70,
+    "scheduled_departure_local": "2026-07-03T08:25:00-07:00",
+    "scheduled_arrival_local": "2026-07-04T17:20:00+09:00",
+    "duration_minutes": 775,
+    "estimated_price_usd": 610,
+    "risk_score": 68,
+    "risk_tier": "moderate",
+    "on_time_pct": 0.7,
+    "average_delay_minutes": 30,
+    "cancellation_pct": 0.019,
+    "sample_size": 690,
+    "departure_time_reliability": {
+      "early_morning": 88,
+      "morning": 82,
+      "afternoon": 70,
+      "evening": 65
+    },
+    "seasonal_risk": {
+      "01": {
+        "risk_multiplier": 1.05,
+        "notes": "Winter weather can cause delays."
+      },
+      "03": {
+        "risk_multiplier": 1.0,
+        "notes": "Typical spring performance."
+      },
+      "07": {
+        "risk_multiplier": 1.12,
+        "notes": "Summer storms and peak travel add delay risk."
+      },
+      "12": {
+        "risk_multiplier": 1.08,
+        "notes": "Holiday volume increases congestion."
+      }
+    },
+    "judge_fallback": {
+      "enabled": false,
+      "demo_event": null,
+      "fallback_reason": null,
+      "status_override": null
+    },
+    "last_verified": "2026-05-23"
+  },
+  {
+    "route_id": "sea_nrt_premium_jl67",
+    "route_key": "SEA-NRT",
+    "origin_iata": "SEA",
+    "destination_iata": "NRT",
+    "airline_iata": "JL",
+    "airline_name": "Japan Airlines",
+    "flight_number": "JL67",
+    "option_tier": "premium",
+    "stops": 1,
+    "connection_minutes": 80,
+    "scheduled_departure_local": "2026-07-03T10:40:00-07:00",
+    "scheduled_arrival_local": "2026-07-04T16:25:00+09:00",
+    "duration_minutes": 765,
+    "estimated_price_usd": 1190,
+    "risk_score": 76,
+    "risk_tier": "low",
+    "on_time_pct": 0.78,
+    "average_delay_minutes": 22,
+    "cancellation_pct": 0.012,
+    "sample_size": 740,
+    "departure_time_reliability": {
+      "early_morning": 88,
+      "morning": 82,
+      "afternoon": 70,
+      "evening": 65
+    },
+    "seasonal_risk": {
+      "01": {
+        "risk_multiplier": 1.05,
+        "notes": "Winter weather can cause delays."
+      },
+      "03": {
+        "risk_multiplier": 1.0,
+        "notes": "Typical spring performance."
+      },
+      "07": {
+        "risk_multiplier": 1.12,
+        "notes": "Summer storms and peak travel add delay risk."
+      },
+      "12": {
+        "risk_multiplier": 1.08,
+        "notes": "Holiday volume increases congestion."
+      }
+    },
+    "judge_fallback": {
+      "enabled": false,
+      "demo_event": null,
+      "fallback_reason": null,
+      "status_override": null
+    },
+    "last_verified": "2026-05-23"
+  },
+  {
+    "route_id": "sea_nrt_recommended_nh117",
+    "route_key": "SEA-NRT",
+    "origin_iata": "SEA",
+    "destination_iata": "NRT",
+    "airline_iata": "NH",
+    "airline_name": "All Nippon Airways",
+    "flight_number": "NH117",
+    "option_tier": "recommended",
+    "stops": 0,
+    "connection_minutes": 0,
+    "scheduled_departure_local": "2026-07-03T12:45:00-07:00",
+    "scheduled_arrival_local": "2026-07-04T15:15:00+09:00",
+    "duration_minutes": 630,
+    "estimated_price_usd": 830,
+    "risk_score": 83,
+    "risk_tier": "low",
+    "on_time_pct": 0.85,
+    "average_delay_minutes": 15,
+    "cancellation_pct": 0.007,
+    "sample_size": 880,
+    "departure_time_reliability": {
+      "early_morning": 88,
+      "morning": 82,
+      "afternoon": 70,
+      "evening": 65
+    },
+    "seasonal_risk": {
+      "01": {
+        "risk_multiplier": 1.05,
+        "notes": "Winter weather can cause delays."
+      },
+      "03": {
+        "risk_multiplier": 1.0,
+        "notes": "Typical spring performance."
+      },
+      "07": {
+        "risk_multiplier": 1.12,
+        "notes": "Summer storms and peak travel add delay risk."
+      },
+      "12": {
+        "risk_multiplier": 1.08,
+        "notes": "Holiday volume increases congestion."
+      }
+    },
+    "judge_fallback": {
+      "enabled": false,
+      "demo_event": null,
+      "fallback_reason": null,
+      "status_override": null
+    },
+    "last_verified": "2026-05-23"
+  },
+  {
+    "route_id": "sfo_nrt_budget_ua838",
+    "route_key": "SFO-NRT",
+    "origin_iata": "SFO",
+    "destination_iata": "NRT",
+    "airline_iata": "UA",
+    "airline_name": "United Airlines",
+    "flight_number": "UA838",
+    "option_tier": "budget",
+    "stops": 1,
+    "connection_minutes": 95,
+    "scheduled_departure_local": "2026-07-03T10:30:00-07:00",
+    "scheduled_arrival_local": "2026-07-04T16:20:00+09:00",
+    "duration_minutes": 860,
+    "estimated_price_usd": 680,
+    "risk_score": 72,
+    "risk_tier": "moderate",
+    "on_time_pct": 0.74,
+    "average_delay_minutes": 24,
+    "cancellation_pct": 0.018,
+    "sample_size": 940,
+    "departure_time_reliability": {
+      "early_morning": 88,
+      "morning": 82,
+      "afternoon": 70,
+      "evening": 65
+    },
+    "seasonal_risk": {
+      "01": {
+        "risk_multiplier": 1.05,
+        "notes": "Winter weather can cause delays."
+      },
+      "03": {
+        "risk_multiplier": 1.0,
+        "notes": "Typical spring performance."
+      },
+      "07": {
+        "risk_multiplier": 1.12,
+        "notes": "Summer storms and peak travel add delay risk."
+      },
+      "12": {
+        "risk_multiplier": 1.08,
+        "notes": "Holiday volume increases congestion."
+      }
+    },
+    "judge_fallback": {
+      "enabled": false,
+      "demo_event": null,
+      "fallback_reason": null,
+      "status_override": null
+    },
+    "last_verified": "2026-05-23"
+  },
+  {
+    "route_id": "sfo_nrt_fallback_ua837",
+    "route_key": "SFO-NRT",
+    "origin_iata": "SFO",
+    "destination_iata": "NRT",
+    "airline_iata": "UA",
+    "airline_name": "United Airlines",
+    "flight_number": "UA837",
+    "option_tier": "premium",
+    "stops": 0,
+    "connection_minutes": 0,
+    "scheduled_departure_local": "2026-07-03T12:10:00-07:00",
+    "scheduled_arrival_local": "2026-07-04T17:05:00+09:00",
+    "duration_minutes": 715,
+    "estimated_price_usd": 760,
+    "risk_score": 41,
+    "risk_tier": "high",
+    "on_time_pct": 0.51,
+    "average_delay_minutes": 86,
+    "cancellation_pct": 0.08,
+    "sample_size": 380,
+    "departure_time_reliability": {
+      "early_morning": 88,
+      "morning": 82,
+      "afternoon": 70,
+      "evening": 65
+    },
+    "seasonal_risk": {
+      "01": {
+        "risk_multiplier": 1.05,
+        "notes": "Winter weather can cause delays."
+      },
+      "03": {
+        "risk_multiplier": 1.0,
+        "notes": "Typical spring performance."
+      },
+      "07": {
+        "risk_multiplier": 1.12,
+        "notes": "Summer storms and peak travel add delay risk."
+      },
+      "12": {
+        "risk_multiplier": 1.08,
+        "notes": "Holiday volume increases congestion."
+      }
+    },
+    "judge_fallback": {
+      "enabled": true,
+      "demo_event": "day_3_flight_cancelled",
+      "fallback_reason": "AeroDataBox unavailable or Amadeus approval delayed",
+      "status_override": "cancelled"
+    },
+    "last_verified": "2026-05-23"
+  },
+  {
+    "route_id": "sfo_nrt_recommended_nh106",
+    "route_key": "SFO-NRT",
+    "origin_iata": "SFO",
+    "destination_iata": "NRT",
+    "airline_iata": "NH",
+    "airline_name": "All Nippon Airways",
+    "flight_number": "NH106",
+    "option_tier": "recommended",
+    "stops": 0,
+    "connection_minutes": 0,
+    "scheduled_departure_local": "2026-07-03T11:55:00-07:00",
+    "scheduled_arrival_local": "2026-07-04T16:50:00+09:00",
+    "duration_minutes": 705,
+    "estimated_price_usd": 890,
+    "risk_score": 84,
+    "risk_tier": "low",
+    "on_time_pct": 0.86,
+    "average_delay_minutes": 14,
+    "cancellation_pct": 0.006,
+    "sample_size": 1320,
+    "departure_time_reliability": {
+      "early_morning": 88,
+      "morning": 82,
+      "afternoon": 70,
+      "evening": 65
+    },
+    "seasonal_risk": {
+      "01": {
+        "risk_multiplier": 1.05,
+        "notes": "Winter weather can cause delays."
+      },
+      "03": {
+        "risk_multiplier": 1.0,
+        "notes": "Typical spring performance."
+      },
+      "07": {
+        "risk_multiplier": 1.12,
+        "notes": "Summer storms and peak travel add delay risk."
+      },
+      "12": {
+        "risk_multiplier": 1.08,
+        "notes": "Holiday volume increases congestion."
+      }
+    },
+    "judge_fallback": {
+      "enabled": false,
+      "demo_event": null,
+      "fallback_reason": null,
+      "status_override": null
+    },
+    "last_verified": "2026-05-23"
+  }
+]
