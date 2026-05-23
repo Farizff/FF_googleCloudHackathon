@@ -61,6 +61,9 @@ def optimise_route(
     if _insert_energy_breather_if_needed(ordered, pace, group_profile, date):
         _assign_times(ordered, day_of_week, start_time, group_profile, transit_fn)
     _annotate_peak_overlap(ordered, day_of_week)
+    if _insert_dining(ordered):
+        _assign_times(ordered, day_of_week, start_time, group_profile, transit_fn)
+        _annotate_peak_overlap(ordered, day_of_week)
     return ordered
 
 
@@ -207,6 +210,8 @@ def _assign_times(
             continue
 
         open_t = _parse_time(_venue_open(item, day_of_week) or "23:59")
+        if item.get("scheduled_time"):
+            open_t = max(open_t, _parse_time(item["scheduled_time"]))
         if current < open_t:
             current = open_t
             _append_reasoning(item, f"Start adjusted to venue opening ({_format_time(open_t)}).")
@@ -295,6 +300,53 @@ def _annotate_peak_overlap(ordered: list[dict[str, Any]], day_of_week: str) -> N
                 item,
                 f"Note: arrives during peak hours ({peak['start']}–{peak['end']}). Consider shifting earlier if possible.",
             )
+
+
+def _insert_dining(ordered: list[dict[str, Any]]) -> bool:
+    dining_candidates = [item for item in ordered if _is_food_venue(item)]
+    if not dining_candidates:
+        return False
+
+    for item in dining_candidates:
+        ordered.remove(item)
+
+    dining_candidates.sort(key=lambda item: (_first_opening_time(item), item.get("name", "")))
+    lunch = dining_candidates[0]
+    _mark_meal(lunch, meal="lunch", scheduled_time="12:00", note="Inserted as lunch near midday.")
+    _insert_before_first_arrival_at_or_after(ordered, lunch, "12:00")
+
+    if len(dining_candidates) > 1:
+        dinner = dining_candidates[-1]
+        _mark_meal(dinner, meal="dinner", scheduled_time="17:30", note="Inserted as dinner near end-of-day.")
+        ordered.append(dinner)
+    return True
+
+
+def _is_food_venue(item: dict[str, Any]) -> bool:
+    if item.get("type") in {"rest", "breather"}:
+        return False
+    return bool(set(item.get("types", [])).intersection(FOOD_TYPES)) or item.get("dietary_relevance") == "high"
+
+
+def _mark_meal(item: dict[str, Any], meal: str, scheduled_time: str, note: str) -> None:
+    item["meal"] = meal
+    item["scheduled_time"] = scheduled_time
+    _append_reasoning(item, note)
+
+
+def _insert_before_first_arrival_at_or_after(ordered: list[dict[str, Any]], item: dict[str, Any], target_time: str) -> None:
+    target = _parse_time(target_time)
+    for index, existing in enumerate(ordered):
+        arrival = existing.get("arrival_time")
+        if arrival and _parse_time(arrival) >= target:
+            ordered.insert(index, item)
+            return
+    ordered.append(item)
+
+
+def _first_opening_time(item: dict[str, Any]) -> str:
+    openings = [hours.get("open") for hours in (item.get("opening_hours") or {}).values() if hours.get("open")]
+    return min(openings) if openings else "23:59"
 
 
 def _peak_window(venue: dict[str, Any], day_of_week: str) -> dict[str, str] | None:

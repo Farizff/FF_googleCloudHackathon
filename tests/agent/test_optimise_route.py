@@ -180,6 +180,41 @@ def test_optimise_route_inserts_child_rest_and_early_breather_when_energy_budget
     assert rest["departure_time"] == "14:00"
 
 
+def test_optimise_route_places_lunch_near_midday_and_dinner_near_end_of_day():
+    """Food venues should be repositioned as lunch/dinner blocks instead of opening-time attractions."""
+    venues = [
+        venue("Breakfast Cafe Candidate", 1.3001, 103.8001, "08:00", duration=45, types=["restaurant", "food"]),
+        venue("Morning Museum", 1.3002, 103.8002, "09:00", duration=90),
+        venue("Late Dinner Candidate", 1.3003, 103.8003, "09:15", duration=75, types=["restaurant", "food"]),
+        venue("Afternoon Gallery", 1.3004, 103.8004, "13:30", duration=60),
+    ]
+
+    result = optimise_route(
+        venues=venues,
+        date="2026-07-06",
+        start_time="09:00",
+        pace="moderate",
+        group_profile=group_profile(),
+        accommodation_coords=ACCOMMODATION,
+        transit_fn=lambda **_: {"duration_minutes": 0, "mode": "walking"},
+    )
+
+    assert [item["name"] for item in result] == [
+        "Morning Museum",
+        "Breakfast Cafe Candidate",
+        "Afternoon Gallery",
+        "Late Dinner Candidate",
+    ]
+    lunch = result[1]
+    dinner = result[-1]
+    assert lunch["meal"] == "lunch"
+    assert dinner["meal"] == "dinner"
+    assert lunch["arrival_time"] == "12:00"
+    assert dinner["arrival_time"] >= "17:30"
+    assert "Inserted as lunch near midday" in lunch["reasoning"]
+    assert "Inserted as dinner near end-of-day" in dinner["reasoning"]
+
+
 def test_optimise_route_returns_standard_error_when_no_venues_are_eligible():
     """If filters remove every venue, the tool should fail loud with a standard error shape."""
     result = optimise_route(
