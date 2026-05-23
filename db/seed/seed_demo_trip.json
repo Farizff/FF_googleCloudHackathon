@@ -1,0 +1,691 @@
+{
+  "seed_version": "2026-05-23.v1",
+  "scenario": "Google Cloud Rapid Agent Hackathon judge demo",
+  "group_trip": {
+    "trip_id": "trip_tokyo_reunion_2026",
+    "trip_name": "The Tokyo Reunion",
+    "created_at": "2026-05-23T00:00:00Z",
+    "invite_token": "invite_tokyo_reunion_demo",
+    "group_type": "friends",
+    "trip_mode": "international",
+    "status": "planning",
+    "special_occasion": "10-year reunion",
+    "destination_city": "Tokyo",
+    "destination_country": "Japan",
+    "destination_iata": "NRT",
+    "departure_date": "2026-07-04",
+    "return_date": "2026-07-14",
+    "members": [
+      {
+        "user_id": "u_alex",
+        "name": "Alex Chen",
+        "role": "organiser",
+        "origin_city_iata": "SFO",
+        "arrival_datetime": "2026-07-04T16:50:00+09:00",
+        "joined_at": "2026-05-23T00:00:00Z",
+        "profile_complete": true,
+        "shares_compliance_with_admins": false
+      },
+      {
+        "user_id": "u_priya",
+        "name": "Priya Patel",
+        "role": "co_leader",
+        "origin_city_iata": "SFO",
+        "arrival_datetime": "2026-07-04T16:50:00+09:00",
+        "joined_at": "2026-05-23T00:00:00Z",
+        "profile_complete": true,
+        "shares_compliance_with_admins": false
+      },
+      {
+        "user_id": "u_marcus",
+        "name": "Marcus Johnson",
+        "role": "member",
+        "origin_city_iata": "SFO",
+        "arrival_datetime": "2026-07-04T16:50:00+09:00",
+        "joined_at": "2026-05-23T00:00:00Z",
+        "profile_complete": true,
+        "shares_compliance_with_admins": false
+      },
+      {
+        "user_id": "u_sofia",
+        "name": "Sofia Gutierrez",
+        "role": "member",
+        "origin_city_iata": "LAX",
+        "arrival_datetime": "2026-07-04T14:30:00+09:00",
+        "joined_at": "2026-05-23T00:00:00Z",
+        "profile_complete": true,
+        "shares_compliance_with_admins": false
+      },
+      {
+        "user_id": "u_jake",
+        "name": "Jake Kim",
+        "role": "member",
+        "origin_city_iata": "LAX",
+        "arrival_datetime": "2026-07-04T14:30:00+09:00",
+        "joined_at": "2026-05-23T00:00:00Z",
+        "profile_complete": true,
+        "shares_compliance_with_admins": false
+      },
+      {
+        "user_id": "u_aditya",
+        "name": "Aditya Sharma",
+        "role": "member",
+        "origin_city_iata": "JFK",
+        "arrival_datetime": "2026-07-04T15:10:00+09:00",
+        "joined_at": "2026-05-23T00:00:00Z",
+        "profile_complete": true,
+        "shares_compliance_with_admins": false
+      },
+      {
+        "user_id": "u_emma",
+        "name": "Emma Clarke",
+        "role": "member",
+        "origin_city_iata": "JFK",
+        "arrival_datetime": "2026-07-04T15:10:00+09:00",
+        "joined_at": "2026-05-23T00:00:00Z",
+        "profile_complete": true,
+        "shares_compliance_with_admins": false
+      },
+      {
+        "user_id": "u_carlos",
+        "name": "Carlos Mendez",
+        "role": "member",
+        "origin_city_iata": "SEA",
+        "arrival_datetime": "2026-07-04T17:20:00+09:00",
+        "joined_at": "2026-05-23T00:00:00Z",
+        "profile_complete": true,
+        "shares_compliance_with_admins": false
+      },
+      {
+        "user_id": "u_liam",
+        "name": "Liam Murphy",
+        "role": "member",
+        "origin_city_iata": "SEA",
+        "arrival_datetime": "2026-07-04T17:20:00+09:00",
+        "joined_at": "2026-05-23T00:00:00Z",
+        "profile_complete": true,
+        "shares_compliance_with_admins": false
+      },
+      {
+        "user_id": "u_rania",
+        "name": "Rania Hassan",
+        "role": "member",
+        "origin_city_iata": "ORD",
+        "arrival_datetime": "2026-07-04T18:05:00+09:00",
+        "joined_at": "2026-05-23T00:00:00Z",
+        "profile_complete": true,
+        "shares_compliance_with_admins": false
+      }
+    ],
+    "contacts": [
+      {
+        "name": "Layla Hassan",
+        "relationship": "mother",
+        "email": "layla.hassan@example.com",
+        "detail_level": "updates_only",
+        "language": "en",
+        "member_user_id": "u_rania"
+      }
+    ],
+    "office_details": {
+      "company_name": null,
+      "cost_centre": null
+    },
+    "shared_budget_estimate_usd": 35000,
+    "all_members_budget_ok": true,
+    "jet_lag_override": false
+  },
+  "traveller_profiles": [
+    {
+      "user_id": "u_alex",
+      "created_at": "2026-05-23T00:00:00Z",
+      "name": "Alex Chen",
+      "age": 29,
+      "nationality": "USA",
+      "passport_country": "USA",
+      "home_currency": "USD",
+      "home_timezone": "America/Los_Angeles",
+      "home_city_iata": "SFO",
+      "languages_spoken": [
+        "en"
+      ],
+      "dietary": {
+        "restrictions": [
+          "none"
+        ],
+        "allergies": [],
+        "strictness": "flexible"
+      },
+      "mobility": "full",
+      "physical_fitness": "average",
+      "observance_blocks": [],
+      "preferences": {
+        "pace": "moderate",
+        "wake_time": "08:00",
+        "interests": [
+          "architecture",
+          "food",
+          "city"
+        ],
+        "crowd_tolerance": "tolerate"
+      },
+      "budget_private": {
+        "total_amount": 3500,
+        "currency": "USD",
+        "is_per_person": true
+      },
+      "travel_dna": {
+        "primary_style": "pending",
+        "energy_level": "pending",
+        "last_updated": "2026-05-23T00:00:00Z"
+      },
+      "japan_visa_required": false
+    },
+    {
+      "user_id": "u_priya",
+      "created_at": "2026-05-23T00:00:00Z",
+      "name": "Priya Patel",
+      "age": 29,
+      "nationality": "IND",
+      "passport_country": "IND",
+      "home_currency": "USD",
+      "home_timezone": "America/Los_Angeles",
+      "home_city_iata": "SFO",
+      "languages_spoken": [
+        "en"
+      ],
+      "dietary": {
+        "restrictions": [
+          "vegetarian"
+        ],
+        "allergies": [],
+        "strictness": "strict"
+      },
+      "mobility": "full",
+      "physical_fitness": "average",
+      "observance_blocks": [],
+      "preferences": {
+        "pace": "moderate",
+        "wake_time": "08:00",
+        "interests": [
+          "culture",
+          "art",
+          "history"
+        ],
+        "crowd_tolerance": "tolerate"
+      },
+      "budget_private": {
+        "total_amount": 3500,
+        "currency": "USD",
+        "is_per_person": true
+      },
+      "travel_dna": {
+        "primary_style": "pending",
+        "energy_level": "pending",
+        "last_updated": "2026-05-23T00:00:00Z"
+      },
+      "japan_visa_required": true
+    },
+    {
+      "user_id": "u_marcus",
+      "created_at": "2026-05-23T00:00:00Z",
+      "name": "Marcus Johnson",
+      "age": 29,
+      "nationality": "USA",
+      "passport_country": "USA",
+      "home_currency": "USD",
+      "home_timezone": "America/Los_Angeles",
+      "home_city_iata": "SFO",
+      "languages_spoken": [
+        "en"
+      ],
+      "dietary": {
+        "restrictions": [
+          "none"
+        ],
+        "allergies": [],
+        "strictness": "flexible"
+      },
+      "mobility": "full",
+      "physical_fitness": "average",
+      "observance_blocks": [],
+      "preferences": {
+        "pace": "packed",
+        "wake_time": "08:00",
+        "interests": [
+          "food",
+          "nightlife",
+          "music"
+        ],
+        "crowd_tolerance": "tolerate"
+      },
+      "budget_private": {
+        "total_amount": 3500,
+        "currency": "USD",
+        "is_per_person": true
+      },
+      "travel_dna": {
+        "primary_style": "pending",
+        "energy_level": "pending",
+        "last_updated": "2026-05-23T00:00:00Z"
+      },
+      "japan_visa_required": false
+    },
+    {
+      "user_id": "u_sofia",
+      "created_at": "2026-05-23T00:00:00Z",
+      "name": "Sofia Gutierrez",
+      "age": 29,
+      "nationality": "MEX",
+      "passport_country": "MEX",
+      "home_currency": "USD",
+      "home_timezone": "America/Los_Angeles",
+      "home_city_iata": "LAX",
+      "languages_spoken": [
+        "en"
+      ],
+      "dietary": {
+        "restrictions": [
+          "no_pork"
+        ],
+        "allergies": [],
+        "strictness": "flexible"
+      },
+      "mobility": "full",
+      "physical_fitness": "average",
+      "observance_blocks": [],
+      "preferences": {
+        "pace": "moderate",
+        "wake_time": "08:00",
+        "interests": [
+          "shopping",
+          "art",
+          "food"
+        ],
+        "crowd_tolerance": "tolerate"
+      },
+      "budget_private": {
+        "total_amount": 3500,
+        "currency": "USD",
+        "is_per_person": true
+      },
+      "travel_dna": {
+        "primary_style": "pending",
+        "energy_level": "pending",
+        "last_updated": "2026-05-23T00:00:00Z"
+      },
+      "japan_visa_required": false
+    },
+    {
+      "user_id": "u_jake",
+      "created_at": "2026-05-23T00:00:00Z",
+      "name": "Jake Kim",
+      "age": 29,
+      "nationality": "KOR",
+      "passport_country": "KOR",
+      "home_currency": "USD",
+      "home_timezone": "America/Los_Angeles",
+      "home_city_iata": "LAX",
+      "languages_spoken": [
+        "en"
+      ],
+      "dietary": {
+        "restrictions": [
+          "none"
+        ],
+        "allergies": [],
+        "strictness": "flexible"
+      },
+      "mobility": "full",
+      "physical_fitness": "average",
+      "observance_blocks": [],
+      "preferences": {
+        "pace": "packed",
+        "wake_time": "08:00",
+        "interests": [
+          "shopping",
+          "sport",
+          "nightlife"
+        ],
+        "crowd_tolerance": "tolerate"
+      },
+      "budget_private": {
+        "total_amount": 3500,
+        "currency": "USD",
+        "is_per_person": true
+      },
+      "travel_dna": {
+        "primary_style": "pending",
+        "energy_level": "pending",
+        "last_updated": "2026-05-23T00:00:00Z"
+      },
+      "japan_visa_required": false
+    },
+    {
+      "user_id": "u_aditya",
+      "created_at": "2026-05-23T00:00:00Z",
+      "name": "Aditya Sharma",
+      "age": 29,
+      "nationality": "IND",
+      "passport_country": "IND",
+      "home_currency": "USD",
+      "home_timezone": "America/New_York",
+      "home_city_iata": "JFK",
+      "languages_spoken": [
+        "en"
+      ],
+      "dietary": {
+        "restrictions": [
+          "vegetarian",
+          "no_beef"
+        ],
+        "allergies": [],
+        "strictness": "strict"
+      },
+      "mobility": "full",
+      "physical_fitness": "average",
+      "observance_blocks": [],
+      "preferences": {
+        "pace": "relaxed",
+        "wake_time": "08:00",
+        "interests": [
+          "history",
+          "architecture",
+          "nature"
+        ],
+        "crowd_tolerance": "tolerate"
+      },
+      "budget_private": {
+        "total_amount": 3500,
+        "currency": "USD",
+        "is_per_person": true
+      },
+      "travel_dna": {
+        "primary_style": "pending",
+        "energy_level": "pending",
+        "last_updated": "2026-05-23T00:00:00Z"
+      },
+      "japan_visa_required": true
+    },
+    {
+      "user_id": "u_emma",
+      "created_at": "2026-05-23T00:00:00Z",
+      "name": "Emma Clarke",
+      "age": 29,
+      "nationality": "GBR",
+      "passport_country": "GBR",
+      "home_currency": "GBP",
+      "home_timezone": "America/New_York",
+      "home_city_iata": "JFK",
+      "languages_spoken": [
+        "en"
+      ],
+      "dietary": {
+        "restrictions": [
+          "gluten_free"
+        ],
+        "allergies": [],
+        "strictness": "flexible"
+      },
+      "mobility": "full",
+      "physical_fitness": "average",
+      "observance_blocks": [],
+      "preferences": {
+        "pace": "moderate",
+        "wake_time": "08:00",
+        "interests": [
+          "art",
+          "culture",
+          "wellness"
+        ],
+        "crowd_tolerance": "tolerate"
+      },
+      "budget_private": {
+        "total_amount": 3500,
+        "currency": "GBP",
+        "is_per_person": true
+      },
+      "travel_dna": {
+        "primary_style": "pending",
+        "energy_level": "pending",
+        "last_updated": "2026-05-23T00:00:00Z"
+      },
+      "japan_visa_required": false
+    },
+    {
+      "user_id": "u_carlos",
+      "created_at": "2026-05-23T00:00:00Z",
+      "name": "Carlos Mendez",
+      "age": 29,
+      "nationality": "BRA",
+      "passport_country": "BRA",
+      "home_currency": "USD",
+      "home_timezone": "America/Los_Angeles",
+      "home_city_iata": "SEA",
+      "languages_spoken": [
+        "en"
+      ],
+      "dietary": {
+        "restrictions": [
+          "none"
+        ],
+        "allergies": [],
+        "strictness": "flexible"
+      },
+      "mobility": "full",
+      "physical_fitness": "average",
+      "observance_blocks": [],
+      "preferences": {
+        "pace": "moderate",
+        "wake_time": "08:00",
+        "interests": [
+          "music",
+          "food",
+          "shopping"
+        ],
+        "crowd_tolerance": "tolerate"
+      },
+      "budget_private": {
+        "total_amount": 3500,
+        "currency": "USD",
+        "is_per_person": true
+      },
+      "travel_dna": {
+        "primary_style": "pending",
+        "energy_level": "pending",
+        "last_updated": "2026-05-23T00:00:00Z"
+      },
+      "japan_visa_required": false
+    },
+    {
+      "user_id": "u_liam",
+      "created_at": "2026-05-23T00:00:00Z",
+      "name": "Liam Murphy",
+      "age": 29,
+      "nationality": "IRL",
+      "passport_country": "IRL",
+      "home_currency": "EUR",
+      "home_timezone": "America/Los_Angeles",
+      "home_city_iata": "SEA",
+      "languages_spoken": [
+        "en"
+      ],
+      "dietary": {
+        "restrictions": [
+          "none"
+        ],
+        "allergies": [],
+        "strictness": "flexible"
+      },
+      "mobility": "full",
+      "physical_fitness": "average",
+      "observance_blocks": [],
+      "preferences": {
+        "pace": "relaxed",
+        "wake_time": "08:00",
+        "interests": [
+          "food",
+          "history",
+          "sport"
+        ],
+        "crowd_tolerance": "tolerate"
+      },
+      "budget_private": {
+        "total_amount": 3500,
+        "currency": "EUR",
+        "is_per_person": true
+      },
+      "travel_dna": {
+        "primary_style": "pending",
+        "energy_level": "pending",
+        "last_updated": "2026-05-23T00:00:00Z"
+      },
+      "japan_visa_required": false
+    },
+    {
+      "user_id": "u_rania",
+      "created_at": "2026-05-23T00:00:00Z",
+      "name": "Rania Hassan",
+      "age": 29,
+      "nationality": "EGY",
+      "passport_country": "EGY",
+      "home_currency": "USD",
+      "home_timezone": "America/Chicago",
+      "home_city_iata": "ORD",
+      "languages_spoken": [
+        "en"
+      ],
+      "dietary": {
+        "restrictions": [
+          "halal",
+          "no_pork",
+          "no_alcohol"
+        ],
+        "allergies": [],
+        "strictness": "strict"
+      },
+      "mobility": "full",
+      "physical_fitness": "average",
+      "observance_blocks": [
+        {
+          "label": "Prayer time",
+          "time": "13:00",
+          "duration_minutes": 15,
+          "frequency": "daily",
+          "facility_type": "quiet_space"
+        }
+      ],
+      "preferences": {
+        "pace": "moderate",
+        "wake_time": "08:00",
+        "interests": [
+          "culture",
+          "shopping",
+          "architecture"
+        ],
+        "crowd_tolerance": "tolerate"
+      },
+      "budget_private": {
+        "total_amount": 3500,
+        "currency": "USD",
+        "is_per_person": true
+      },
+      "travel_dna": {
+        "primary_style": "pending",
+        "energy_level": "pending",
+        "last_updated": "2026-05-23T00:00:00Z"
+      },
+      "japan_visa_required": true
+    }
+  ],
+  "private_compliance_reminders": [
+    {
+      "user_id": "u_priya",
+      "name": "Priya Patel",
+      "passport_iso": "IND",
+      "destination_iso": "JPN",
+      "visibility": "private_to_member",
+      "message": "Japan tourist visa required. Verify with the official embassy before booking."
+    },
+    {
+      "user_id": "u_aditya",
+      "name": "Aditya Sharma",
+      "passport_iso": "IND",
+      "destination_iso": "JPN",
+      "visibility": "private_to_member",
+      "message": "Japan tourist visa required. Verify with the official embassy before booking."
+    },
+    {
+      "user_id": "u_rania",
+      "name": "Rania Hassan",
+      "passport_iso": "EGY",
+      "destination_iso": "JPN",
+      "visibility": "private_to_member",
+      "message": "Japan tourist visa required. Verify with the official embassy before booking."
+    }
+  ],
+  "flock_mode": {
+    "day_number": 5,
+    "reconvene_time": "18:30",
+    "reconvene_location": "Shinjuku Station East Exit",
+    "reconvene_coordinates": {
+      "lat": 35.6909,
+      "lng": 139.7016
+    },
+    "flocks": [
+      {
+        "flock_id": "flock_explorers",
+        "flock_name": "The Explorers",
+        "leader_user_id": "u_priya",
+        "leader_name": "Priya Patel",
+        "member_ids": [
+          "u_alex",
+          "u_priya",
+          "u_aditya",
+          "u_emma"
+        ],
+        "member_names": [
+          "Alex Chen",
+          "Priya Patel",
+          "Aditya Sharma",
+          "Emma Clarke"
+        ],
+        "activity": "teamLab Borderless (Odaiba)"
+      },
+      {
+        "flock_id": "flock_foodies",
+        "flock_name": "The Foodies",
+        "leader_user_id": "u_marcus",
+        "leader_name": "Marcus Johnson",
+        "member_ids": [
+          "u_marcus",
+          "u_sofia",
+          "u_liam"
+        ],
+        "member_names": [
+          "Marcus Johnson",
+          "Sofia Gutierrez",
+          "Liam Murphy"
+        ],
+        "activity": "Tsukiji Outer Market + Yanaka neighbourhood"
+      },
+      {
+        "flock_id": "flock_shoppers",
+        "flock_name": "The Shoppers",
+        "leader_user_id": "u_jake",
+        "leader_name": "Jake Kim",
+        "member_ids": [
+          "u_jake",
+          "u_carlos",
+          "u_rania"
+        ],
+        "member_names": [
+          "Jake Kim",
+          "Carlos Mendez",
+          "Rania Hassan"
+        ],
+        "activity": "Harajuku Takeshita Street + Shibuya"
+      }
+    ]
+  }
+}
