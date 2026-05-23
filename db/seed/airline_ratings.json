@@ -1,0 +1,205 @@
+[
+  {
+    "iata": "AA",
+    "name": "American Airlines",
+    "skytrax_rating": 3,
+    "airhelp_score": 7.2,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "AF",
+    "name": "Air France",
+    "skytrax_rating": 4,
+    "airhelp_score": 7.92,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "AS",
+    "name": "Alaska Airlines",
+    "skytrax_rating": 3,
+    "airhelp_score": 7.55,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "B6",
+    "name": "JetBlue Airways",
+    "skytrax_rating": 3,
+    "airhelp_score": 7.05,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "BA",
+    "name": "British Airways",
+    "skytrax_rating": 4,
+    "airhelp_score": 7.7,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "CX",
+    "name": "Cathay Pacific",
+    "skytrax_rating": 5,
+    "airhelp_score": 8.1,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "DL",
+    "name": "Delta Air Lines",
+    "skytrax_rating": 3,
+    "airhelp_score": 7.8,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "EK",
+    "name": "Emirates",
+    "skytrax_rating": 5,
+    "airhelp_score": 8.35,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "EY",
+    "name": "Etihad Airways",
+    "skytrax_rating": 4,
+    "airhelp_score": 8.05,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "FR",
+    "name": "Ryanair",
+    "skytrax_rating": 3,
+    "airhelp_score": 6.4,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "GA",
+    "name": "Garuda Indonesia",
+    "skytrax_rating": 5,
+    "airhelp_score": 7.95,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "IB",
+    "name": "Iberia",
+    "skytrax_rating": 4,
+    "airhelp_score": 7.35,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "JL",
+    "name": "Japan Airlines",
+    "skytrax_rating": 5,
+    "airhelp_score": 8.15,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "JQ",
+    "name": "Jetstar Airways",
+    "skytrax_rating": 3,
+    "airhelp_score": 6.65,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "KE",
+    "name": "Korean Air",
+    "skytrax_rating": 5,
+    "airhelp_score": 8.0,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "KL",
+    "name": "KLM Royal Dutch Airlines",
+    "skytrax_rating": 4,
+    "airhelp_score": 7.85,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "LH",
+    "name": "Lufthansa",
+    "skytrax_rating": 4,
+    "airhelp_score": 7.6,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "MH",
+    "name": "Malaysia Airlines",
+    "skytrax_rating": 4,
+    "airhelp_score": 7.25,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "NH",
+    "name": "All Nippon Airways",
+    "skytrax_rating": 5,
+    "airhelp_score": 8.21,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "OZ",
+    "name": "Asiana Airlines",
+    "skytrax_rating": 5,
+    "airhelp_score": 7.75,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "QF",
+    "name": "Qantas Airways",
+    "skytrax_rating": 4,
+    "airhelp_score": 8.0,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "QR",
+    "name": "Qatar Airways",
+    "skytrax_rating": 5,
+    "airhelp_score": 8.4,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "SQ",
+    "name": "Singapore Airlines",
+    "skytrax_rating": 5,
+    "airhelp_score": 8.45,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "SV",
+    "name": "Saudia",
+    "skytrax_rating": 4,
+    "airhelp_score": 7.05,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "TG",
+    "name": "Thai Airways",
+    "skytrax_rating": 4,
+    "airhelp_score": 7.3,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "U2",
+    "name": "easyJet",
+    "skytrax_rating": 3,
+    "airhelp_score": 6.55,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "UA",
+    "name": "United Airlines",
+    "skytrax_rating": 3,
+    "airhelp_score": 7.1,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "VA",
+    "name": "Virgin Australia",
+    "skytrax_rating": 3,
+    "airhelp_score": 7.15,
+    "last_verified": "2026-05-23"
+  },
+  {
+    "iata": "WN",
+    "name": "Southwest Airlines",
+    "skytrax_rating": 3,
+    "airhelp_score": 7.0,
+    "last_verified": "2026-05-23"
+  }
+]
