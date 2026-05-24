@@ -152,6 +152,11 @@ Repository evidence at audit time:
   - Deliverable: chat entry, profile gap-fill, itinerary day view, budget tracker, Maps JS pins/routes, flight selection layout.
   - Acceptance: core loop, flights, and maps checklist items in Part 15 pass manually or through tests where practical.
 
+- **BNC-029 — Group, FlockMode, active trip, and split bill UI**
+  - PRD source: Days 9–13 build sequence and Part 15 group/FlockMode/split bill.
+  - Deliverable: group dashboard, suggestion review, Flock creation/map view/reconvene display, active trip view, split bill UI.
+  - Acceptance: group, FlockMode, disruption trigger, and split bill checklist items pass.
+
 ### BLOCKED
 
 - **BNC-017 — MongoDB Atlas and MCP live setup**
@@ -175,11 +180,6 @@ Repository evidence at audit time:
   - Blocker: depends on BNC-018 live Firebase RTDB project/database access.
 
 ### TODO
-
-- **BNC-029 — Group, FlockMode, active trip, and split bill UI**
-  - PRD source: Days 9–13 build sequence and Part 15 group/FlockMode/split bill.
-  - Deliverable: group dashboard, suggestion review, Flock creation/map view/reconvene display, active trip view, split bill UI.
-  - Acceptance: group, FlockMode, disruption trigger, and split bill checklist items pass.
 
 - **BNC-030 — Production deployment and smoke tests**
   - PRD source: Part 16.
@@ -207,6 +207,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next action: **Proceed with BNC-029 — Group, FlockMode, active trip, and split bill UI**, while keeping BNC-017, BNC-018, and BNC-024 blocked/gated by live Firebase/MongoDB access.
+Recommended next action: **Proceed with BNC-030 — Production deployment and smoke tests**, while keeping BNC-017, BNC-018, and BNC-024 blocked/gated by live Firebase/MongoDB access.
 
-Reason: BNC-028 now provides the core planning UI shell for chat entry, profile gap-fill, itinerary, budget, map pins, and flight selection. BNC-029 is the next fixed-contract UI card.
+Reason: BNC-029 now provides the group dashboard, suggestion review, FlockMode creation/active views, active-trip companion view, and split-bill UI. BNC-030 is the next fixed-contract deployment card.

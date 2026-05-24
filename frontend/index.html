@@ -108,6 +108,107 @@
         </div>
       </section>
 
+      <section id="group-dashboard" class="planning-shell group-dashboard-card" aria-labelledby="group-title">
+        <p class="eyebrow">Group dashboard</p>
+        <h2 id="group-title">Tokyo Reunion group</h2>
+        <p class="muted"><strong>7 joined</strong> · <strong>3 pending</strong> · Alex is organiser with Priya as co-leader.</p>
+        <div id="member-status-grid" class="member-status-grid" aria-label="Member join status">
+          <span class="member-chip is-joined">Alex</span>
+          <span class="member-chip is-joined">Priya</span>
+          <span class="member-chip is-joined">Marcus</span>
+          <span class="member-chip is-joined">Sofia</span>
+          <span class="member-chip is-pending">Jake pending</span>
+          <span class="member-chip is-pending">Rania pending</span>
+        </div>
+        <button id="split-into-flocks" class="secondary-button" type="button">Split into Flocks</button>
+      </section>
+
+      <section id="suggestion-review" class="planning-shell suggestion-panel" aria-labelledby="suggestion-title">
+        <div class="suggestion-panel-header">
+          <span class="suggestion-count-badge">3</span>
+          <div>
+            <p class="eyebrow">Suggestion review</p>
+            <h2 id="suggestion-title" class="suggestion-title">Member ideas waiting for organiser review</h2>
+          </div>
+        </div>
+        <article class="suggestion-item">
+          <p class="suggestion-text">Move teamLab Borderless earlier so delayed arrivals can still join dinner.</p>
+          <p class="suggestion-supporters">Supported by Marcus, Sofia, and Emma</p>
+          <div class="suggestion-actions">
+            <button class="sug-btn sug-accept" type="button">Accept</button>
+            <button class="sug-btn sug-modify" type="button">Modify</button>
+            <button class="sug-btn sug-decline" type="button">Decline</button>
+          </div>
+        </article>
+      </section>
+
+      <section id="flockmode-creation" class="planning-shell flock-creation-card" aria-labelledby="flock-create-title">
+        <p class="eyebrow">FlockMode creation</p>
+        <h2 id="flock-create-title">Create Flocks for Day 5</h2>
+        <p class="muted">Split your group into smaller flocks for parallel adventures. They'll reconvene at a time and place you set.</p>
+        <div class="chip-grid" aria-label="Unassigned member pool">
+          <span class="member-chip">Alex</span><span class="member-chip">Priya</span><span class="member-chip">Marcus</span><span class="member-chip">Sofia</span><span class="member-chip">Jake</span><span class="member-chip">Aditya</span>
+        </div>
+        <div class="flock-grid">
+          <article class="flock-box">
+            <input class="flock-name-input" value="The Explorers" aria-label="Flock 1 name" />
+            <div class="flock-dropzone has-members"><span class="member-chip is-joined">Alex</span><span class="member-chip is-joined">Priya</span><span class="member-chip is-joined">Aditya</span></div>
+          </article>
+          <article class="flock-box">
+            <input class="flock-name-input" value="Food Scouts" aria-label="Flock 2 name" />
+            <div class="flock-dropzone has-members"><span class="member-chip is-joined">Marcus</span><span class="member-chip is-joined">Sofia</span></div>
+          </article>
+        </div>
+        <div class="reconvene-card">
+          <strong>Reconvene</strong>
+          <span>6:30 PM · Shinjuku Station East Exit</span>
+        </div>
+        <button id="start-flockmode" class="primary-button" type="button">Start FlockMode →</button>
+      </section>
+
+      <section id="flock-active-view" class="planning-shell flock-active-card" aria-labelledby="flock-active-title">
+        <p class="eyebrow">Flock active view</p>
+        <h2 id="flock-active-title">🐦 The Explorers</h2>
+        <p class="muted">Alex, Priya, Aditya, Emma</p>
+        <article class="reconvene-countdown">
+          <strong>Meet at Shinjuku Station East Exit</strong>
+          <span>3h 42m remaining · ~18 min by Yamanote Line from teamLab</span>
+        </article>
+        <ol class="itinerary-timeline">
+          <li><time>13:00</time><span>teamLab Borderless</span></li>
+          <li><time>16:00</time><span>Coffee reset near Harajuku</span></li>
+        </ol>
+      </section>
+
+      <section id="active-trip-view" class="planning-shell active-trip-card" aria-labelledby="active-trip-title">
+        <p class="eyebrow">Active trip</p>
+        <h2 id="active-trip-title">Today in Tokyo</h2>
+        <p class="flight-status-banner">NH106 SFO → NRT · On time · Lands 4:50pm</p>
+        <article class="current-activity-card"><span class="now-badge">NOW</span><strong>teamLab Borderless</strong><span>Transit to next: 15 min by metro →</span></article>
+        <button class="ask-bounce-button" type="button">Ask Bounce anything about today →</button>
+      </section>
+
+      <section id="split-bill" class="planning-shell split-bill-card" aria-labelledby="split-bill-title">
+        <p class="eyebrow">Split bill</p>
+        <h2 id="split-bill-title">Log a shared expense</h2>
+        <div class="expense-tabs" role="tablist" aria-label="Expense split options">
+          <button type="button" aria-selected="true">Everyone</button>
+          <button type="button">Specific people</button>
+          <button type="button">My Flock</button>
+          <button type="button">Just me</button>
+        </div>
+        <label class="amount-input"><span>$</span><input value="128.40" inputmode="decimal" aria-label="Expense amount" /></label>
+        <input class="expense-description" value="Ramen dinner" aria-label="Expense description" />
+        <div class="chip-grid"><button class="quick-chip" type="button">🍜 Food</button><button class="quick-chip" type="button">🚇 Transport</button><button class="quick-chip" type="button">🎟 Activity</button></div>
+        <p class="muted">Split between: Alex, Priya, Carlos (+4 more)</p>
+        <button id="log-expense" class="primary-button" type="button">Log expense</button>
+        <div class="balance-grid">
+          <article class="balance-card is-owed"><strong>Alex</strong><span>+$42.10</span></article>
+          <article class="balance-card owes"><strong>Carlos</strong><span>-$31.25</span></article>
+          <article class="balance-card balanced"><strong>Priya</strong><span>$0.00</span></article>
+        </div>
+      </section>
+
       <section class="demo-panel" aria-labelledby="demo-title">
         <div>
           <p class="eyebrow">Judge-ready shell</p>
@@ -123,10 +224,10 @@
         <pre id="api-output" class="api-output" aria-live="polite"></pre>
       </section>
 
-      <nav class="bottom-nav" data-phase="planning" aria-label="Primary">
-        <a href="#app" aria-current="page">Plan</a>
-        <a href="#demo-title">Demo</a>
-        <a href="#api-status">Status</a>
+      <nav class="bottom-nav" data-phase="active" aria-label="Primary">
+        <a href="#entry-conversation">Plan</a>
+        <a href="#active-trip-view" aria-current="page">Today</a>
+        <a href="#split-bill">Split</a>
       </nav>
     </main>
 

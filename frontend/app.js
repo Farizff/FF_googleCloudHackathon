@@ -12,6 +12,15 @@ const els = {
   sendTripPromptButton: document.querySelector('#send-trip-prompt'),
   bounceResponse: document.querySelector('#bounce-response'),
   flightOptions: document.querySelector('#flight-options'),
+  groupDashboard: document.querySelector('#group-dashboard'),
+  suggestionReview: document.querySelector('#suggestion-review'),
+  flockActiveView: document.querySelector('#flock-active-view'),
+  activeTripView: document.querySelector('#active-trip-view'),
+  splitBill: document.querySelector('#split-bill'),
+  splitIntoFlocksButton: document.querySelector('#split-into-flocks'),
+  startFlockModeButton: document.querySelector('#start-flockmode'),
+  logExpenseButton: document.querySelector('#log-expense'),
+  bottomNav: document.querySelector('.bottom-nav'),
 };
 
 function setStatus(message, state = 'pending') {
@@ -122,6 +131,55 @@ function renderMapPins(pins = []) {
   canvas.dataset.pins = pins.join(' → ');
 }
 
+function demoActiveTripSnapshot() {
+  return {
+    group: { joined: 7, pending: 3, organiser: 'Alex', co_leader: 'Priya' },
+    suggestion: { count: 3, text: 'Move teamLab Borderless earlier so delayed arrivals can still join dinner.' },
+    flock: { name: 'The Explorers', reconvene: 'Shinjuku Station East Exit', countdown: '3h 42m' },
+    active_trip: { flight: 'NH106 SFO → NRT · On time · Lands 4:50pm', now: 'teamLab Borderless' },
+    split_bill: { amount: 128.40, description: 'Ramen dinner', split_between: 'Alex, Priya, Carlos (+4 more)' },
+  };
+}
+
+function renderGroupDashboard(snapshot = demoActiveTripSnapshot()) {
+  if (!els.groupDashboard) return;
+  els.groupDashboard.dataset.joined = snapshot.group.joined;
+  els.groupDashboard.dataset.pending = snapshot.group.pending;
+}
+
+function renderSuggestionReview(snapshot = demoActiveTripSnapshot()) {
+  if (!els.suggestionReview) return;
+  els.suggestionReview.dataset.suggestions = snapshot.suggestion.count;
+}
+
+function renderFlockMode(snapshot = demoActiveTripSnapshot()) {
+  if (!els.flockActiveView) return;
+  els.flockActiveView.dataset.flock = snapshot.flock.name;
+}
+
+function renderActiveTrip(snapshot = demoActiveTripSnapshot()) {
+  if (els.bottomNav) els.bottomNav.dataset.phase = 'active';
+  if (!els.activeTripView) return;
+  els.activeTripView.dataset.currentActivity = snapshot.active_trip.now;
+}
+
+function renderSplitBill(snapshot = demoActiveTripSnapshot()) {
+  if (!els.splitBill) return;
+  els.splitBill.dataset.amount = String(snapshot.split_bill.amount);
+}
+
+function activateFlockMode() {
+  renderFlockMode();
+  els.flockActiveView?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setStatus('FlockMode active for The Explorers', 'ok');
+}
+
+function logDemoExpense() {
+  renderSplitBill();
+  setStatus('Demo expense logged', 'ok');
+  showOutput({ expense: 'Ramen dinner', amount: 128.40, split: 'Everyone' });
+}
+
 async function seedDemoTrip() {
   setStatus('Seeding demo trip…');
   const result = await fetch(`${API_BASE}/judge/seed-demo-trip`, { method: 'POST' }).then((response) => response.json());
@@ -165,5 +223,13 @@ els.disruptionButton?.addEventListener('click', () => triggerDisruption().catch(
   setStatus('Disruption trigger failed', 'error');
   showOutput(error.message);
 }));
+
+els.splitIntoFlocksButton?.addEventListener('click', activateFlockMode);
+els.startFlockModeButton?.addEventListener('click', activateFlockMode);
+els.logExpenseButton?.addEventListener('click', logDemoExpense);
+renderGroupDashboard();
+renderSuggestionReview();
+renderActiveTrip();
+renderSplitBill();
 
 checkHealth().catch(() => {});
