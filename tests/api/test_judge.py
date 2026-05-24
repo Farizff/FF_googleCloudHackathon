@@ -1,4 +1,5 @@
 from fastapi.testclient import TestClient
+from pymongo.errors import ServerSelectionTimeoutError
 
 from api.main import app
 from api.routes.judge import get_db, get_now_fn
@@ -150,6 +151,25 @@ def test_judge_seed_returns_503_when_mongodb_provider_is_not_configured(monkeypa
     assert response.json()["detail"] == {
         "code": "MONGODB_PROVIDER_NOT_CONFIGURED",
         "message": "MONGODB_CONNECTION_STRING is required before connecting to MongoDB.",
+    }
+
+
+def test_judge_seed_returns_503_when_mongodb_provider_is_unavailable():
+    class UnavailableCollection(FakeCollection):
+        def replace_one(self, query, document, upsert=False):
+            raise ServerSelectionTimeoutError("Atlas network access rejected Cloud Run")
+
+    db = FakeDB()
+    db.group_trips = UnavailableCollection([])
+    install_overrides(db)
+    client = TestClient(app)
+
+    response = client.post("/judge/seed-demo-trip")
+
+    assert response.status_code == 503
+    assert response.json()["detail"] == {
+        "code": "MONGODB_PROVIDER_UNAVAILABLE",
+        "message": "Atlas network access rejected Cloud Run",
     }
 
 

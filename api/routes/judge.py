@@ -6,6 +6,7 @@ from typing import Any, Callable
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import PlainTextResponse
+from pymongo.errors import PyMongoError
 
 from db.client import MongoDBConfigError, get_database
 
@@ -32,23 +33,29 @@ def get_now_fn() -> Callable[[], str]:
 
 @router.post("/seed-demo-trip")
 def seed_demo_trip_endpoint(db: Any = Depends(get_db)) -> dict[str, Any]:
-    return seed_demo_trip(db)
+    try:
+        return seed_demo_trip(db)
+    except PyMongoError as exc:
+        raise _mongo_unavailable(exc) from exc
 
 
 @router.post("/reset")
 def reset_judge_demo_endpoint(db: Any = Depends(get_db)) -> dict[str, Any]:
-    seed = _load_seed()
-    trip = seed["group_trip"]
-    trip_id = trip["trip_id"]
-    member_ids = [member["user_id"] for member in trip["members"]]
+    try:
+        seed = _load_seed()
+        trip = seed["group_trip"]
+        trip_id = trip["trip_id"]
+        member_ids = [member["user_id"] for member in trip["members"]]
 
-    db.group_trips.delete_many({"trip_id": trip_id})
-    db.traveller_profiles.delete_many({"user_id": {"$in": member_ids}})
-    db.compliance_reminders.delete_many({"trip_id": trip_id})
-    db.flocks.delete_many({"trip_id": trip_id})
-    db.disruption_events.delete_many({"itinerary_id": DEMO_ITINERARY_ID})
+        db.group_trips.delete_many({"trip_id": trip_id})
+        db.traveller_profiles.delete_many({"user_id": {"$in": member_ids}})
+        db.compliance_reminders.delete_many({"trip_id": trip_id})
+        db.flocks.delete_many({"trip_id": trip_id})
+        db.disruption_events.delete_many({"itinerary_id": DEMO_ITINERARY_ID})
 
-    return {"success": True, "reset": True, "seeded": seed_demo_trip(db, seed)}
+        return {"success": True, "reset": True, "seeded": seed_demo_trip(db, seed)}
+    except PyMongoError as exc:
+        raise _mongo_unavailable(exc) from exc
 
 
 @router.post("/trigger-disruption")
@@ -64,7 +71,10 @@ def judge_trigger_disruption_endpoint(
         "created_at": now_fn(),
         "judge_demo": True,
     }
-    db.disruption_events.insert_one(event)
+    try:
+        db.disruption_events.insert_one(event)
+    except PyMongoError as exc:
+        raise _mongo_unavailable(exc) from exc
     return {
         "success": True,
         "event_type": event["event_type"],
@@ -95,6 +105,13 @@ Suggested path:
 3. Trigger disruption and confirm alternatives/update flow.
 4. Test FlockMode, split bill, visa, and flight status screens.
 """
+
+
+def _mongo_unavailable(exc: PyMongoError) -> HTTPException:
+    return HTTPException(
+        status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+        detail={"code": "MONGODB_PROVIDER_UNAVAILABLE", "message": str(exc)},
+    )
 
 
 def seed_demo_trip(db: Any, seed: dict[str, Any] | None = None) -> dict[str, Any]:

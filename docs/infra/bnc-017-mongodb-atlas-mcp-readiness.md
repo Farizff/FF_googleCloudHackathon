@@ -43,19 +43,24 @@ Environment/tooling:
 
 Secret Manager:
 
-- Secret `mongodb-uri` does **not** currently exist in project `project-411e0419-48bd-4b5b-97f`.
+- Secret `mongodb-uri` now exists in project `project-411e0419-48bd-4b5b-97f`.
+- A secret version containing the Atlas URI was added without committing or printing the URI.
 
 Cloud Run:
 
-- `bounce-api` currently has no MongoDB-related env var or Secret Manager reference configured.
+- `bounce-api` revision `bounce-api-00011-gj6` receives `MONGODB_CONNECTION_STRING` from Secret Manager secret `mongodb-uri:latest`.
+- `bounce-api` has `MONGODB_DATABASE=bounce`.
+- `/health`, `/`, `/judge/instructions`, and `/chat` are live.
+- MongoDB-backed judge writes currently return `503 MONGODB_PROVIDER_UNAVAILABLE` because Atlas returns TLS handshake failures from Cloud Run egress.
 
-Local environment:
+Local environment/readiness:
 
-- `MONGODB_CONNECTION_STRING` is unset.
-- `MONGODB_DATABASE` is unset.
-- Atlas API credential env vars are unset.
+- The provided Atlas URI was verified locally without printing the URI.
+- Database `bounce` exists.
+- All 10 PRD MongoDB collections exist.
+- `python scripts/infra/verify_mongodb_atlas.py --create-missing --write-probe` passes.
 
-Because no MongoDB URI or Atlas API credentials are available in the environment, I could not create/verify the live Atlas cluster, create live collections, save the real URI secret, or validate deployed read/write access.
+Because the URI works locally but fails from Cloud Run with Atlas TLS handshake failures, the remaining blocker is Atlas Network Access for Cloud Run egress. For the hackathon setup, add `0.0.0.0/0` in Atlas Network Access, then rerun deployed judge smoke tests.
 
 ## Repo support added
 
@@ -81,14 +86,27 @@ database=bounce
 expected_collections=10
 existing_expected_collections=10
 missing_collections=none
-created_collections=none
+created_collections=traveller_profiles,group_trips,itineraries,flight_performance,airline_ratings,visa_requirements,venue_enrichment,expenses,suggestions,notification_log
 write_probe=ok
 ```
 
-Current run without credentials fails correctly:
+Current run with the provided Atlas URI succeeds locally:
 
 ```text
-MongoDB readiness check failed: MongoDB URI is required; set MONGODB_CONNECTION_STRING or pass --uri-env.
+database=bounce
+expected_collections=10
+existing_expected_collections=10
+missing_collections=none
+created_collections=traveller_profiles,group_trips,itineraries,flight_performance,airline_ratings,visa_requirements,venue_enrichment,expenses,suggestions,notification_log
+write_probe=ok
+```
+
+Current deployed Cloud Run judge mutation smoke fails loud, not as an unhandled 500:
+
+```text
+POST /judge/seed-demo-trip -> HTTP 503
+code=MONGODB_PROVIDER_UNAVAILABLE
+root symptom=Atlas TLS handshake failed from Cloud Run
 ```
 
 ## MCP server configuration target
@@ -109,9 +127,9 @@ mcp_servers:
     connect_timeout: 60
 ```
 
-Note: this is intentionally not applied to global Hermes config yet because the required MongoDB connection string is not available.
+Note: this template remains non-secret and is safe to apply only if the Hermes process receives `MONGODB_CONNECTION_STRING` from the environment/secret manager. Do not paste the URI into `config.yaml`.
 
-## Commands to finish BNC-017 once Atlas URI is available
+## Commands to rerun after Atlas Network Access is updated
 
 Set the URI locally for the terminal session without committing it:
 
@@ -160,10 +178,19 @@ Then redeploy/smoke-test backend routes that require MongoDB when those routes a
 
 ## Status
 
-Blocked on external credential/setup input:
+Partially unblocked and checkpointed:
 
-- Need an Atlas cluster or permission/API credentials to create one.
-- Need the Atlas connection string for user `bounce-app`.
-- Need the Cloud Run service account identity when granting secret access.
+- Atlas URI works locally.
+- Database `bounce` exists.
+- All 10 expected collections exist.
+- Local write probe passes.
+- Secret Manager secret `mongodb-uri` exists.
+- Cloud Run service `bounce-api` has `MONGODB_CONNECTION_STRING` from Secret Manager and `MONGODB_DATABASE=bounce`.
+- Judge routes now fail loud with `503 MONGODB_PROVIDER_UNAVAILABLE` when Atlas is unreachable instead of returning an unhandled 500.
+
+Remaining external action needed:
+
+- In MongoDB Atlas, open **Network Access** and add `0.0.0.0/0` for hackathon/demo simplicity, or otherwise allow Cloud Run egress to the cluster.
+- After that, rerun deployed smoke tests for `POST /judge/seed-demo-trip`, `POST /judge/trigger-disruption`, and `POST /judge/reset`.
 
 No secrets were committed to the repository.
