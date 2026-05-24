@@ -122,12 +122,16 @@ Repository evidence at audit time:
   - Acceptance: required APIs are enabled, billing is linked, Secret Manager API is ready, Cloud Run `bounce-api` health check passes, and min instances is configured.
   - Evidence: `docs/infra/bnc-016-gcp-readiness.md`.
 
-### TODO
+### BLOCKED
 
 - **BNC-017 — MongoDB Atlas and MCP live setup**
   - PRD source: Part 0.3.
   - Deliverable: confirm live Atlas cluster, database, 10 collections, app user, connection string secret, and MCP enablement.
   - Acceptance: deployed backend can read/write expected collections without local mocks.
+  - Blocker: no Atlas URI/API credentials are available yet, Secret Manager does not have `mongodb-uri`, and Cloud Run has no MongoDB secret reference.
+  - Evidence/readiness support: `docs/infra/bnc-017-mongodb-atlas-mcp-readiness.md`, `scripts/infra/verify_mongodb_atlas.py`.
+
+### TODO
 
 - **BNC-018 — Firebase Realtime Database live setup**
   - PRD source: Part 0.4, Part 7.4.
@@ -200,6 +204,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next card: **BNC-017 — MongoDB Atlas and MCP live setup**.
+Recommended next action: **Resolve BNC-017 MongoDB Atlas credential/setup blocker**.
 
-Reason: Cloud/GCP project readiness is now verified. The next foundation dependency is live MongoDB Atlas/MCP setup before Firebase and larger app orchestration.
+Reason: Cloud/GCP project readiness is verified, but BNC-017 cannot be completed until an Atlas cluster/URI or Atlas API credentials are available. After BNC-017 is unblocked and verified, continue to **BNC-018 — Firebase Realtime Database live setup**.
