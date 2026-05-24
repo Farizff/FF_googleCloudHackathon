@@ -3,13 +3,6 @@ from typing import Any, Callable
 from uuid import uuid4
 
 
-class NoopFirebaseBroadcaster:
-    """Placeholder Firebase broadcaster until live Realtime Database wiring exists."""
-
-    def broadcast_itinerary_saved(self, itinerary: dict[str, Any]) -> None:
-        return None
-
-
 def _utc_now_iso() -> str:
     return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
@@ -40,8 +33,8 @@ def save_itinerary(
         upsert=True,
     )
 
-    broadcaster = firebase_broadcaster or NoopFirebaseBroadcaster()
-    broadcaster.broadcast_itinerary_saved(saved_itinerary)
+    if firebase_broadcaster is not None:
+        firebase_broadcaster.broadcast_itinerary_saved(saved_itinerary)
 
     return {
         "success": True,

@@ -8,6 +8,9 @@ from uuid import uuid4
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
+from api.firebase_rtdb import FirebaseProviderNotConfigured, FirebasePublishError, FirebaseRtdbPublisher
+from api.settings import get_settings
+
 router = APIRouter()
 
 PII_PATTERNS = {
@@ -77,13 +80,6 @@ class LocalPlanningOrchestrator:
         )
 
 
-class NoopChatPublisher:
-    """Firebase-compatible path publisher seam for tests and blocked live RTDB."""
-
-    def publish_main_thread_message(self, *, trip_id: str, author_id: str, text: str, role: str, message_id: str) -> str:
-        return f"/trips/{trip_id}/threads/main/{message_id}"
-
-
 def get_time_fn() -> Callable[[], float]:
     return time
 
@@ -92,15 +88,16 @@ def get_planner() -> LocalPlanningOrchestrator:
     return LocalPlanningOrchestrator()
 
 
-def get_chat_publisher() -> NoopChatPublisher:
-    return NoopChatPublisher()
+def get_chat_publisher() -> FirebaseRtdbPublisher:
+    settings = get_settings()
+    return FirebaseRtdbPublisher(settings.firebase_database_url)
 
 
 @router.post("/chat", response_model=ChatResponse)
 def chat_endpoint(
     request: ChatRequest,
     planner: LocalPlanningOrchestrator = Depends(get_planner),
-    publisher: NoopChatPublisher = Depends(get_chat_publisher),
+    publisher: FirebaseRtdbPublisher = Depends(get_chat_publisher),
     time_fn: Callable[[], float] = Depends(get_time_fn),
 ) -> ChatResponse:
     pii_detected, pii_type = check_for_pii(request.message)
@@ -125,13 +122,24 @@ def chat_endpoint(
         ) from exc
 
     message_id = f"msg_{uuid4().hex}"
-    path = publisher.publish_main_thread_message(
-        trip_id=result.trip_id,
-        author_id="bounce",
-        text=result.message,
-        role="assistant",
-        message_id=message_id,
-    )
+    try:
+        path = publisher.publish_main_thread_message(
+            trip_id=result.trip_id,
+            author_id="bounce",
+            text=result.message,
+            role="assistant",
+            message_id=message_id,
+        )
+    except FirebaseProviderNotConfigured as exc:
+        raise HTTPException(
+            status_code=503,
+            detail={"code": "FIREBASE_PROVIDER_NOT_CONFIGURED", "message": "Firebase Realtime Database is not configured."},
+        ) from exc
+    except FirebasePublishError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail={"code": "FIREBASE_PUBLISH_FAILED", "message": "Firebase Realtime Database publish failed."},
+        ) from exc
 
     return ChatResponse(
         success=True,

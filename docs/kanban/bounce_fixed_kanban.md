@@ -163,6 +163,12 @@ Repository evidence at audit time:
   - Acceptance: Firebase project exists, RTDB instance exists in `asia-southeast1`, demo rules are deployed, public demo read/write probe passes, and Cloud Run `bounce-api` has `FIREBASE_DATABASE_URL` configured.
   - Evidence: `docs/infra/bnc-018-firebase-rtdb-readiness.md`.
 
+- **BNC-024 — Firebase real-time sync integration**
+  - PRD source: Days 9–11 build sequence, Part 7.4.
+  - Deliverable: real Firebase broadcaster implementation replacing no-op/local test doubles.
+  - Acceptance: chat responses, itinerary updates, and group state updates write to live Firebase RTDB paths; live `/chat` publishes to RTDB; missing provider config fails loudly.
+  - Evidence: `docs/infra/bnc-024-firebase-realtime-sync.md`.
+
 ### BLOCKED
 
 - **BNC-017 — MongoDB Atlas and MCP live setup**
@@ -173,11 +179,6 @@ Repository evidence at audit time:
   - Evidence/readiness support: `docs/infra/bnc-017-mongodb-atlas-mcp-readiness.md`, `scripts/infra/verify_mongodb_atlas.py`.
 
 ### TODO
-
-- **BNC-024 — Firebase real-time sync integration**
-  - PRD source: Days 9–11 build sequence, Part 7.4.
-  - Deliverable: real Firebase broadcaster implementation replacing no-op/local test doubles.
-  - Acceptance: itinerary and group state changes appear in Firebase for all members.
 
 - **BNC-030 — Production deployment and smoke tests**
   - PRD source: Part 16.
@@ -205,6 +206,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next action: **Proceed with BNC-024 — Firebase real-time sync integration**, while keeping BNC-017 blocked/gated by live MongoDB Atlas access.
+Recommended next action: **Proceed with BNC-030 — Production deployment and smoke tests**, while keeping BNC-017 blocked/gated by live MongoDB Atlas access.
 
-Reason: BNC-018 now provides the live Firebase RTDB instance, deployed demo rules, public demo read/write verification, and Cloud Run `FIREBASE_DATABASE_URL` wiring. BNC-024 can now replace the no-op/local Firebase seams with a real RTDB broadcaster before final BNC-030 production smoke tests.
+Reason: BNC-024 now replaces the Firebase no-op/local seams with a real RTDB publisher, deploys successfully to Cloud Run, and verifies live `/chat` writes in Firebase. BNC-030 is now the next fixed-contract deployment/smoke-test card.

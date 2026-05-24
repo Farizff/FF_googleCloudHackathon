@@ -5,6 +5,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from agent.tools.apply_disruption import apply_disruption
+from api.firebase_rtdb import FirebaseProviderNotConfigured, FirebasePublishError, FirebaseRtdbPublisher
+from api.settings import get_settings
 
 
 router = APIRouter()
@@ -23,12 +25,6 @@ class TriggerDisruptionRequest(BaseModel):
     current_location: Coordinates
 
 
-class FirebaseBroadcaster:
-    def broadcast_itinerary_update(self, trip_id: str, payload: dict[str, Any]) -> None:
-        """Broadcast itinerary updates. Real Firebase wiring is injected in production setup."""
-        del trip_id, payload
-
-
 def get_db() -> Any:
     raise RuntimeError("MongoDB dependency is not configured.")
 
@@ -45,8 +41,9 @@ def get_rank_alternatives_fn() -> Callable[[list[dict[str, Any]], list[dict[str,
     return lambda reachable, profiles, available_minutes: reachable[:3]
 
 
-def get_firebase_broadcaster() -> FirebaseBroadcaster:
-    return FirebaseBroadcaster()
+def get_firebase_broadcaster() -> FirebaseRtdbPublisher:
+    settings = get_settings()
+    return FirebaseRtdbPublisher(settings.firebase_database_url)
 
 
 def get_now_fn() -> Callable[[], str]:
@@ -60,7 +57,7 @@ def trigger_disruption(
     search_venues_nearby_fn: Callable[..., list[dict[str, Any]]] = Depends(get_search_venues_nearby_fn),
     get_transit_time_fn: Callable[..., dict[str, Any]] = Depends(get_transit_time_fn),
     rank_alternatives_fn: Callable[[list[dict[str, Any]], list[dict[str, Any]], int], list[dict[str, Any]]] = Depends(get_rank_alternatives_fn),
-    firebase_broadcaster: FirebaseBroadcaster = Depends(get_firebase_broadcaster),
+    firebase_broadcaster: FirebaseRtdbPublisher = Depends(get_firebase_broadcaster),
     now_fn: Callable[[], str] = Depends(get_now_fn),
 ) -> dict[str, Any]:
     result = apply_disruption(
@@ -82,15 +79,26 @@ def trigger_disruption(
     trip_id = itinerary["trip_id"]
     last_disruption_at = result["last_disruption_at"]
     alternatives = result.get("alternatives", [])
-    firebase_broadcaster.broadcast_itinerary_update(
-        trip_id,
-        {
-            "event_type": request.event_type,
-            "itinerary_id": request.itinerary_id,
-            "last_disruption_at": last_disruption_at,
-            "alternatives_count": len(alternatives),
-        },
-    )
+    try:
+        firebase_broadcaster.broadcast_itinerary_update(
+            trip_id,
+            {
+                "event_type": request.event_type,
+                "itinerary_id": request.itinerary_id,
+                "last_disruption_at": last_disruption_at,
+                "alternatives_count": len(alternatives),
+            },
+        )
+    except FirebaseProviderNotConfigured as exc:
+        raise HTTPException(
+            status_code=503,
+            detail={"code": "FIREBASE_PROVIDER_NOT_CONFIGURED", "message": "Firebase Realtime Database is not configured."},
+        ) from exc
+    except FirebasePublishError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail={"code": "FIREBASE_PUBLISH_FAILED", "message": "Firebase Realtime Database publish failed."},
+        ) from exc
 
     return {**result, "map_pins": _map_pins(alternatives)}
 

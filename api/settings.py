@@ -17,7 +17,7 @@ class AppSettings(BaseSettings):
     mongodb_connection_string: str = ""
     mongodb_database: str = "bounce"
 
-    firebase_database_url: str = "https://bounce-hackathon-2026-default-rtdb.firebaseio.com/"
+    firebase_database_url: str = ""
     firebase_service_account_key: str = ""
 
     google_maps_api_key: str = ""
