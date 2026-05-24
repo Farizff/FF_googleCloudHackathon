@@ -119,3 +119,69 @@ def test_flockmode_permissions_chat_paths_and_flock_leader_scope():
     ended_by_member = client.post("/trips/trip_tokyo/itineraries/iti_tokyo/days/5/flock-mode/end", json={"actor_user_id": "u_priya", "end_time": "18:30"})
     assert ended_by_member.status_code == 403
     assert ended_by_member.json()["detail"]["code"] == "FLOCK_MODE_ORGANISER_ONLY"
+
+
+def test_join_trip_via_invite_token():
+    """POST /trips/join allows a user to join a trip with a valid invite token."""
+    db = install_overrides(FakeDB())
+    client = TestClient(app)
+
+    # First create an invite for trip_tokyo (organiser creates invite for a new member role)
+    created = client.post("/trips/trip_tokyo/invites", json={"actor_user_id": "u_alex", "role": "member"})
+    assert created.status_code == 200
+    invite = created.json()["invite"]
+    invite_token = invite["token"]
+    assert invite["trip_id"] == "trip_tokyo"
+    assert invite["status"] == "active"
+
+    # Accept the invite via POST /trips/join
+    joined = client.post("/trips/join", json={
+        "invite_token": invite_token,
+        "user_id": "u_emma",
+        "name": "Emma",
+        "origin_city_iata": "SEA",
+    })
+    assert joined.status_code == 200
+    result = joined.json()
+    assert result["success"] is True
+    assert result["trip_id"] == "trip_tokyo"
+
+    # Verify Emma was added as a member
+    trip = db.group_trips.find_one({"trip_id": "trip_tokyo"})
+    emma = next((m for m in trip["members"] if m["user_id"] == "u_emma"), None)
+    assert emma is not None
+    assert emma["name"] == "Emma"
+    assert emma["role"] == "member"
+    assert emma["origin_city_iata"] == "SEA"
+
+
+def test_join_trip_with_invalid_token_returns_404():
+    """POST /trips/join with an unknown token returns INVITE_NOT_FOUND."""
+    db = install_overrides(FakeDB())
+    client = TestClient(app)
+
+    response = client.post("/trips/join", json={
+        "invite_token": "invalid_token_xyz",
+        "user_id": "u_emma",
+        "name": "Emma",
+    })
+    assert response.status_code == 404
+    assert response.json()["detail"]["code"] == "INVITE_NOT_FOUND"
+
+
+def test_join_trip_already_member_returns_409():
+    """POST /trips/join when user is already a member returns MEMBER_ALREADY_EXISTS."""
+    db = install_overrides(FakeDB())
+    client = TestClient(app)
+
+    # Create invite and join
+    created = client.post("/trips/trip_tokyo/invites", json={"actor_user_id": "u_alex", "role": "member"})
+    invite_token = created.json()["invite"]["token"]
+
+    joined = client.post("/trips/join", json={
+        "invite_token": invite_token,
+        "user_id": "u_priya",  # already a member
+        "name": "Priya",
+    })
+    assert joined.status_code == 409
+    assert joined.json()["detail"]["code"] == "MEMBER_ALREADY_EXISTS"

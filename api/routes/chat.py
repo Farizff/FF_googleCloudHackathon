@@ -1,6 +1,7 @@
 import re
 from collections import defaultdict
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from time import time
 from typing import Callable
 from uuid import uuid4
@@ -9,6 +10,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
 from api.firebase_rtdb import FirebaseProviderNotConfigured, FirebasePublishError, FirebaseRtdbPublisher
+from api.routes import trip as trip_module
 from api.settings import get_settings
 
 router = APIRouter()
@@ -66,18 +68,215 @@ class PlanningError(RuntimeError):
 
 
 class LocalPlanningOrchestrator:
-    """Small deterministic planning seam until Agent Builder is wired live."""
+    """Planning seam that extracts trip details and optionally creates a real trip document."""
 
     def plan(self, request: ChatRequest) -> PlanningResult:
-        trip_id = request.trip_id or f"trip_draft_{request.user_id}"
         intent = classify_intent(request.message)
+
+        # If trip_id already provided, use it without creating a new trip
+        if request.trip_id:
+            trip_id = request.trip_id
+            message = build_planning_message(request.message, intent)
+            return PlanningResult(
+                message=message,
+                intent=intent,
+                trip_id=trip_id,
+                actions=["classify_intent", "start_planning_response"],
+            )
+
+        # Otherwise, extract destination/date/people from message and create a real trip
+        extracted = extract_trip_fields(request.user_id, request.message)
+        created = create_trip_from_extraction(
+            user_id=request.user_id,
+            name=extracted.get("name", request.user_id),
+            destination_city=extracted.get("destination_city", "Unknown"),
+            destination_country=extracted.get("destination_country", "Unknown"),
+            destination_iata=extracted.get("destination_iata", "SYD"),
+            departure_date=extracted.get("departure_date"),
+            return_date=extracted.get("return_date"),
+            num_people=extracted.get("num_people"),
+            occasion=extracted.get("occasion"),
+            origin_city_iata=extracted.get("origin_city_iata"),
+        )
+        trip_id = created["trip_id"]
+
         message = build_planning_message(request.message, intent)
         return PlanningResult(
             message=message,
             intent=intent,
             trip_id=trip_id,
-            actions=["classify_intent", "start_planning_response"],
+            actions=["extract_trip_fields", "create_trip", "start_planning_response"],
         )
+
+
+def extract_trip_fields(user_id: str, message: str) -> dict:
+    """Extract trip parameters from natural language message."""
+    normalized = message.lower()
+    fields: dict = {"name": user_id}
+
+    # Destination city - simple keyword mapping
+    destinations = {
+        "tokyo": ("Tokyo", "Japan", "NRT"),
+        "paris": ("Paris", "France", "CDG"),
+        "london": ("London", "UK", "LHR"),
+        "new york": ("New York", "USA", "JFK"),
+        "sydney": ("Sydney", "Australia", "SYD"),
+        "singapore": ("Singapore", "Singapore", "SIN"),
+        "dubai": ("Dubai", "UAE", "DXB"),
+        "rome": ("Rome", "Italy", "FCO"),
+        "barcelona": ("Barcelona", "Spain", "BCN"),
+        "bali": ("Bali", "Indonesia", "DPS"),
+        "lisbon": ("Lisbon", "Portugal", "LIS"),
+        "berlin": ("Berlin", "Germany", "BER"),
+        "amsterdam": ("Amsterdam", "Netherlands", "AMS"),
+        "miami": ("Miami", "USA", "MIA"),
+        "los angeles": ("Los Angeles", "USA", "LAX"),
+        "san francisco": ("San Francisco", "USA", "SFO"),
+        "chicago": ("Chicago", "USA", "ORD"),
+        "boston": ("Boston", "USA", "BOS"),
+        "seattle": ("Seattle", "USA", "SEA"),
+        "denver": ("Denver", "USA", "DEN"),
+        "phoenix": ("Phoenix", "USA", "PHX"),
+        "las vegas": ("Las Vegas", "USA", "LAS"),
+        "honolulu": ("Honolulu", "USA", "HNL"),
+        "maui": ("Maui", "USA", "OGG"),
+        "toronto": ("Toronto", "Canada", "YYZ"),
+        "vancouver": ("Vancouver", "Canada", "YVR"),
+        "mexico city": ("Mexico City", "Mexico", "MEX"),
+        "cancun": ("Cancun", "Mexico", "CUN"),
+        "buenos aires": ("Buenos Aires", "Argentina", "EZE"),
+        "rio de janeiro": ("Rio de Janeiro", "Brazil", "GIG"),
+        "são paulo": ("São Paulo", "Brazil", "GRU"),
+        "hong kong": ("Hong Kong", "China", "HKG"),
+        "shanghai": ("Shanghai", "China", "PVG"),
+        "beijing": ("Beijing", "China", "PEK"),
+        "seoul": ("Seoul", "South Korea", "ICN"),
+        "bangkok": ("Bangkok", "Thailand", "BKK"),
+        "phuket": ("Phuket", "Thailand", "HKT"),
+        "kuala lumpur": ("Kuala Lumpur", "Malaysia", "KUL"),
+        "manila": ("Manila", "Philippines", "MNL"),
+        "mumbai": ("Mumbai", "India", "BOM"),
+        "delhi": ("Delhi", "India", "DEL"),
+        "bangalore": ("Bangalore", "India", "BLR"),
+        "tokyo": ("Tokyo", "Japan", "NRT"),
+        "osaka": ("Osaka", "Japan", "KIX"),
+        "kyoto": ("Kyoto", "Japan", "KIX"),
+        "sapporo": ("Sapporo", "Japan", "CTS"),
+    }
+
+    for key, (city, country, iata) in destinations.items():
+        if key in normalized:
+            fields["destination_city"] = city
+            fields["destination_country"] = country
+            fields["destination_iata"] = iata
+            break
+
+    # Number of people - look for patterns like "for 10 friends", "for 4 people"
+    people_match = re.search(r"(?:for|of)\s+(\d+)\s+(?:people|friends|travelers|pax)", normalized)
+    if people_match:
+        fields["num_people"] = int(people_match.group(1))
+
+    # Dates - look for month names and day patterns
+    month_map = {
+        "january": "01", "february": "02", "march": "03", "april": "04",
+        "may": "05", "june": "06", "july": "07", "august": "08",
+        "september": "09", "october": "10", "november": "11", "december": "12",
+        "jan": "01", "feb": "02", "mar": "03", "apr": "04",
+        "jun": "06", "jul": "07", "aug": "08", "sep": "09", "oct": "10", "nov": "11", "dec": "12",
+    }
+    date_match = re.search(r"(july|august|september|october|january|february|march|april|may|june|november|december)", normalized)
+    if date_match:
+        month = month_map[date_match.group(1)]
+        day_match = re.search(r"(\d{1,2})(?:st|nd|rd|th)?", normalized)
+        if day_match:
+            day = day_match.group(1).zfill(2)
+            fields["departure_date"] = f"2026-{month}-{day}"
+
+    # Trip duration - "7 day", "5-night"
+    duration_match = re.search(r"(\d+)\s*(?:day|night|days|nights)", normalized)
+    if duration_match:
+        duration = int(duration_match.group(1))
+        if "night" in normalized or "days" not in normalized:
+            # e.g., "7-night" or "7 nights"
+            fields["num_nights"] = duration
+        else:
+            fields["num_days"] = duration
+
+    # Occasion detection
+    occasions = {
+        "reunion": "reunion",
+        "birthday": "birthday",
+        "anniversary": "anniversary",
+        "honeymoon": "honeymoon",
+        "wedding": "wedding",
+        "graduation": "graduation",
+        "conference": "conference",
+        "team offsite": "corporate offsite",
+        "offsite": "corporate offsite",
+        "vacation": "vacation",
+        "holiday": "holiday",
+    }
+    for keyword, occasion in occasions.items():
+        if keyword in normalized:
+            fields["occasion"] = occasion
+            break
+
+    return fields
+
+
+def create_trip_from_extraction(
+    user_id: str,
+    name: str,
+    destination_city: str,
+    destination_country: str = "Unknown",
+    destination_iata: str = "SYD",
+    departure_date: str | None = None,
+    return_date: str | None = None,
+    num_people: int | None = None,
+    occasion: str | None = None,
+    origin_city_iata: str | None = None,
+) -> dict:
+    """Call POST /trips/simple internally to create a real trip document."""
+    db = trip_module.get_db()
+    id_fn = trip_module.get_id_fn()
+    now = datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    trip_id = id_fn("trip")
+
+    group_type = "friends"
+    trip_mode = "international"
+
+    trip = {
+        "trip_id": trip_id,
+        "created_at": now,
+        "invite_token": id_fn("invite"),
+        "group_type": group_type,
+        "trip_mode": trip_mode,
+        "status": "planning",
+        "special_occasion": occasion,
+        "destination_city": destination_city,
+        "destination_country": destination_country,
+        "destination_iata": destination_iata,
+        "departure_date": departure_date,
+        "return_date": return_date,
+        "members": [
+            {
+                "user_id": user_id,
+                "name": name,
+                "role": "organiser",
+                "origin_city_iata": origin_city_iata,
+                "joined_at": now,
+                "profile_complete": False,
+                "shares_compliance_with_admins": True,
+            }
+        ],
+        "contacts": [],
+        "office_details": {"company_name": None, "cost_centre": None},
+        "shared_budget_estimate_usd": 0,
+        "all_members_budget_ok": False,
+        "jet_lag_override": False,
+    }
+    db.group_trips.insert_one(trip)
+    return {"success": True, "trip_id": trip_id, "trip": trip}
 
 
 def get_time_fn() -> Callable[[], float]:

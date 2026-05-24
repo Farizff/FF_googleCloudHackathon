@@ -2,10 +2,36 @@ from datetime import UTC, datetime
 from typing import Any, Callable
 from uuid import uuid4
 
+from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel
+
+from db.client import get_database
+
+router = APIRouter(prefix="/expenses", tags=["expenses"])
+
 
 TRIP_NOT_FOUND = "TRIP_NOT_FOUND"
 FLOCK_NOT_FOUND = "FLOCK_NOT_FOUND"
 INVALID_LOGGING_MODE = "INVALID_LOGGING_MODE"
+
+
+class LogExpenseRequest(BaseModel):
+    trip_id: str
+    logged_by_user_id: str
+    amount: float
+    currency: str
+    category: str
+    description: str
+    logging_mode: str
+    participants: list[str] | None = None
+    flock_id: str | None = None
+    split_type: str = "equal"
+    custom_splits: list[dict[str, Any]] | None = None
+    day_number: int | None = None
+
+
+def get_db() -> Any:
+    return get_database()
 
 
 def calculate_settlement(trip_id: str, db: Any) -> dict[str, Any]:
@@ -162,3 +188,27 @@ def _utc_now_iso() -> str:
 
 def _error(code: str, message: str) -> dict[str, dict[str, str]]:
     return {"error": {"code": code, "message": message}}
+
+
+@router.post("")
+def log_expense_endpoint(request: LogExpenseRequest, db: Any = Depends(get_db)) -> dict[str, Any]:
+    """Persist a split-bill expense for a trip."""
+    result = log_expense(
+        trip_id=request.trip_id,
+        logged_by_user_id=request.logged_by_user_id,
+        amount=request.amount,
+        currency=request.currency,
+        category=request.category,
+        description=request.description,
+        logging_mode=request.logging_mode,
+        db=db,
+        exchange_rate_fn=lambda c: 1.0,  # Placeholder; real rates injected in tests
+        participants=request.participants,
+        flock_id=request.flock_id,
+        split_type=request.split_type,
+        custom_splits=request.custom_splits,
+        day_number=request.day_number,
+    )
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result

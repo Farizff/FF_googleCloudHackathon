@@ -407,7 +407,75 @@ textarea { resize: vertical; }
   padding: var(--sp-3); display: flex; flex-wrap: wrap; gap: var(--sp-1);
   align-items: flex-start; align-content: flex-start; transition: border-color var(--t-fast), background var(--t-fast);
 }
-.flock-dropzone.has-members { border-color: var(--yale); background: var(--yale-tint); }
+.flock-dropzone.drag-over {
+  border-color: var(--teal);
+  background: var(--teal-tint);
+  border-style: solid;
+}
+.flock-dropzone:empty::after {
+  content: 'Drop members here';
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+  font-style: italic;
+  width: 100%;
+  text-align: center;
+  padding: var(--sp-2);
+}
+.member-chip[draggable="true"] { cursor: grab; }
+.member-chip[draggable="true"]:active { cursor: grabbing; }
+.member-chip.dragging { opacity: 0.4; }
+.unassigned-label { font-size: var(--text-xs); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 800; margin: 0 0 var(--sp-2); }
+.unassigned-members { margin-bottom: var(--sp-4); }
+.reconvene-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  align-items: center;
+  margin-top: var(--sp-3);
+}
+.reconvene-inputs label {
+  font-size: var(--text-sm);
+  color: var(--lemon-dark);
+  font-weight: 700;
+}
+.reconvene-inputs input {
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: var(--r-md);
+  padding: var(--sp-2) var(--sp-3);
+  background: rgba(255,255,255,0.7);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+.flock-leader-select {
+  width: 100%;
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-md);
+  padding: var(--sp-2);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  margin-bottom: var(--sp-3);
+}
+#add-flock-btn { margin-top: var(--sp-3); margin-right: var(--sp-3); }
+#save-flockmode-btn { margin-top: var(--sp-3); }
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--success);
+  color: white;
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: var(--r-pill);
+  font-weight: 750;
+  z-index: var(--z-toast);
+  animation: toastIn 0.3s ease, toastOut 0.3s ease 2.5s forwards;
+  box-shadow: var(--shadow-float);
+}
+@keyframes toastIn  { from { opacity: 0; transform: translateX(-50%) translateY(16px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+@keyframes toastOut { from { opacity: 1; } to { opacity: 0; } }
 .flock-name-input {
   border: none; background: transparent; font-size: var(--text-base);
   font-weight: 700; color: var(--text-primary); width: 100%; outline: none; padding: var(--sp-2) 0;

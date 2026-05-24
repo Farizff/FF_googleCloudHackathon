@@ -1,4 +1,160 @@
 const API_BASE = window.BOUNCE_API_BASE || '';
+const GOOGLE_MAPS_API_KEY = 'YOUR_API_KEY';
+
+let bounceMap = null;
+let bounceMarkers = [];
+let bounceInfoWindow = null;
+
+function initBounceMap() {
+  if (bounceMap) return; // already initialized
+  const mapCanvas = document.getElementById('map-canvas');
+  if (!mapCanvas) return;
+
+  // Check if the API key is still the placeholder
+  if (GOOGLE_MAPS_API_KEY === 'YOUR_API_KEY' || !GOOGLE_MAPS_API_KEY) {
+    showMapFallback(mapCanvas, 'Map: configure GOOGLE_MAPS_API_KEY');
+    return;
+  }
+
+  try {
+    bounceMap = new google.maps.Map(mapCanvas, {
+      center: { lat: 35.6762, lng: 139.6503 }, // Tokyo
+      zoom: 13,
+      disableDefaultUI: false,
+      zoomControl: true,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: true,
+    });
+    bounceInfoWindow = new google.maps.InfoWindow();
+  } catch (err) {
+    showMapFallback(mapCanvas, 'Map: Google Maps failed to load');
+  }
+}
+
+function showMapFallback(container, message) {
+  if (!container) return;
+  container.style.cssText = 'width:100%;height:300px;background:#e8eef4;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#0D3B66;font-weight:600;';
+  container.textContent = message;
+}
+
+function clearBounceMarkers() {
+  bounceMarkers.forEach(m => m.setMap(null));
+  bounceMarkers = [];
+}
+
+function addVenueMarker(lat, lng, label, color) {
+  if (!bounceMap) return null;
+  const colorMap = {
+    budget: '#2196F3',    // blue
+    recommended: '#4CAF50', // green
+    premium: '#FFC107',   // gold
+    default: '#0D3B66',   // navy
+  };
+  const markerColor = colorMap[color] || colorMap.default;
+
+  const svgIcon = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="36" viewBox="0 0 24 36">
+      <path fill="${markerColor}" d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0z"/>
+      <circle fill="#ffffff" cx="12" cy="12" r="6"/>
+    </svg>
+  `;
+
+  const marker = new google.maps.Marker({
+    position: { lat, lng },
+    map: bounceMap,
+    icon: {
+      url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svgIcon),
+      scaledSize: new google.maps.Size(24, 36),
+      anchor: new google.maps.Point(12, 36),
+    },
+    title: label,
+  });
+
+  marker.addListener('click', () => {
+    if (bounceInfoWindow) {
+      bounceInfoWindow.setContent(`<strong>${label}</strong>`);
+      bounceInfoWindow.open(bounceMap, marker);
+    }
+  });
+
+  bounceMarkers.push(marker);
+  return marker;
+}
+
+async function showItineraryView() {
+  const tripId = window.currentTripId;
+  if (!tripId) {
+    showOutput('No currentTripId set — cannot load itinerary.');
+    return;
+  }
+  setStatus('Loading itinerary…');
+  try {
+    const data = await requestJson(`/itineraries/${tripId}`);
+    const itinerary = data.itinerary;
+    const titleEl = document.querySelector('#itinerary-title');
+    const timelineEl = document.getElementById('itinerary-timeline');
+    if (titleEl && itinerary) {
+      titleEl.textContent = `${itinerary.trip_id} — Itinerary`;
+    }
+    if (timelineEl && itinerary?.days?.length) {
+      const day = itinerary.days[0];
+      timelineEl.innerHTML = (day.activities || []).map(act => {
+        const time = act.start_time || act.time || '';
+        const title = act.title || act.name || act.description || '';
+        return `<li><time>${time}</time><span>${title}</span></li>`;
+      }).join('');
+    }
+
+    // Initialize Google Map with itinerary venue pins
+    initBounceMap();
+    clearBounceMarkers();
+
+    if (itinerary?.days?.length) {
+      const day = itinerary.days[0];
+      (day.activities || []).forEach((act, idx) => {
+        if (act.lat && act.lng) {
+          addVenueMarker(act.lat, act.lng, act.title || act.name || `Stop ${idx + 1}`, 'default');
+        }
+      });
+
+      // Fit map to show all markers
+      if (bounceMarkers.length > 0) {
+        const bounds = new google.maps.LatLngBounds();
+        bounceMarkers.forEach(m => bounds.extend(m.getPosition()));
+        bounceMap.fitBounds(bounds);
+      }
+    }
+
+    setStatus('Itinerary loaded', 'ok');
+    showOutput(itinerary);
+  } catch (err) {
+    setStatus('Itinerary unavailable', 'error');
+    showOutput(err.message);
+  }
+}
+
+function showDisruptionSheet(alternatives = []) {
+  if (!bounceMap) {
+    initBounceMap();
+  }
+  if (!bounceMap) return;
+
+  const colorByTier = { budget: 'budget', recommended: 'recommended', premium: 'premium' };
+  (alternatives || []).forEach((alt, idx) => {
+    const color = colorByTier[alt.tier?.toLowerCase()] || 'default';
+    const label = alt.name || alt.venue_name || `Option ${idx + 1}: ${alt.tier || ''}`;
+    if (alt.lat && alt.lng) {
+      addVenueMarker(alt.lat, alt.lng, `${idx + 1}. ${label}`, color);
+    }
+  });
+
+  if (bounceMarkers.length > 0) {
+    const bounds = new google.maps.LatLngBounds();
+    bounceMarkers.forEach(m => bounds.extend(m.getPosition()));
+    bounceMap.fitBounds(bounds);
+  }
+}
 
 const els = {
   nameInput: document.querySelector('#traveller-name'),
@@ -21,6 +177,9 @@ const els = {
   startFlockModeButton: document.querySelector('#start-flockmode'),
   logExpenseButton: document.querySelector('#log-expense'),
   bottomNav: document.querySelector('.bottom-nav'),
+  inviteToken: document.querySelector('#invite-token'),
+  joinTripButton: document.querySelector('#join-trip-button'),
+  inviteError: document.querySelector('#invite-error'),
 };
 
 const state = {
@@ -128,11 +287,13 @@ async function sendTripPrompt() {
     }).then((res) => res.json());
     renderPlanningSnapshot({ ...fallback, bounce_message: response.message || fallback.bounce_message });
     setStatus('Planning snapshot ready', 'ok');
+    // Load live flight options once the planning context is set.
+    showFlightSelectionView();
     return response;
   } catch (error) {
     renderPlanningSnapshot(fallback);
     setStatus('Showing local planning snapshot — chat API unavailable', 'error');
-    showOutput({ fallback: true, reason: error.message, state: selectedPlanningDetails() });
+showFlightSelectionView();
     return fallback;
   }
 }
@@ -178,6 +339,35 @@ function renderFlightOptions(flights = []) {
       <div class="risk-bar"><span style="width: ${flight.risk}%"></span></div>
     </article>`;
   }).join('');
+}
+
+async function showFlightSelectionView() {
+  const origin = window.tripOrigin || 'SFO';
+  const destination = window.tripDestination || 'TYO';
+  const date = window.tripDepartureDate || '2026-10-15';
+
+  setStatus('Loading flights…');
+  try {
+    const data = await requestJson(`/flights/search?origin=${origin}&destination=${destination}&date=${date}`);
+    if (data.error) {
+      // Fall back to demo data if API returns an error.
+      renderFlightOptions(demoPlanningSnapshot('').flights);
+      setStatus('Flight search unavailable — showing demo options', 'error');
+      return;
+    }
+    const options = data.options || [];
+    if (options.length === 0) {
+      renderFlightOptions(demoPlanningSnapshot('').flights);
+      setStatus('No flights found — showing demo options', 'error');
+      return;
+    }
+    renderFlightOptions(options);
+    setStatus(`${options.length} flight option${options.length !== 1 ? 's' : ''} loaded`, 'ok');
+  } catch (err) {
+    renderFlightOptions(demoPlanningSnapshot('').flights);
+    setStatus('Flight API unavailable — showing demo options', 'error');
+    showOutput(err.message);
+  }
 }
 
 function renderMapPins(pins = []) {
@@ -296,6 +486,38 @@ function selectFlight(card) {
   showOutput({ selected_flight: state.selectedFlightNumber, tier: state.selectedFlightTier, note: 'Selection saved in local demo state.' });
   renderActiveTrip();
   renderMapPins((document.querySelector('.map-canvas')?.dataset.pins || 'Hotel → Asakusa → Ueno dinner').split(' → '));
+}
+
+async function showSettlementView() {
+  const tripId = window.currentTripId;
+  if (!tripId) {
+    showOutput('No currentTripId set — cannot load settlement.');
+    return;
+  }
+  setStatus('Loading settlement…');
+  try {
+    const data = await requestJson(`/settlements/${tripId}`);
+    const balances = data.balances || {};
+    const transactions = data.transactions || [];
+
+    // Update balance cards in the split-bill section
+    const balanceGrid = document.querySelector('.balance-grid');
+    if (balanceGrid) {
+      balanceGrid.innerHTML = Object.entries(balances).map(([userId, balance]) => {
+        const cls = balance > 0.01 ? 'is-owed' : balance < -0.01 ? 'owes' : 'balanced';
+        const sign = balance > 0 ? '+' : '';
+        return `<article class="balance-card ${cls}"><strong>${userId}</strong><span>${sign}$${balance.toFixed(2)}</span></article>`;
+      }).join('');
+    }
+
+    // Show transactions summary
+    const output = { balances, transactions };
+    showOutput(output);
+    setStatus('Settlement loaded', 'ok');
+  } catch (err) {
+    setStatus('Settlement unavailable', 'error');
+    showOutput(err.message);
+  }
 }
 
 function activateFlockMode() {
@@ -431,6 +653,45 @@ async function triggerDisruption() {
   }
 }
 
+async function joinTrip() {
+  const token = els.inviteToken?.value?.trim();
+  const name = els.nameInput?.value?.trim();
+  if (!token) {
+    showInviteError('Please enter an invite token.');
+    return;
+  }
+  if (!name) {
+    showInviteError('Please enter your name first (above).');
+    return;
+  }
+  setStatus('Joining trip…');
+  if (els.inviteError) els.inviteError.hidden = true;
+  try {
+    const userId = `u_${name.toLowerCase().replace(/\s+/g, '_')}`;
+    const result = await requestJson('/trips/join', {
+      method: 'POST',
+      body: JSON.stringify({ invite_token: token, user_id: userId, name }),
+    });
+    window.currentTripId = result.trip_id;
+    setStatus(`Joined ${result.trip_name}! Loading itinerary…`, 'ok');
+    showOutput(result);
+    // Navigate to itinerary / profile gap-fill screen
+    document.querySelector('#entry-conversation')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return result;
+  } catch (err) {
+    setStatus('Join failed', 'error');
+    showInviteError(err.message || 'Could not join trip. Check your token and try again.');
+    showOutput(err.message);
+    throw err;
+  }
+}
+
+function showInviteError(msg) {
+  if (!els.inviteError) return;
+  els.inviteError.textContent = msg;
+  els.inviteError.hidden = false;
+}
+
 function personalizeShell() {
   const name = els.nameInput?.value?.trim();
   if (!name) {
@@ -516,6 +777,12 @@ els.disruptionButton?.addEventListener('click', () => triggerDisruption().catch(
   setStatus('Disruption trigger failed', 'error');
   showOutput(error.message);
 }));
+els.joinTripButton?.addEventListener('click', () => joinTrip().catch((error) => {
+  setStatus('Join failed', 'error');
+}));
+els.inviteToken?.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') joinTrip().catch(() => {});
+});
 
 els.splitIntoFlocksButton?.addEventListener('click', prepareFlockSplit);
 els.startFlockModeButton?.addEventListener('click', activateFlockMode);
@@ -534,4 +801,251 @@ renderActiveTrip();
 renderSplitBill();
 renderMapPins(['Hotel', 'Asakusa', 'Ueno dinner']);
 
+// ─── FlockMode drag-and-drop ───────────────────────────────────────────
+let draggedChip = null;
+
+function initFlockModeDragDrop() {
+  // Set up drag events on all member chips (both in unassigned pool and in flock dropzones)
+  document.querySelectorAll('.member-chip[draggable="true"]').forEach(chip => {
+    chip.addEventListener('dragstart', onDragStart);
+    chip.addEventListener('dragend', onDragEnd);
+  });
+
+  // Set up drop zones: unassigned pool
+  const pool = document.getElementById('unassigned-pool');
+  if (pool) {
+    pool.addEventListener('dragover', onDragOver);
+    pool.addEventListener('drop', onDropPool);
+    pool.addEventListener('dragleave', onDragLeave);
+  }
+
+  // Set up drop zones: flock dropzones
+  document.querySelectorAll('.flock-dropzone').forEach(zone => {
+    zone.addEventListener('dragover', onDragOver);
+    zone.addEventListener('drop', onDropFlock);
+    zone.addEventListener('dragleave', onDragLeave);
+  });
+
+  // Add Flock button
+  const addFlockBtn = document.getElementById('add-flock-btn');
+  if (addFlockBtn) {
+    addFlockBtn.addEventListener('click', addNewFlock);
+  }
+
+  // Save FlockMode button
+  const saveBtn = document.getElementById('save-flockmode-btn');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', saveFlockMode);
+  }
+}
+
+function onDragStart(e) {
+  draggedChip = e.target;
+  e.target.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', e.target.dataset.userId || '');
+}
+
+function onDragEnd(e) {
+  e.target.classList.remove('dragging');
+  document.querySelectorAll('.flock-dropzone').forEach(z => z.classList.remove('drag-over'));
+  const pool = document.getElementById('unassigned-pool');
+  if (pool) pool.classList.remove('drag-over');
+  draggedChip = null;
+}
+
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  e.currentTarget.classList.add('drag-over');
+}
+
+function onDragLeave(e) {
+  // Only remove class if leaving the container itself
+  if (!e.currentTarget.contains(e.relatedTarget)) {
+    e.currentTarget.classList.remove('drag-over');
+  }
+}
+
+function onDropPool(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (!draggedChip) return;
+
+  // If dropped back on the unassigned pool, remove from any flock
+  const userId = draggedChip.dataset.userId;
+  if (userId) removeMemberFromAllFlocks(userId);
+
+  // Move chip to unassigned pool
+  const pool = document.getElementById('unassigned-pool');
+  if (pool && !pool.contains(draggedChip)) {
+    pool.appendChild(draggedChip);
+    updateLeaderOptions();
+  }
+}
+
+function onDropFlock(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (!draggedChip) return;
+
+  const dropzone = e.currentTarget;
+  const chip = draggedChip;
+  const userId = chip.dataset.userId;
+
+  // Remove from any other flock first
+  if (userId) removeMemberFromAllFlocks(userId);
+
+  // Append to this dropzone
+  dropzone.appendChild(chip);
+  updateLeaderOptions();
+}
+
+function removeMemberFromAllFlocks(userId) {
+  document.querySelectorAll('.flock-dropzone').forEach(zone => {
+    Array.from(zone.children).forEach(child => {
+      if (child.dataset.userId === userId) {
+        // Move back to unassigned pool
+        const pool = document.getElementById('unassigned-pool');
+        if (pool) pool.appendChild(child);
+      }
+    });
+  });
+}
+
+function updateLeaderOptions() {
+  // Collect all members currently placed in flocks
+  const placedUserIds = new Set();
+  document.querySelectorAll('.flock-dropzone .member-chip').forEach(chip => {
+    if (chip.dataset.userId) placedUserIds.add(chip.dataset.userId);
+  });
+
+  // Update each flock's leader dropdown: disable options already assigned to another flock
+  document.querySelectorAll('.flock-box').forEach(box => {
+    const select = box.querySelector('.flock-leader-select');
+    const thisFlockMembers = Array.from(box.querySelectorAll('.flock-dropzone .member-chip'))
+      .map(c => c.dataset.userId)
+      .filter(Boolean);
+    const currentLeader = select?.value;
+
+    Array.from(select?.options || []).forEach(opt => {
+      const userId = opt.value;
+      if (!userId) return; // skip placeholder
+      const isInThisFlock = thisFlockMembers.includes(userId);
+      const isPlacedElsewhere = placedUserIds.has(userId) && !isInThisFlock;
+      opt.disabled = isPlacedElsewhere;
+    });
+  });
+}
+
+let flockCounter = 2; // already have 2 flocks (0 and 1)
+
+function addNewFlock() {
+  const grid = document.getElementById('flock-grid');
+  if (!grid) return;
+
+  const id = flockCounter++;
+  const allUserIds = ['u_alex','u_priya','u_marcus','u_sofia','u_jake','u_aditya'];
+  const name = `Flock ${id + 1}`;
+
+  const article = document.createElement('article');
+  article.className = 'flock-box';
+  article.dataset.flockId = id;
+  article.innerHTML = `
+    <input class="flock-name-input" value="${name}" aria-label="Flock name" />
+    <select class="flock-leader-select" aria-label="Select leader for this flock">
+      <option value="">Select leader…</option>
+      ${allUserIds.map(uid => {
+        const displayName = uid.replace('u_', '').charAt(0).toUpperCase() + uid.replace('u_', '').slice(1);
+        return `<option value="${uid}">${displayName}</option>`;
+      }).join('')}
+    </select>
+    <div class="flock-dropzone" data-flock-id="${id}"></div>
+  `;
+
+  grid.appendChild(article);
+
+  // Re-init drag events on all chips (new chips added in existing flocks)
+  document.querySelectorAll('.member-chip[draggable="true"]').forEach(chip => {
+    chip.removeEventListener('dragstart', onDragStart);
+    chip.removeEventListener('dragend', onDragEnd);
+    chip.addEventListener('dragstart', onDragStart);
+    chip.addEventListener('dragend', onDragEnd);
+  });
+
+  // Set up dropzone events for the new dropzone
+  const dropzone = article.querySelector('.flock-dropzone');
+  dropzone.addEventListener('dragover', onDragOver);
+  dropzone.addEventListener('drop', onDropFlock);
+  dropzone.addEventListener('dragleave', onDragLeave);
+
+  updateLeaderOptions();
+}
+
+function showToast(message) {
+  // Remove existing toast
+  document.querySelectorAll('.toast').forEach(t => t.remove());
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+async function saveFlockMode() {
+  const tripId = window.currentTripId || 'trip_tokyo_reunion_2026';
+
+  // Collect all flocks
+  const flocks = [];
+  document.querySelectorAll('.flock-box').forEach(box => {
+    const name = box.querySelector('.flock-name-input')?.value?.trim() || `Flock ${flocks.length + 1}`;
+    const leaderSelect = box.querySelector('.flock-leader-select');
+    const leaderUserId = leaderSelect?.value || null;
+    const memberIds = Array.from(box.querySelectorAll('.flock-dropzone .member-chip'))
+      .map(chip => chip.dataset.userId)
+      .filter(Boolean);
+
+    if (memberIds.length > 0) {
+      flocks.push({ name, leader_user_id: leaderUserId, member_ids: memberIds });
+    }
+  });
+
+  const reconveneTime = document.getElementById('reconvene-time')?.value || '';
+  const reconveneLocation = document.getElementById('reconvene-location')?.value || '';
+
+  if (flocks.length === 0) {
+    showToast('Add at least one member to a flock before saving.');
+    return;
+  }
+
+  setStatus('Saving FlockMode…');
+
+  try {
+    const payload = {
+      name: `Day 5 Flocks`,
+      trip_id: tripId,
+      reconvene_time: reconveneTime || '18:30',
+      reconvene_location: reconveneLocation || 'Shinjuku Station East Exit',
+      flocks: flocks,
+    };
+
+    const result = await requestJson('/flocks', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+
+    showToast('FlockMode activated 🐦');
+    setStatus('FlockMode saved', 'ok');
+
+    // Transition to flock-active-view
+    document.getElementById('flock-active-view')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (err) {
+    setStatus('FlockMode save failed', 'error');
+    showOutput(err.message);
+    showToast('FlockMode save failed — check console');
+  }
+}
+
+// Initialize drag-and-drop on load
+document.addEventListener('DOMContentLoaded', initFlockModeDragDrop);
 checkHealth().catch(() => {});

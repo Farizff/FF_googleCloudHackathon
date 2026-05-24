@@ -35,6 +35,17 @@
           <button id="start-button" class="primary-button" type="button">Let's go →</button>
           <p class="auth-privacy">Bounce stores your travel preferences to personalise your trips. We don't sell your data or share it outside your travel group.</p>
         </div>
+
+        <div id="invite-join" class="auth-card invite-join-card" aria-labelledby="invite-join-title">
+          <div class="bounce-line">
+            <div class="bounce-avatar" aria-hidden="true">B</div>
+            <p>Got an invite link? Paste your token below to join your group.</p>
+          </div>
+          <label class="sr-only" for="invite-token">Invite token</label>
+          <input id="invite-token" class="auth-name-input" autocomplete="off" placeholder="Invite token (e.g. invite_abc123...)" />
+          <button id="join-trip-button" class="primary-button" type="button">Join Trip →</button>
+          <p id="invite-error" class="invite-error" aria-live="polite" hidden></p>
+        </div>
       </section>
 
       <section id="entry-conversation" class="planning-shell entry-card" aria-labelledby="entry-title">
@@ -95,12 +106,9 @@
       <section id="map-preview" class="planning-shell map-card" aria-labelledby="map-title">
         <p class="eyebrow">Maps JS preview</p>
         <h2 id="map-title">Map preview</h2>
-        <div class="map-canvas" aria-label="Static map placeholder with custom pins">
-          <span class="map-pin map-pin--hotel">H</span>
-          <span class="map-pin map-pin--current">1</span>
-          <span class="map-pin">2</span>
-          <span class="route-line"></span>
-        </div>
+        <!-- Replace YOUR_API_KEY with actual Google Maps JS API key -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initBounceMap" async defer></script>
+        <div id="map-canvas" style="width:100%;height:300px;"></div>
       </section>
 
       <section id="flight-selection" class="planning-shell flights-card" aria-labelledby="flights-title">
@@ -151,24 +159,68 @@
         <p class="eyebrow">FlockMode creation</p>
         <h2 id="flock-create-title">Create Flocks for Day 5</h2>
         <p class="muted">Split your group into smaller flocks for parallel adventures. They'll reconvene at a time and place you set.</p>
-        <div class="chip-grid" aria-label="Unassigned member pool">
-          <span class="member-chip">Alex</span><span class="member-chip">Priya</span><span class="member-chip">Marcus</span><span class="member-chip">Sofia</span><span class="member-chip">Jake</span><span class="member-chip">Aditya</span>
-        </div>
-        <div class="flock-grid">
-          <article class="flock-box">
-            <input class="flock-name-input" value="The Explorers" aria-label="Flock 1 name" />
-            <div class="flock-dropzone has-members"><span class="member-chip is-joined">Alex</span><span class="member-chip is-joined">Priya</span><span class="member-chip is-joined">Aditya</span></div>
-          </article>
-          <article class="flock-box">
-            <input class="flock-name-input" value="Food Scouts" aria-label="Flock 2 name" />
-            <div class="flock-dropzone has-members"><span class="member-chip is-joined">Marcus</span><span class="member-chip is-joined">Sofia</span></div>
-          </article>
-        </div>
+
         <div class="reconvene-card">
-          <strong>Reconvene</strong>
-          <span>6:30 PM · Shinjuku Station East Exit</span>
+          <strong>Reconvene settings</strong>
+          <div class="reconvene-inputs">
+            <label for="reconvene-time">Time</label>
+            <input id="reconvene-time" type="time" value="18:30" aria-label="Reconvene time" />
+            <label for="reconvene-location">Location</label>
+            <input id="reconvene-location" type="text" value="Shinjuku Station East Exit" placeholder="Meeting point" aria-label="Reconvene location" />
+          </div>
         </div>
-        <button id="start-flockmode" class="primary-button" type="button">Start FlockMode →</button>
+
+        <div class="unassigned-members" aria-label="Unassigned member pool">
+          <p class="unassigned-label">Unassigned Members</p>
+          <div id="unassigned-pool" class="chip-grid">
+            <span class="member-chip" draggable="true" data-user-id="u_alex">Alex</span>
+            <span class="member-chip" draggable="true" data-user-id="u_priya">Priya</span>
+            <span class="member-chip" draggable="true" data-user-id="u_marcus">Marcus</span>
+            <span class="member-chip" draggable="true" data-user-id="u_sofia">Sofia</span>
+            <span class="member-chip" draggable="true" data-user-id="u_jake">Jake</span>
+            <span class="member-chip" draggable="true" data-user-id="u_aditya">Aditya</span>
+          </div>
+        </div>
+
+        <div id="flock-grid" class="flock-grid">
+          <article class="flock-box" data-flock-id="0">
+            <input class="flock-name-input" value="The Explorers" aria-label="Flock 1 name" />
+            <select class="flock-leader-select" aria-label="Select leader for this flock">
+              <option value="">Select leader…</option>
+              <option value="u_alex">Alex</option>
+              <option value="u_priya">Priya</option>
+              <option value="u_marcus">Marcus</option>
+              <option value="u_sofia">Sofia</option>
+              <option value="u_jake">Jake</option>
+              <option value="u_aditya">Aditya</option>
+            </select>
+            <div class="flock-dropzone" data-flock-id="0">
+              <span class="member-chip" draggable="true" data-user-id="u_alex">Alex</span>
+              <span class="member-chip" draggable="true" data-user-id="u_priya">Priya</span>
+              <span class="member-chip" draggable="true" data-user-id="u_aditya">Aditya</span>
+            </div>
+          </article>
+          <article class="flock-box" data-flock-id="1">
+            <input class="flock-name-input" value="Food Scouts" aria-label="Flock 2 name" />
+            <select class="flock-leader-select" aria-label="Select leader for this flock">
+              <option value="">Select leader…</option>
+              <option value="u_alex">Alex</option>
+              <option value="u_priya">Priya</option>
+              <option value="u_marcus">Marcus</option>
+              <option value="u_sofia">Sofia</option>
+              <option value="u_jake">Jake</option>
+              <option value="u_aditya">Aditya</option>
+            </select>
+            <div class="flock-dropzone" data-flock-id="1">
+              <span class="member-chip" draggable="true" data-user-id="u_marcus">Marcus</span>
+              <span class="member-chip" draggable="true" data-user-id="u_sofia">Sofia</span>
+            </div>
+          </article>
+        </div>
+
+        <button id="add-flock-btn" class="secondary-button" type="button">+ Add Flock</button>
+        <p class="flockmode-label">Start FlockMode</p>
+        <button id="save-flockmode-btn" class="primary-button" type="button">Save FlockMode →</button>
       </section>
 
       <section id="flock-active-view" class="planning-shell flock-active-card" aria-labelledby="flock-active-title">
