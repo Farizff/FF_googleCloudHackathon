@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0D3B66" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Bounce" />
+    <title>Bounce — Group travel genius</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main id="app" class="app-shell">
+      <section class="auth-screen" aria-labelledby="auth-title">
+        <div class="auth-logo-wrap">
+          <div class="bounce-avatar bounce-avatar--large" aria-hidden="true">B</div>
+          <h1 id="auth-title" class="auth-wordmark">Boun<span>ce</span></h1>
+          <p class="auth-tagline">Your group travel genius</p>
+        </div>
+
+        <div class="auth-card">
+          <div class="bounce-line">
+            <div class="bounce-avatar" aria-hidden="true">B</div>
+            <p>I'm Bounce — your AI travel companion. Before we go anywhere, what's your name?</p>
+          </div>
+          <label class="sr-only" for="traveller-name">Your name</label>
+          <input id="traveller-name" class="auth-name-input" autocomplete="name" placeholder="Alex, Priya, Marcus..." />
+          <button id="start-button" class="primary-button" type="button">Let's go →</button>
+          <p class="auth-privacy">Bounce stores your travel preferences to personalise your trips. We don't sell your data or share it outside your travel group.</p>
+        </div>
+      </section>
+
+      <section class="demo-panel" aria-labelledby="demo-title">
+        <div>
+          <p class="eyebrow">Judge-ready shell</p>
+          <h2 id="demo-title">The Tokyo Reunion</h2>
+          <p class="muted">Use these controls to verify the backend connection before the richer planning UI lands.</p>
+        </div>
+        <div id="api-status" class="api-status" role="status">Checking API…</div>
+        <div class="demo-actions">
+          <button id="health-button" class="secondary-button" type="button">Check health</button>
+          <button id="seed-button" class="secondary-button" type="button">Seed demo trip</button>
+          <button id="disruption-button" class="danger-button" type="button">Trigger disruption</button>
+        </div>
+        <pre id="api-output" class="api-output" aria-live="polite"></pre>
+      </section>
+
+      <nav class="bottom-nav" data-phase="planning" aria-label="Primary">
+        <a href="#app" aria-current="page">Plan</a>
+        <a href="#demo-title">Demo</a>
+        <a href="#api-status">Status</a>
+      </nav>
+    </main>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+      }
+    </script>
+    <script src="app.js" defer="defer"></script>
+  </body>
+</html>

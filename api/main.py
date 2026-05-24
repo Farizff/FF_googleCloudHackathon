@@ -1,4 +1,7 @@
+from pathlib import Path
+
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from api.routes.chat import router as chat_router
 from api.routes.disruptions import router as disruptions_router
@@ -21,8 +24,14 @@ app.include_router(judge_router)
 app.include_router(scheduler_router)
 app.include_router(trip_router)
 
+FRONTEND_DIR = Path(__file__).resolve().parents[1] / "frontend"
+
 
 @app.get("/health")
 def health() -> dict[str, str]:
     """Return a minimal health response for Cloud Run and local checks."""
     return {"status": "ok", "app": "Bounce", "version": "v0"}
+
+
+if FRONTEND_DIR.exists():
+    app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")

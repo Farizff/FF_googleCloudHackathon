@@ -142,6 +142,11 @@ Repository evidence at audit time:
   - Deliverable: `workers/flight_poller.py`, `workers/reminder_dispatcher.py`, and internal scheduler endpoints if needed.
   - Acceptance: due reminders are sent once and flight status changes publish notifications.
 
+- **BNC-027 — Frontend foundation and app shell**
+  - PRD source: Part 4 repo structure, design doc cross-reference.
+  - Deliverable: `frontend/index.html`, `manifest.json`, `sw.js`, `app.js`, and `style.css`.
+  - Acceptance: app shell loads locally and can call backend health/demo endpoints.
+
 ### BLOCKED
 
 - **BNC-017 — MongoDB Atlas and MCP live setup**
@@ -165,11 +170,6 @@ Repository evidence at audit time:
   - Blocker: depends on BNC-018 live Firebase RTDB project/database access.
 
 ### TODO
-
-- **BNC-027 — Frontend foundation and app shell**
-  - PRD source: Part 4 repo structure, design doc cross-reference.
-  - Deliverable: `frontend/index.html`, `manifest.json`, `sw.js`, `app.js`, and `style.css`.
-  - Acceptance: app shell loads locally and can call backend health/demo endpoints.
 
 - **BNC-028 — Core planning UI**
   - PRD source: Days 3–8 build sequence and Part 15 core loop/flights/maps.
@@ -207,6 +207,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next action: **Proceed with BNC-027 — Frontend foundation and app shell**, while keeping BNC-017, BNC-018, and BNC-024 blocked/gated by live Firebase/MongoDB access.
+Recommended next action: **Proceed with BNC-028 — Core planning UI**, while keeping BNC-017, BNC-018, and BNC-024 blocked/gated by live Firebase/MongoDB access.
 
-Reason: BNC-026 now covers local scheduler-triggered reminder dispatch and flight polling workers behind injected provider seams. BNC-027 is the next unblocked card in the fixed contract.
+Reason: BNC-027 now provides the frontend PWA app shell, static serving, and backend health/judge demo connection checks. BNC-028 is the next fixed-contract UI card.
