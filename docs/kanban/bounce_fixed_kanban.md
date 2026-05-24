@@ -169,22 +169,18 @@ Repository evidence at audit time:
   - Acceptance: chat responses, itinerary updates, and group state updates write to live Firebase RTDB paths; live `/chat` publishes to RTDB; missing provider config fails loudly.
   - Evidence: `docs/infra/bnc-024-firebase-realtime-sync.md`.
 
-### BLOCKED
-
 - **BNC-017 — MongoDB Atlas and MCP live setup**
   - PRD source: Part 0.3.
   - Deliverable: confirm live Atlas cluster, database, 10 collections, app user, connection string secret, and MCP enablement.
   - Acceptance: deployed backend can read/write expected collections without local mocks.
-  - Completed checkpoint: Atlas URI verified locally, database `bounce` exists, all 10 PRD collections exist, local read/write/delete probe passes, GCP Secret Manager secret `mongodb-uri` exists, and Cloud Run revision `bounce-api-00011-gj6` receives `MONGODB_CONNECTION_STRING` from Secret Manager.
-  - Blocker: Atlas Network Access still appears to reject Cloud Run egress; deployed judge mutations return `503 MONGODB_PROVIDER_UNAVAILABLE` with Atlas TLS handshake failures. Add `0.0.0.0/0` in Atlas Network Access for hackathon simplicity, then rerun BNC-017/BNC-030 smoke tests.
+  - Completed checkpoint: Atlas URI verified locally, database `bounce` exists, all 10 PRD collections exist, local read/write/delete probe passes, GCP Secret Manager secret `mongodb-uri` exists, Cloud Run revision `bounce-api-00011-gj6` receives `MONGODB_CONNECTION_STRING` from Secret Manager, and deployed judge MongoDB write endpoints pass after Atlas Network Access was updated to `0.0.0.0/0`.
   - Evidence/readiness support: `docs/infra/bnc-017-mongodb-atlas-mcp-readiness.md`, `scripts/infra/verify_mongodb_atlas.py`.
 
 - **BNC-030 — Production deployment and smoke tests**
   - PRD source: Part 16.
   - Deliverable: container build, Cloud Run deploy, env/secrets wired, frontend deploy.
   - Acceptance: hosted app URL and API URL work, `/health` passes, judge endpoints live.
-  - Completed checkpoint: Cloud Run revision `bounce-api-00011-gj6` serves `/health`, `/`, `/app.js`, `/judge/instructions`, and live `/chat` with Firebase RTDB publishing. Cloud Run now also receives `MONGODB_CONNECTION_STRING` from Secret Manager.
-  - Blocker: MongoDB-backed judge mutations cannot be fully live until Atlas Network Access allows Cloud Run egress; they now fail loud with `503 MONGODB_PROVIDER_UNAVAILABLE` instead of an unhandled 500.
+  - Completed checkpoint: Cloud Run revision `bounce-api-00011-gj6` serves `/health`, `/`, `/app.js`, `/judge/instructions`, live `/chat` with Firebase RTDB publishing, and MongoDB-backed judge endpoints `/judge/seed-demo-trip`, `/judge/trigger-disruption`, and `/judge/reset` return HTTP 200.
   - Evidence: `docs/infra/bnc-030-production-smoke.md`.
 
 ### TODO
@@ -210,6 +206,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next action: **In MongoDB Atlas, add `0.0.0.0/0` to Network Access**, then rerun BNC-017/BNC-030 deployed judge smoke tests.
+Recommended next action: **Proceed with BNC-031 — Demo/submission package**.
 
-Reason: BNC-017 now has the Atlas URI verified locally, all 10 PRD collections created, a local write probe passing, Secret Manager `mongodb-uri` created, and Cloud Run wired to `MONGODB_CONNECTION_STRING`. Cloud Run reaches Atlas but receives TLS handshake failures, which is consistent with Atlas Network Access not allowing Cloud Run egress. Once Atlas allows Cloud Run, the remaining MongoDB-backed judge endpoints can be re-smoked and BNC-017/BNC-030 can move forward.
+Reason: BNC-017 and BNC-030 now pass their live deployment gates: Atlas local/read-write readiness passes, Cloud Run is wired to Secret Manager, hosted app/API endpoints work, and deployed MongoDB-backed judge endpoints return HTTP 200 after Atlas Network Access was updated.

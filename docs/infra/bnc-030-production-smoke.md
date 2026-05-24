@@ -4,9 +4,9 @@ Date: 2026-05-24
 
 ## Result
 
-BNC-030 has a production smoke checkpoint deployed on Cloud Run. The public API URL and Cloud Run-hosted frontend URL are live, `/health` passes, judge instructions are live, and live `/chat` publishes to Firebase RTDB.
+BNC-030 has a production smoke checkpoint deployed on Cloud Run. The public API URL and Cloud Run-hosted frontend URL are live, `/health` passes, judge instructions are live, live `/chat` publishes to Firebase RTDB, and MongoDB-backed judge endpoints are live.
 
-The remaining MongoDB-backed judge write actions are blocked by BNC-017 because Atlas Network Access still appears to reject Cloud Run egress. Secret Manager and Cloud Run MongoDB wiring now exist.
+Atlas Network Access was updated to `0.0.0.0/0` for hackathon/demo access, unblocking Cloud Run → Atlas writes.
 
 ## Deployment target
 
@@ -27,7 +27,7 @@ Cloud Run environment currently includes:
 - `MONGODB_DATABASE=bounce`
 - `MONGODB_CONNECTION_STRING` from Secret Manager secret `mongodb-uri:latest`
 
-Secret Manager now contains `mongodb-uri`. The remaining blocker is Atlas Network Access for Cloud Run egress.
+Secret Manager contains `mongodb-uri`, and deployed MongoDB-backed judge smoke tests now pass.
 
 ## Changes made during BNC-030
 
@@ -70,8 +70,9 @@ const API_BASE = window.BOUNCE_API_BASE || '';
 GET /judge/instructions -> HTTP 200
 Bounce Judge Test Mode
 
-POST /judge/seed-demo-trip -> HTTP 503
-{"detail":{"code":"MONGODB_PROVIDER_UNAVAILABLE","message":"Atlas TLS handshake failed from Cloud Run; allow Cloud Run egress in Atlas Network Access."}}
+POST /judge/seed-demo-trip -> HTTP 200
+POST /judge/trigger-disruption -> HTTP 200
+POST /judge/reset -> HTTP 200
 
 POST /chat -> HTTP 200
 planning_response_path=/trips/trip_bnc030_smoke/threads/main/msg_5e3a080066764f2e9d09d08c534a725b
@@ -84,17 +85,19 @@ Readback confirmed messages under /trips/trip_bnc030_smoke/threads/main.
 Probe data was deleted after verification.
 ```
 
-## Boundary / blocker
+## Boundary / follow-up
 
-BNC-030 cannot be fully closed as production-complete until Atlas Network Access allows Cloud Run to connect to MongoDB. Until then:
+BNC-030 is complete for the current hackathon deployment gate:
 
 - `/health` is live.
 - The hosted app shell is live at `/`.
 - `/judge/instructions` is live.
 - `/chat` works and writes to Firebase RTDB.
 - Cloud Run has `MONGODB_CONNECTION_STRING` from Secret Manager.
-- MongoDB-backed judge mutations correctly fail loud with `503 MONGODB_PROVIDER_UNAVAILABLE`.
+- MongoDB-backed judge mutations return HTTP 200.
+
+Follow-up security hardening after demo: rotate the `bounce-app` password and tighten Atlas Network Access when stable Cloud Run egress is available.
 
 ## Next recommended card
 
-`BNC-017 — add Atlas Network Access allowlist for Cloud Run egress, then rerun deployed judge smoke tests`
+`BNC-031 — Demo/submission package`
