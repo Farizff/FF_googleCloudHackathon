@@ -183,12 +183,18 @@ Repository evidence at audit time:
   - Completed checkpoint: Cloud Run revision `bounce-api-00011-gj6` serves `/health`, `/`, `/app.js`, `/judge/instructions`, live `/chat` with Firebase RTDB publishing, and MongoDB-backed judge endpoints `/judge/seed-demo-trip`, `/judge/trigger-disruption`, and `/judge/reset` return HTTP 200.
   - Evidence: `docs/infra/bnc-030-production-smoke.md`.
 
-### TODO
+### BLOCKED
 
 - **BNC-031 — Demo/submission package**
   - PRD source: Part 14 and Part 17.
   - Deliverable: 3-minute demo video, Devpost form, screenshots, public repo verification, judge instructions.
   - Acceptance: all Devpost checklist items are complete before the submission buffer ends.
+  - Prepared checkpoint: repo submission package exists under `docs/submission/`, including a 3-minute demo recording script, Devpost draft, judge instructions, and live-app screenshots. README now exposes live demo and judge-mode links.
+  - Blocker: final demo video recording/upload and Devpost submission require Fariz's human account/action outside the repository.
+
+### TODO
+
+- None.
 
 ### CUT — do not build without approval
 
@@ -206,6 +212,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next action: **Proceed with BNC-031 — Demo/submission package**.
+Recommended next action: **Fariz records/uploads the BNC-031 demo video and submits the prepared Devpost package**.
 
-Reason: BNC-017 and BNC-030 now pass their live deployment gates: Atlas local/read-write readiness passes, Cloud Run is wired to Secret Manager, hosted app/API endpoints work, and deployed MongoDB-backed judge endpoints return HTTP 200 after Atlas Network Access was updated.
+Reason: BNC-031 repository-side submission materials are prepared, but final video upload and Devpost submission require Fariz's human account/action outside this repo. BNC-016 and BNC-024 remain DONE, and BNC-017/BNC-030 pass live deployment gates.
