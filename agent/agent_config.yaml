@@ -28,11 +28,10 @@ tools:
     purpose: Search and enrich venues using Places-shaped data plus MongoDB enrichment.
 
   - name: search_accommodation
-    status: planned
+    status: implemented
     module: agent.tools.search_accommodation
     function: search_accommodation
     prd_tool: 3
-    kanban_card: BNC-020
     purpose: Return budget, recommended, and premium accommodation options.
 
   - name: get_transit_time

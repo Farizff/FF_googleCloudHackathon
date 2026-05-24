@@ -109,6 +109,10 @@ Repository evidence at audit time:
   - Covers PRD Part 5 system prompt and fixed Part 8 tool registration.
   - Acceptance: `agent/system_prompt.txt` and `agent/agent_config.yaml` exist, register the fixed 14-tool PRD set, and config contract tests pass.
 
+- **BNC-020 — Search accommodation tool**
+  - Covers PRD Tool 3: Google Places-shaped hotel search with deterministic price estimates/disclaimer.
+  - Acceptance: `agent/tools/search_accommodation.py` exists, returns labelled accommodation options, filters unsafe booking URLs, and agent tests pass.
+
 ### TODO
 
 - **BNC-016 — Cloud/GCP project readiness**
@@ -125,11 +129,6 @@ Repository evidence at audit time:
   - PRD source: Part 0.4, Part 7.4.
   - Deliverable: configure Firebase project/database and initial rules for hackathon demo.
   - Acceptance: backend can broadcast itinerary/state updates to Firebase paths from the PRD.
-
-- **BNC-020 — Search accommodation tool**
-  - PRD source: Tool 3.
-  - Deliverable: `agent/tools/search_accommodation.py` with tests.
-  - Acceptance: returns 3 labelled accommodation options with final-price disclaimer.
 
 - **BNC-021 — Search flights tool**
   - PRD source: Tool 7.
@@ -202,6 +201,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next card: **BNC-020 — Search accommodation tool**.
+Recommended next card: **BNC-021 — Search flights tool**.
 
-Reason: the Bounce system prompt and fixed Agent Builder config are now in place. The next missing PRD tool in the fixed build order is accommodation search before flight search and chat orchestration.
+Reason: accommodation search is now implemented and registered. The next missing PRD tool in the fixed tool set is flight search before chat/planning orchestration.

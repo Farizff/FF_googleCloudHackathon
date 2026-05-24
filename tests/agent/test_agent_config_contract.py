@@ -48,8 +48,7 @@ def test_agent_config_registers_fixed_prd_tool_set():
 def test_agent_config_marks_not_yet_implemented_tools_without_expanding_scope():
     config = CONFIG.read_text(encoding="utf-8")
 
-    assert "name: search_accommodation" in config
-    assert "status: planned" in config
     assert "name: search_flights" in config
-    assert config.count("status: planned") == 2
-    assert config.count("status: implemented") == 12
+    assert "kanban_card: BNC-021" in config
+    assert config.count("status: planned") == 1
+    assert config.count("status: implemented") == 13
