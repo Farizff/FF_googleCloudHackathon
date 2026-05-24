@@ -32,11 +32,87 @@
         </div>
       </section>
 
+      <section id="entry-conversation" class="planning-shell entry-card" aria-labelledby="entry-title">
+        <div class="section-heading">
+          <p class="eyebrow">Screen 1</p>
+          <h2 id="entry-title">Tell me about your trip</h2>
+          <p class="muted">Type naturally. Bounce will fill the planning cards below from the conversation.</p>
+        </div>
+        <div class="chat-compose">
+          <textarea id="trip-prompt" rows="4" placeholder="We’re 10 friends planning a Tokyo reunion in July. Food, culture, shopping, easy first day…"></textarea>
+          <button id="send-trip-prompt" class="primary-button" type="button">Send to Bounce →</button>
+        </div>
+        <div class="quick-chip-row" aria-label="Quick planning chips">
+          <button class="quick-chip" data-category="Culture" type="button">Culture</button>
+          <button class="quick-chip" data-category="Food" type="button">Food</button>
+          <button class="quick-chip" data-category="Shopping" type="button">Shopping</button>
+          <button class="quick-chip" data-mode="International" type="button">International</button>
+        </div>
+        <div id="bounce-response" class="bounce-response" aria-live="polite">Bounce is ready when you are.</div>
+      </section>
+
+      <section id="profile-gap-fill" class="planning-shell profile-card" aria-labelledby="profile-title">
+        <p class="eyebrow">Screen 3</p>
+        <h2 id="profile-title">Quick details</h2>
+        <p class="muted">Profile gap-fill chips for itinerary matching and private compliance reminders.</p>
+        <div class="chip-grid">
+          <button class="quick-chip bounce-updated" type="button">Halal-friendly</button>
+          <button class="quick-chip" type="button">Art</button>
+          <button class="quick-chip" type="button">Food</button>
+          <button class="quick-chip" type="button">Low walking first day</button>
+        </div>
+        <article class="compliance-card">
+          <strong>Private visa reminder</strong>
+          <span>3 travellers need Japan visa checks — shown only to organisers/co-leaders.</span>
+        </article>
+      </section>
+
+      <section id="itinerary-view" class="planning-shell itinerary-card" aria-labelledby="itinerary-title">
+        <p class="eyebrow">Screen 4</p>
+        <h2 id="itinerary-title">Tokyo Reunion — Day 1</h2>
+        <p class="ready-callout">Group ready after staggered arrivals: first shared activity starts after international buffer.</p>
+        <ol id="itinerary-timeline" class="itinerary-timeline">
+          <li><time>15:30</time><span>Hotel check-in and low-energy reset</span></li>
+          <li><time>17:30</time><span>Asakusa walk with one-line reasoning note</span></li>
+          <li><time>19:00</time><span>Welcome dinner near Ueno</span></li>
+        </ol>
+      </section>
+
+      <section id="budget-tracker" class="planning-shell budget-card" aria-labelledby="budget-title">
+        <p class="eyebrow">Budget tracker</p>
+        <h2 id="budget-title">Shared budget estimate</h2>
+        <div class="budget-meter" aria-label="Budget used" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100">
+          <span style="width: 64%"></span>
+        </div>
+        <p class="muted"><strong>$2,240</strong> estimated per traveller before flights.</p>
+      </section>
+
+      <section id="map-preview" class="planning-shell map-card" aria-labelledby="map-title">
+        <p class="eyebrow">Maps JS preview</p>
+        <h2 id="map-title">Map preview</h2>
+        <div class="map-canvas" aria-label="Static map placeholder with custom pins">
+          <span class="map-pin map-pin--hotel">H</span>
+          <span class="map-pin map-pin--current">1</span>
+          <span class="map-pin">2</span>
+          <span class="route-line"></span>
+        </div>
+      </section>
+
+      <section id="flight-selection" class="planning-shell flights-card" aria-labelledby="flights-title">
+        <p class="eyebrow">Flight selection</p>
+        <h2 id="flights-title">3 options per origin</h2>
+        <div id="flight-options" class="flight-options">
+          <article class="flight-option-card" data-tier="budget"><span>Budget</span><strong>ZIPAIR ZG25</strong><small>Risk 72/100</small><div class="risk-bar"><span style="width: 72%"></span></div></article>
+          <article class="flight-option-card is-recommended" data-tier="recommended"><span>Recommended</span><strong>ANA NH106</strong><small>Risk 84/100</small><div class="risk-bar"><span style="width: 84%"></span></div></article>
+          <article class="flight-option-card" data-tier="premium"><span>Premium</span><strong>JAL JL1</strong><small>Risk 80/100</small><div class="risk-bar"><span style="width: 80%"></span></div></article>
+        </div>
+      </section>
+
       <section class="demo-panel" aria-labelledby="demo-title">
         <div>
           <p class="eyebrow">Judge-ready shell</p>
           <h2 id="demo-title">The Tokyo Reunion</h2>
-          <p class="muted">Use these controls to verify the backend connection before the richer planning UI lands.</p>
+          <p class="muted">Use these controls to verify the backend connection while the planning UI reads the same API origin.</p>
         </div>
         <div id="api-status" class="api-status" role="status">Checking API…</div>
         <div class="demo-actions">

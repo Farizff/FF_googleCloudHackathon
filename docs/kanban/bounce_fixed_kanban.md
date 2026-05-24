@@ -147,6 +147,11 @@ Repository evidence at audit time:
   - Deliverable: `frontend/index.html`, `manifest.json`, `sw.js`, `app.js`, and `style.css`.
   - Acceptance: app shell loads locally and can call backend health/demo endpoints.
 
+- **BNC-028 — Core planning UI**
+  - PRD source: Days 3–8 build sequence and Part 15 core loop/flights/maps.
+  - Deliverable: chat entry, profile gap-fill, itinerary day view, budget tracker, Maps JS pins/routes, flight selection layout.
+  - Acceptance: core loop, flights, and maps checklist items in Part 15 pass manually or through tests where practical.
+
 ### BLOCKED
 
 - **BNC-017 — MongoDB Atlas and MCP live setup**
@@ -170,11 +175,6 @@ Repository evidence at audit time:
   - Blocker: depends on BNC-018 live Firebase RTDB project/database access.
 
 ### TODO
-
-- **BNC-028 — Core planning UI**
-  - PRD source: Days 3–8 build sequence and Part 15 core loop/flights/maps.
-  - Deliverable: chat entry, profile gap-fill, itinerary day view, budget tracker, Maps JS pins/routes, flight selection layout.
-  - Acceptance: core loop, flights, and maps checklist items in Part 15 pass manually or through tests where practical.
 
 - **BNC-029 — Group, FlockMode, active trip, and split bill UI**
   - PRD source: Days 9–13 build sequence and Part 15 group/FlockMode/split bill.
@@ -207,6 +207,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next action: **Proceed with BNC-028 — Core planning UI**, while keeping BNC-017, BNC-018, and BNC-024 blocked/gated by live Firebase/MongoDB access.
+Recommended next action: **Proceed with BNC-029 — Group, FlockMode, active trip, and split bill UI**, while keeping BNC-017, BNC-018, and BNC-024 blocked/gated by live Firebase/MongoDB access.
 
-Reason: BNC-027 now provides the frontend PWA app shell, static serving, and backend health/judge demo connection checks. BNC-028 is the next fixed-contract UI card.
+Reason: BNC-028 now provides the core planning UI shell for chat entry, profile gap-fill, itinerary, budget, map pins, and flight selection. BNC-029 is the next fixed-contract UI card.
