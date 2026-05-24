@@ -117,12 +117,12 @@ Repository evidence at audit time:
   - Covers PRD Tool 7: Amadeus-shaped flight search with budget/recommended/premium option labelling.
   - Acceptance: `agent/tools/search_flights.py` exists, normalizes Amadeus and flat offer shapes, applies budget/duration/preferred-airline filters, supports optional risk scorer output, and agent tests pass.
 
-### TODO
-
 - **BNC-016 — Cloud/GCP project readiness**
-  - PRD source: Part 0.2, Part 16.
-  - Deliverable: confirm required APIs, billing, Secret Manager, and Cloud Run settings for the real project.
-  - Acceptance: deployed API health endpoint returns OK from Cloud Run and min instance is configured.
+  - Covers PRD Part 0.2 and Part 16 project readiness checks.
+  - Acceptance: required APIs are enabled, billing is linked, Secret Manager API is ready, Cloud Run `bounce-api` health check passes, and min instances is configured.
+  - Evidence: `docs/infra/bnc-016-gcp-readiness.md`.
+
+### TODO
 
 - **BNC-017 — MongoDB Atlas and MCP live setup**
   - PRD source: Part 0.3.
@@ -200,6 +200,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next card: **BNC-016 — Cloud/GCP project readiness**.
+Recommended next card: **BNC-017 — MongoDB Atlas and MCP live setup**.
 
-Reason: the fixed local agent tool set is now complete. The remaining skipped foundation work starts with live GCP readiness before larger chat/API/frontend integration.
+Reason: Cloud/GCP project readiness is now verified. The next foundation dependency is live MongoDB Atlas/MCP setup before Firebase and larger app orchestration.
