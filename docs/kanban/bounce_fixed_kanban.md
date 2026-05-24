@@ -137,6 +137,11 @@ Repository evidence at audit time:
   - Deliverable: invite token system, role management, member suggestions, Flock CRUD, Flock chat thread paths.
   - Acceptance: organiser/co-leader/Flock leader permissions match PRD rules in tests.
 
+- **BNC-026 — Reminder workers and scheduler endpoints**
+  - PRD source: Part 10 and Days 12–13 build sequence.
+  - Deliverable: `workers/flight_poller.py`, `workers/reminder_dispatcher.py`, and internal scheduler endpoints if needed.
+  - Acceptance: due reminders are sent once and flight status changes publish notifications.
+
 ### BLOCKED
 
 - **BNC-017 — MongoDB Atlas and MCP live setup**
@@ -160,11 +165,6 @@ Repository evidence at audit time:
   - Blocker: depends on BNC-018 live Firebase RTDB project/database access.
 
 ### TODO
-
-- **BNC-026 — Reminder workers and scheduler endpoints**
-  - PRD source: Part 10 and Days 12–13 build sequence.
-  - Deliverable: `workers/flight_poller.py`, `workers/reminder_dispatcher.py`, and internal scheduler endpoints if needed.
-  - Acceptance: due reminders are sent once and flight status changes publish notifications.
 
 - **BNC-027 — Frontend foundation and app shell**
   - PRD source: Part 4 repo structure, design doc cross-reference.
@@ -207,6 +207,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next action: **Proceed with BNC-026 — Reminder workers and scheduler endpoints**, while keeping BNC-017, BNC-018, and BNC-024 blocked/gated by live Firebase/MongoDB access.
+Recommended next action: **Proceed with BNC-027 — Frontend foundation and app shell**, while keeping BNC-017, BNC-018, and BNC-024 blocked/gated by live Firebase/MongoDB access.
 
-Reason: BNC-025 now covers local invite, suggestion, role, and FlockMode route behavior behind injected persistence seams. BNC-026 is the next unblocked backend card in the fixed contract.
+Reason: BNC-026 now covers local scheduler-triggered reminder dispatch and flight polling workers behind injected provider seams. BNC-027 is the next unblocked card in the fixed contract.

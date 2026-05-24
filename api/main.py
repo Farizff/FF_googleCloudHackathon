@@ -7,6 +7,7 @@ from api.routes.flights import router as flights_router
 from api.routes.group import router as group_router
 from api.routes.itinerary import router as itinerary_router
 from api.routes.judge import router as judge_router
+from api.routes.scheduler import router as scheduler_router
 from api.routes.trip import router as trip_router
 
 app = FastAPI(title="Bounce API", version="v0")
@@ -17,6 +18,7 @@ app.include_router(flights_router)
 app.include_router(group_router)
 app.include_router(itinerary_router)
 app.include_router(judge_router)
+app.include_router(scheduler_router)
 app.include_router(trip_router)
 
 
