@@ -132,6 +132,11 @@ Repository evidence at audit time:
   - Deliverable: `api/routes/trip.py`, `itinerary.py`, `flights.py`, `flight_status.py`, and `group.py`.
   - Acceptance: trip creation/get, itinerary create/get/status, flight listing/attachment/status update, and member/co-leader governance are test-covered behind injected DB seams.
 
+- **BNC-025 — Invite, co-leader, suggestions, and FlockMode backend**
+  - PRD source: Days 9–11 build sequence, Part 1.5, Part 5 group governance.
+  - Deliverable: invite token system, role management, member suggestions, Flock CRUD, Flock chat thread paths.
+  - Acceptance: organiser/co-leader/Flock leader permissions match PRD rules in tests.
+
 ### BLOCKED
 
 - **BNC-017 — MongoDB Atlas and MCP live setup**
@@ -155,11 +160,6 @@ Repository evidence at audit time:
   - Blocker: depends on BNC-018 live Firebase RTDB project/database access.
 
 ### TODO
-
-- **BNC-025 — Invite, co-leader, suggestions, and FlockMode backend**
-  - PRD source: Days 9–11 build sequence, Part 1.5, Part 5 group governance.
-  - Deliverable: invite token system, role management, member suggestions, Flock CRUD, Flock chat thread paths.
-  - Acceptance: organiser/co-leader/Flock leader permissions match PRD rules in tests.
 
 - **BNC-026 — Reminder workers and scheduler endpoints**
   - PRD source: Part 10 and Days 12–13 build sequence.
@@ -207,6 +207,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next action: **Proceed with BNC-025 — Invite, co-leader, suggestions, and FlockMode backend**, while keeping BNC-017, BNC-018, and BNC-024 blocked/gated by live Firebase/MongoDB access.
+Recommended next action: **Proceed with BNC-026 — Reminder workers and scheduler endpoints**, while keeping BNC-017, BNC-018, and BNC-024 blocked/gated by live Firebase/MongoDB access.
 
-Reason: BNC-023 now provides the core local route layer. BNC-024 requires real Firebase RTDB access, which is still blocked by BNC-018; BNC-025 can extend local group-governance and FlockMode backend behavior with injected persistence seams.
+Reason: BNC-025 now covers local invite, suggestion, role, and FlockMode route behavior behind injected persistence seams. BNC-026 is the next unblocked backend card in the fixed contract.

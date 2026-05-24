@@ -92,6 +92,8 @@ class FakeDB:
             ]
         )
         self.flight_status_events = FakeCollection([])
+        self.invite_tokens = FakeCollection([])
+        self.suggestions = FakeCollection([])
 
 
 def install_overrides(db=None):
