@@ -56,11 +56,10 @@ tools:
     purpose: Fetch date-specific weather data from an Open-Meteo-shaped client.
 
   - name: search_flights
-    status: planned
+    status: implemented
     module: agent.tools.search_flights
     function: search_flights
     prd_tool: 7
-    kanban_card: BNC-021
     purpose: Return budget, recommended, and premium flight options.
 
   - name: score_flight_risk

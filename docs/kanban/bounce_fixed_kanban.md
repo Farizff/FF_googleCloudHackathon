@@ -113,6 +113,10 @@ Repository evidence at audit time:
   - Covers PRD Tool 3: Google Places-shaped hotel search with deterministic price estimates/disclaimer.
   - Acceptance: `agent/tools/search_accommodation.py` exists, returns labelled accommodation options, filters unsafe booking URLs, and agent tests pass.
 
+- **BNC-021 — Search flights tool**
+  - Covers PRD Tool 7: Amadeus-shaped flight search with budget/recommended/premium option labelling.
+  - Acceptance: `agent/tools/search_flights.py` exists, normalizes Amadeus and flat offer shapes, applies budget/duration/preferred-airline filters, supports optional risk scorer output, and agent tests pass.
+
 ### TODO
 
 - **BNC-016 — Cloud/GCP project readiness**
@@ -129,11 +133,6 @@ Repository evidence at audit time:
   - PRD source: Part 0.4, Part 7.4.
   - Deliverable: configure Firebase project/database and initial rules for hackathon demo.
   - Acceptance: backend can broadcast itinerary/state updates to Firebase paths from the PRD.
-
-- **BNC-021 — Search flights tool**
-  - PRD source: Tool 7.
-  - Deliverable: `agent/tools/search_flights.py` with tests and Amadeus production/sandbox switch handling.
-  - Acceptance: returns budget/recommended/premium options and supports real production validation when keys are available.
 
 - **BNC-022 — Chat and planning API**
   - PRD source: Part 5, Part 8, Part 11.3, Part 13.
@@ -201,6 +200,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next card: **BNC-021 — Search flights tool**.
+Recommended next card: **BNC-016 — Cloud/GCP project readiness**.
 
-Reason: accommodation search is now implemented and registered. The next missing PRD tool in the fixed tool set is flight search before chat/planning orchestration.
+Reason: the fixed local agent tool set is now complete. The remaining skipped foundation work starts with live GCP readiness before larger chat/API/frontend integration.
