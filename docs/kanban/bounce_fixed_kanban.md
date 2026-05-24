@@ -131,12 +131,14 @@ Repository evidence at audit time:
   - Blocker: no Atlas URI/API credentials are available yet, Secret Manager does not have `mongodb-uri`, and Cloud Run has no MongoDB secret reference.
   - Evidence/readiness support: `docs/infra/bnc-017-mongodb-atlas-mcp-readiness.md`, `scripts/infra/verify_mongodb_atlas.py`.
 
-### TODO
-
 - **BNC-018 — Firebase Realtime Database live setup**
   - PRD source: Part 0.4, Part 7.4.
   - Deliverable: configure Firebase project/database and initial rules for hackathon demo.
   - Acceptance: backend can broadcast itinerary/state updates to Firebase paths from the PRD.
+  - Blocker: Firebase CLI is not logged in, the current Google caller cannot add Firebase to the live GCP project, and no Realtime Database instance exists yet.
+  - Evidence/readiness support: `docs/infra/bnc-018-firebase-rtdb-readiness.md`, `firebase.json`, `database.rules.json`, `scripts/infra/verify_firebase_rtdb.py`.
+
+### TODO
 
 - **BNC-022 — Chat and planning API**
   - PRD source: Part 5, Part 8, Part 11.3, Part 13.
@@ -204,6 +206,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next action: **Resolve BNC-017 MongoDB Atlas credential/setup blocker**.
+Recommended next action: **Proceed with BNC-022 — Chat and planning API**, while keeping BNC-017 and BNC-018 blocked until external MongoDB/Firebase access is available.
 
-Reason: Cloud/GCP project readiness is verified, but BNC-017 cannot be completed until an Atlas cluster/URI or Atlas API credentials are available. After BNC-017 is unblocked and verified, continue to **BNC-018 — Firebase Realtime Database live setup**.
+Reason: Both remaining foundation live-service cards are blocked by missing external credentials/permissions. BNC-022 can still define the local API boundary, validation, loading/error behavior, and testable orchestration seams without claiming live persistence is complete.
