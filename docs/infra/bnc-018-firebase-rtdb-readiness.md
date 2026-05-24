@@ -125,12 +125,41 @@ firebase_project_exists=yes
 database_instances=<at least one instance>
 ```
 
+## Completion update
+
+Date: 2026-05-24
+
+BNC-018 live setup is now verified for the Bounce Google Cloud project:
+
+- Firebase project exists for `project-411e0419-48bd-4b5b-97f`.
+- Realtime Database instance exists:
+  - `projects/167980864337/locations/asia-southeast1/instances/project-411e0419-48bd-4b5b-97f-default-rtdb`
+- Database URL:
+  - `https://project-411e0419-48bd-4b5b-97f-default-rtdb.asia-southeast1.firebasedatabase.app`
+- Demo rules from `database.rules.json` were deployed via authenticated REST management endpoint.
+- A public demo read/write/delete probe passed against `/readiness/bnc-018` after rules deployment.
+- Cloud Run service `bounce-api` revision `bounce-api-00004-9hv` is configured with:
+  - `GCP_PROJECT_ID=project-411e0419-48bd-4b5b-97f`
+  - `GCP_REGION=asia-southeast1`
+  - `FIREBASE_DATABASE_URL=https://project-411e0419-48bd-4b5b-97f-default-rtdb.asia-southeast1.firebasedatabase.app`
+- Cloud Run `/health` passes after the env update.
+
+Verification command:
+
+```bash
+python scripts/infra/verify_firebase_rtdb.py --project project-411e0419-48bd-4b5b-97f
+```
+
+Successful output:
+
+```text
+project=project-411e0419-48bd-4b5b-97f
+firebase_project_exists=yes
+database_instances=projects/167980864337/locations/asia-southeast1/instances/project-411e0419-48bd-4b5b-97f-default-rtdb
+```
+
 ## Status
 
-Blocked on Firebase project permission/login:
-
-- Current Firebase CLI is not logged in.
-- Current Google caller cannot add Firebase to the existing GCP project (`PERMISSION_DENIED`).
-- No live Realtime Database instance exists yet.
+Complete for live RTDB setup. BNC-024 remains separate implementation work: replace no-op/local Firebase seams with real RTDB publishing and verify itinerary/group state updates appear in Firebase.
 
 No secrets were committed to the repository.

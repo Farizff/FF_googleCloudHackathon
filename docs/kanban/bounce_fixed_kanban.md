@@ -157,6 +157,12 @@ Repository evidence at audit time:
   - Deliverable: group dashboard, suggestion review, Flock creation/map view/reconvene display, active trip view, split bill UI.
   - Acceptance: group, FlockMode, disruption trigger, and split bill checklist items pass.
 
+- **BNC-018 — Firebase Realtime Database live setup**
+  - PRD source: Part 0.4, Part 7.4.
+  - Deliverable: configure Firebase project/database and initial rules for hackathon demo.
+  - Acceptance: Firebase project exists, RTDB instance exists in `asia-southeast1`, demo rules are deployed, public demo read/write probe passes, and Cloud Run `bounce-api` has `FIREBASE_DATABASE_URL` configured.
+  - Evidence: `docs/infra/bnc-018-firebase-rtdb-readiness.md`.
+
 ### BLOCKED
 
 - **BNC-017 — MongoDB Atlas and MCP live setup**
@@ -166,20 +172,12 @@ Repository evidence at audit time:
   - Blocker: no Atlas URI/API credentials are available yet, Secret Manager does not have `mongodb-uri`, and Cloud Run has no MongoDB secret reference.
   - Evidence/readiness support: `docs/infra/bnc-017-mongodb-atlas-mcp-readiness.md`, `scripts/infra/verify_mongodb_atlas.py`.
 
-- **BNC-018 — Firebase Realtime Database live setup**
-  - PRD source: Part 0.4, Part 7.4.
-  - Deliverable: configure Firebase project/database and initial rules for hackathon demo.
-  - Acceptance: backend can broadcast itinerary/state updates to Firebase paths from the PRD.
-  - Blocker: Firebase CLI is not logged in, the current Google caller cannot add Firebase to the live GCP project, and no Realtime Database instance exists yet.
-  - Evidence/readiness support: `docs/infra/bnc-018-firebase-rtdb-readiness.md`, `firebase.json`, `database.rules.json`, `scripts/infra/verify_firebase_rtdb.py`.
+### TODO
 
 - **BNC-024 — Firebase real-time sync integration**
   - PRD source: Days 9–11 build sequence, Part 7.4.
   - Deliverable: real Firebase broadcaster implementation replacing no-op/local test doubles.
   - Acceptance: itinerary and group state changes appear in Firebase for all members.
-  - Blocker: depends on BNC-018 live Firebase RTDB project/database access.
-
-### TODO
 
 - **BNC-030 — Production deployment and smoke tests**
   - PRD source: Part 16.
@@ -207,6 +205,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next action: **Proceed with BNC-030 — Production deployment and smoke tests**, while keeping BNC-017, BNC-018, and BNC-024 blocked/gated by live Firebase/MongoDB access.
+Recommended next action: **Proceed with BNC-024 — Firebase real-time sync integration**, while keeping BNC-017 blocked/gated by live MongoDB Atlas access.
 
-Reason: BNC-029 now provides the group dashboard, suggestion review, FlockMode creation/active views, active-trip companion view, and split-bill UI. BNC-030 is the next fixed-contract deployment card.
+Reason: BNC-018 now provides the live Firebase RTDB instance, deployed demo rules, public demo read/write verification, and Cloud Run `FIREBASE_DATABASE_URL` wiring. BNC-024 can now replace the no-op/local Firebase seams with a real RTDB broadcaster before final BNC-030 production smoke tests.
