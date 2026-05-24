@@ -105,6 +105,10 @@ Repository evidence at audit time:
   - Covers PRD judge endpoints: reset, seed demo trip, trigger disruption, instructions.
   - Acceptance: judge API tests pass.
 
+- **BNC-019 — Agent system prompt and Agent Builder config**
+  - Covers PRD Part 5 system prompt and fixed Part 8 tool registration.
+  - Acceptance: `agent/system_prompt.txt` and `agent/agent_config.yaml` exist, register the fixed 14-tool PRD set, and config contract tests pass.
+
 ### TODO
 
 - **BNC-016 — Cloud/GCP project readiness**
@@ -121,11 +125,6 @@ Repository evidence at audit time:
   - PRD source: Part 0.4, Part 7.4.
   - Deliverable: configure Firebase project/database and initial rules for hackathon demo.
   - Acceptance: backend can broadcast itinerary/state updates to Firebase paths from the PRD.
-
-- **BNC-019 — Agent system prompt and Agent Builder config**
-  - PRD source: Part 5, Part 2.1.
-  - Deliverable: create `agent/system_prompt.txt` and `agent/agent_config.yaml` registering the fixed tool set.
-  - Acceptance: Bounce persona and tool registration can be loaded by the agent runtime.
 
 - **BNC-020 — Search accommodation tool**
   - PRD source: Tool 3.
@@ -203,6 +202,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next card: **BNC-019 — Agent system prompt and Agent Builder config**.
+Recommended next card: **BNC-020 — Search accommodation tool**.
 
-Reason: most backend tools are already implemented and tested, but the PRD requires the Bounce system prompt and tool registration before the backend can behave like the actual planned agent. This is a bounded documentation/config task before larger API/frontend work.
+Reason: the Bounce system prompt and fixed Agent Builder config are now in place. The next missing PRD tool in the fixed build order is accommodation search before flight search and chat orchestration.

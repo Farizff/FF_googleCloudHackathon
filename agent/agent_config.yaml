@@ -1,0 +1,135 @@
+# Bounce Agent Builder configuration
+# Source of truth: docs/prd/bounce_prd_v2.md v2.1, Part 5 and Part 8.
+# This file intentionally registers the fixed PRD tool set. Tools not yet
+# implemented stay listed as planned so scope remains visible without silently
+# expanding the Kanban.
+
+name: bounce
+display_name: Bounce
+version: v0
+runtime: google_cloud_agent_builder
+primary_model: gemini
+system_prompt: agent/system_prompt.txt
+tool_count: 14
+
+tools:
+  - name: get_traveller_profile
+    status: implemented
+    module: agent.tools.get_traveller_profile
+    function: get_traveller_profile
+    prd_tool: 1
+    purpose: Load one traveller profile from MongoDB.
+
+  - name: search_venues
+    status: implemented
+    module: agent.tools.search_venues
+    function: search_venues
+    prd_tool: 2
+    purpose: Search and enrich venues using Places-shaped data plus MongoDB enrichment.
+
+  - name: search_accommodation
+    status: planned
+    module: agent.tools.search_accommodation
+    function: search_accommodation
+    prd_tool: 3
+    kanban_card: BNC-020
+    purpose: Return budget, recommended, and premium accommodation options.
+
+  - name: get_transit_time
+    status: implemented
+    module: agent.tools.get_transit_time
+    function: get_transit_time
+    prd_tool: 4
+    purpose: Estimate transit time and group transport notes.
+
+  - name: optimise_route
+    status: implemented
+    module: agent.tools.optimise_route
+    function: optimise_route
+    prd_tool: 5
+    purpose: Optimise daily route sequencing with energy and dining logic.
+
+  - name: get_weather
+    status: implemented
+    module: agent.tools.get_weather
+    function: get_weather
+    prd_tool: 6
+    purpose: Fetch date-specific weather data from an Open-Meteo-shaped client.
+
+  - name: search_flights
+    status: planned
+    module: agent.tools.search_flights
+    function: search_flights
+    prd_tool: 7
+    kanban_card: BNC-021
+    purpose: Return budget, recommended, and premium flight options.
+
+  - name: score_flight_risk
+    status: implemented
+    module: agent.tools.score_flight_risk
+    function: score_flight_risk
+    prd_tool: 8
+    purpose: Score flight risk using the PRD weighted formula.
+
+  - name: get_multi_modal_transport
+    status: implemented
+    module: agent.tools.get_multi_modal_transport
+    function: get_multi_modal_transport
+    prd_tool: 9
+    purpose: Return up to three multi-modal transport options.
+
+  - name: apply_disruption
+    status: implemented
+    module: agent.tools.apply_disruption
+    function: apply_disruption
+    prd_tool: 10
+    purpose: Generate reachable disruption alternatives and notification context.
+
+  - name: save_itinerary
+    status: implemented
+    module: agent.tools.save_itinerary
+    function: save_itinerary
+    prd_tool: 11
+    purpose: Persist itinerary data and broadcast itinerary state updates.
+
+  - name: get_visa_requirements
+    status: implemented
+    module: agent.tools.get_visa_requirements
+    function: get_visa_requirements
+    prd_tool: 12
+    purpose: Return cached visa requirements or structured unavailable response.
+
+  - name: notify_contacts
+    status: implemented
+    module: agent.tools.notify_contacts
+    function: notify_contacts
+    prd_tool: 13
+    purpose: Send contact notifications with detail-level templates.
+
+  - name: poll_flight_status
+    status: implemented
+    module: agent.tools.poll_flight_status
+    function: poll_flight_status
+    prd_tool: 14
+    purpose: Poll/cache live flight status and publish status-change events.
+
+policies:
+  response_style:
+    chat: plain_text
+    itinerary_generation: structured_json_when_tool_requires
+  privacy:
+    never_request:
+      - passport_numbers
+      - payment_card_details
+      - national_ids
+    private_only:
+      - nationality
+      - health
+      - visa_status
+      - budget
+  recommendations:
+    default_option_count: 3
+    option_labels:
+      - budget
+      - recommended
+      - premium
