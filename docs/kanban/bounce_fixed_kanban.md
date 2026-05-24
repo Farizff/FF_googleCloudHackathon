@@ -122,6 +122,11 @@ Repository evidence at audit time:
   - Acceptance: required APIs are enabled, billing is linked, Secret Manager API is ready, Cloud Run `bounce-api` health check passes, and min instances is configured.
   - Evidence: `docs/infra/bnc-016-gcp-readiness.md`.
 
+- **BNC-022 — Chat and planning API**
+  - PRD source: Part 5, Part 8, Part 11.3, Part 13.
+  - Deliverable: `api/routes/chat.py` for Bounce conversation entry, PII guard, rate limit, streamed loading states, and tool orchestration boundary.
+  - Acceptance: natural-language trip entry produces a planning response path with tested error/loading behavior, PII guard, and 5 messages / 10 seconds rate limit.
+
 ### BLOCKED
 
 - **BNC-017 — MongoDB Atlas and MCP live setup**
@@ -139,11 +144,6 @@ Repository evidence at audit time:
   - Evidence/readiness support: `docs/infra/bnc-018-firebase-rtdb-readiness.md`, `firebase.json`, `database.rules.json`, `scripts/infra/verify_firebase_rtdb.py`.
 
 ### TODO
-
-- **BNC-022 — Chat and planning API**
-  - PRD source: Part 5, Part 8, Part 11.3, Part 13.
-  - Deliverable: `api/routes/chat.py` for Bounce conversation entry, PII guard, rate limit, streamed loading states, and tool orchestration boundary.
-  - Acceptance: natural-language trip entry produces or updates a planning response path with tested error/loading behavior.
 
 - **BNC-023 — Trip/itinerary/flight/group API routes**
   - PRD source: Part 4 repo structure and Part 7 schemas.
@@ -206,6 +206,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next action: **Proceed with BNC-022 — Chat and planning API**, while keeping BNC-017 and BNC-018 blocked until external MongoDB/Firebase access is available.
+Recommended next action: **Proceed with BNC-023 — Trip/itinerary/flight/group API routes**, while keeping BNC-017 and BNC-018 blocked until external MongoDB/Firebase access is available.
 
-Reason: Both remaining foundation live-service cards are blocked by missing external credentials/permissions. BNC-022 can still define the local API boundary, validation, loading/error behavior, and testable orchestration seams without claiming live persistence is complete.
+Reason: BNC-022 now provides the local chat/planning entrypoint and tested orchestration seams. The next backend layer is the core trip/itinerary/flight/group route set, still built with injected dependencies so live MongoDB/Firebase blockers do not create false DONE status.
