@@ -4,10 +4,10 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Callable
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import PlainTextResponse
 
-from db.client import get_database
+from db.client import MongoDBConfigError, get_database
 
 
 router = APIRouter(prefix="/judge")
@@ -17,7 +17,13 @@ DEMO_DISRUPTION_DESCRIPTION = "Day 3 flight UA837 cancelled — judge demo disru
 
 
 def get_db() -> Any:
-    return get_database()
+    try:
+        return get_database()
+    except MongoDBConfigError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail={"code": "MONGODB_PROVIDER_NOT_CONFIGURED", "message": str(exc)},
+        ) from exc
 
 
 def get_now_fn() -> Callable[[], str]:

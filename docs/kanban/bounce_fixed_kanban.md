@@ -178,12 +178,15 @@ Repository evidence at audit time:
   - Blocker: no Atlas URI/API credentials are available yet, Secret Manager does not have `mongodb-uri`, and Cloud Run has no MongoDB secret reference.
   - Evidence/readiness support: `docs/infra/bnc-017-mongodb-atlas-mcp-readiness.md`, `scripts/infra/verify_mongodb_atlas.py`.
 
-### TODO
-
 - **BNC-030 — Production deployment and smoke tests**
   - PRD source: Part 16.
   - Deliverable: container build, Cloud Run deploy, env/secrets wired, frontend deploy.
   - Acceptance: hosted app URL and API URL work, `/health` passes, judge endpoints live.
+  - Completed checkpoint: Cloud Run revision `bounce-api-00009-pp5` serves `/health`, `/`, `/app.js`, `/judge/instructions`, and live `/chat` with Firebase RTDB publishing.
+  - Blocker: MongoDB-backed judge mutations cannot be fully live until BNC-017 provides `MONGODB_CONNECTION_STRING`; they now fail loud with `503 MONGODB_PROVIDER_NOT_CONFIGURED` instead of an unhandled 500.
+  - Evidence: `docs/infra/bnc-030-production-smoke.md`.
+
+### TODO
 
 - **BNC-031 — Demo/submission package**
   - PRD source: Part 14 and Part 17.
@@ -206,6 +209,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next action: **Proceed with BNC-030 — Production deployment and smoke tests**, while keeping BNC-017 blocked/gated by live MongoDB Atlas access.
+Recommended next action: **Unblock BNC-017 — MongoDB Atlas and MCP live setup**, then rerun the BNC-030 MongoDB-backed judge smoke tests.
 
-Reason: BNC-024 now replaces the Firebase no-op/local seams with a real RTDB publisher, deploys successfully to Cloud Run, and verifies live `/chat` writes in Firebase. BNC-030 is now the next fixed-contract deployment/smoke-test card.
+Reason: BNC-030 now has a production Cloud Run smoke checkpoint: the API, Cloud Run-hosted frontend, `/health`, `/judge/instructions`, and live `/chat` → Firebase RTDB path work. The remaining production smoke gap is MongoDB-backed judge mutations, which are correctly blocked by the missing Atlas URI/Secret Manager wiring tracked in BNC-017.

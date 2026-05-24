@@ -2,6 +2,7 @@ from fastapi.testclient import TestClient
 
 from api.main import app
 from api.routes.judge import get_db, get_now_fn
+from db.client import MongoDBConfigError
 
 
 class FakeCollection:
@@ -132,6 +133,24 @@ def test_judge_trigger_disruption_records_demo_flight_cancellation():
             "judge_demo": True,
         }
     ]
+
+
+def test_judge_seed_returns_503_when_mongodb_provider_is_not_configured(monkeypatch):
+    app.dependency_overrides.clear()
+
+    def fake_get_database():
+        raise MongoDBConfigError("MONGODB_CONNECTION_STRING is required before connecting to MongoDB.")
+
+    monkeypatch.setattr("api.routes.judge.get_database", fake_get_database)
+    client = TestClient(app)
+
+    response = client.post("/judge/seed-demo-trip")
+
+    assert response.status_code == 503
+    assert response.json()["detail"] == {
+        "code": "MONGODB_PROVIDER_NOT_CONFIGURED",
+        "message": "MONGODB_CONNECTION_STRING is required before connecting to MongoDB.",
+    }
 
 
 def test_judge_instructions_returns_plain_text_guide():
