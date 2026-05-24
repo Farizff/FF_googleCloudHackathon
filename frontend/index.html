@@ -15,7 +15,12 @@
     <main id="app" class="app-shell">
       <section class="auth-screen" aria-labelledby="auth-title">
         <div class="auth-logo-wrap">
-          <div class="bounce-avatar bounce-avatar--large" aria-hidden="true">B</div>
+          <svg class="bounce-logomark" viewBox="0 0 40 40" role="img" aria-label="Bounce">
+            <rect width="40" height="40" rx="9" fill="currentColor"></rect>
+            <text x="9" y="29" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-weight="800" font-size="24" fill="var(--lemon)" letter-spacing="-0.5">b</text>
+            <circle cx="29" cy="10" r="4" fill="var(--lemon)"></circle>
+            <path d="M22 22 Q26 14 27 12" stroke="var(--lemon)" stroke-width="1.5" fill="none" stroke-linecap="round"></path>
+          </svg>
           <h1 id="auth-title" class="auth-wordmark">Boun<span>ce</span></h1>
           <p class="auth-tagline">Your group travel genius</p>
         </div>
@@ -225,9 +230,26 @@
       </section>
 
       <nav class="bottom-nav" data-phase="active" aria-label="Primary">
-        <a href="#entry-conversation">Plan</a>
-        <a href="#active-trip-view" aria-current="page">Today</a>
-        <a href="#split-bill">Split</a>
+        <a class="nav-tab nav-home" href="#entry-conversation">
+          <span class="nav-icon" aria-hidden="true">⌂</span>
+          <span class="nav-label">Home</span>
+        </a>
+        <a class="nav-tab nav-today active" href="#active-trip-view" aria-current="page">
+          <span class="nav-icon" aria-hidden="true">◴</span>
+          <span class="nav-label">Today</span>
+        </a>
+        <a class="nav-tab nav-map" href="#map-preview">
+          <span class="nav-icon" aria-hidden="true">⌖</span>
+          <span class="nav-label">Map</span>
+        </a>
+        <a class="nav-tab nav-split" href="#split-bill">
+          <span class="nav-icon" aria-hidden="true">▤</span>
+          <span class="nav-label">Split</span>
+        </a>
+        <a class="nav-tab nav-alerts" href="#demo-title">
+          <span class="nav-icon" aria-hidden="true">!</span>
+          <span class="nav-label">Alerts</span>
+        </a>
       </nav>
     </main>
 
