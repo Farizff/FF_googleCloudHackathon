@@ -127,6 +127,11 @@ Repository evidence at audit time:
   - Deliverable: `api/routes/chat.py` for Bounce conversation entry, PII guard, rate limit, streamed loading states, and tool orchestration boundary.
   - Acceptance: natural-language trip entry produces a planning response path with tested error/loading behavior, PII guard, and 5 messages / 10 seconds rate limit.
 
+- **BNC-023 — Trip/itinerary/flight/group API routes**
+  - PRD source: Part 4 repo structure and Part 7 schemas.
+  - Deliverable: `api/routes/trip.py`, `itinerary.py`, `flights.py`, `flight_status.py`, and `group.py`.
+  - Acceptance: trip creation/get, itinerary create/get/status, flight listing/attachment/status update, and member/co-leader governance are test-covered behind injected DB seams.
+
 ### BLOCKED
 
 - **BNC-017 — MongoDB Atlas and MCP live setup**
@@ -143,17 +148,13 @@ Repository evidence at audit time:
   - Blocker: Firebase CLI is not logged in, the current Google caller cannot add Firebase to the live GCP project, and no Realtime Database instance exists yet.
   - Evidence/readiness support: `docs/infra/bnc-018-firebase-rtdb-readiness.md`, `firebase.json`, `database.rules.json`, `scripts/infra/verify_firebase_rtdb.py`.
 
-### TODO
-
-- **BNC-023 — Trip/itinerary/flight/group API routes**
-  - PRD source: Part 4 repo structure and Part 7 schemas.
-  - Deliverable: `api/routes/trip.py`, `itinerary.py`, `flights.py`, `flight_status.py`, and `group.py`.
-  - Acceptance: CRUD and group-governance flows are test-covered against PRD schemas.
-
 - **BNC-024 — Firebase real-time sync integration**
   - PRD source: Days 9–11 build sequence, Part 7.4.
   - Deliverable: real Firebase broadcaster implementation replacing no-op/local test doubles.
   - Acceptance: itinerary and group state changes appear in Firebase for all members.
+  - Blocker: depends on BNC-018 live Firebase RTDB project/database access.
+
+### TODO
 
 - **BNC-025 — Invite, co-leader, suggestions, and FlockMode backend**
   - PRD source: Days 9–11 build sequence, Part 1.5, Part 5 group governance.
@@ -206,6 +207,6 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ## Current next card recommendation
 
-Recommended next action: **Proceed with BNC-023 — Trip/itinerary/flight/group API routes**, while keeping BNC-017 and BNC-018 blocked until external MongoDB/Firebase access is available.
+Recommended next action: **Proceed with BNC-025 — Invite, co-leader, suggestions, and FlockMode backend**, while keeping BNC-017, BNC-018, and BNC-024 blocked/gated by live Firebase/MongoDB access.
 
-Reason: BNC-022 now provides the local chat/planning entrypoint and tested orchestration seams. The next backend layer is the core trip/itinerary/flight/group route set, still built with injected dependencies so live MongoDB/Firebase blockers do not create false DONE status.
+Reason: BNC-023 now provides the core local route layer. BNC-024 requires real Firebase RTDB access, which is still blocked by BNC-018; BNC-025 can extend local group-governance and FlockMode backend behavior with injected persistence seams.
