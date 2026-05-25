@@ -35,7 +35,7 @@ Deployment target: existing Cloud Run service `bounce-api` in project `project-4
   - PRD source: Part 16 deployment and Part 17 hosted URL/judge instructions.
   - Deliverable: deploy updated frontend/backend container to existing Cloud Run service and smoke hosted interactions.
   - Acceptance: hosted URL loads, `/health` passes, `/app.js` serves current code, `/chat` works or falls back visibly, judge endpoints pass, and representative visible controls produce useful feedback.
-  - Completed checkpoint: Cloud Run revision `bounce-api-00016-wv7` serves 100% traffic for `https://bounce-api-4dynllwdeq-as.a.run.app`; hosted `/health`, `/`, `/app.js?v=20260525v3`, `/style.css?v=20260525v3`, `/assets/logo.svg`, `/assets/v3-1.png`, `/judge/seed-demo-trip`, and `/itineraries/iti_tokyo_reunion_2026` returned HTTP 200. Browser visual smoke confirmed the v3 purple/lime desktop layout, left sidebar, graphics, itinerary cards, static map fallback, and no console errors on initial load.
+  - Completed checkpoint: Cloud Run revision `bounce-api-00017-hmz` serves 100% traffic for `https://bounce-api-4dynllwdeq-as.a.run.app`; hosted `/health`, `/`, `/app.js?v=20260525v3`, `/style.css?v=20260525v3`, `/assets/logo.svg`, `/assets/v3-1.png`, `/judge/seed-demo-trip`, and `/itineraries/iti_tokyo_reunion_2026` returned HTTP 200. Browser visual smoke confirmed the v3 purple/lime desktop layout, left sidebar, graphics, itinerary cards, static map fallback, and no console errors on initial load.
 
 - **BNC-032 — Frontend usability audit and interaction contract**
   - PRD source: Part 4 frontend files, Part 12 judge test mode, Part 14 demo script, Part 15 testing checklist; design source: `docs/design/bounce_design_v2.md`.
