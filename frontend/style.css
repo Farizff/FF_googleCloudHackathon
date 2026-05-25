@@ -221,6 +221,13 @@ textarea { resize: vertical; }
   padding: var(--sp-2) var(--sp-3);
   font-weight: 700;
 }
+.quick-chip.is-selected,
+.quick-chip[aria-pressed="true"] {
+  border-color: var(--teal);
+  background: var(--teal-tint);
+  color: var(--teal-text);
+  box-shadow: 0 0 0 2px rgba(13,148,136,0.08);
+}
 .bounce-response,
 .ready-callout,
 .compliance-card {
@@ -263,6 +270,20 @@ textarea { resize: vertical; }
 .map-pin--hotel { left: 18%; top: 58%; background: var(--lemon); color: var(--text-lemon); }
 .map-pin--current { left: 46%; top: 32%; background: var(--teal); }
 .map-pin:not(.map-pin--hotel):not(.map-pin--current) { left: 70%; top: 52%; }
+.map-canvas::after {
+  content: attr(data-pins);
+  position: absolute;
+  left: var(--sp-4);
+  right: var(--sp-4);
+  bottom: var(--sp-4);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-pill);
+  background: rgba(255,255,255,0.9);
+  color: var(--yale);
+  font-size: var(--text-sm);
+  font-weight: 750;
+  box-shadow: var(--shadow-xs);
+}
 .route-line { position: absolute; left: 28%; right: 20%; top: 50%; height: 4px; transform: rotate(-9deg); background: var(--teal); border-radius: var(--r-pill); opacity: 0.7; }
 .flight-options { display: grid; gap: var(--sp-3); margin-top: var(--sp-4); }
 .flight-option-card {
@@ -274,6 +295,11 @@ textarea { resize: vertical; }
   box-shadow: var(--shadow-xs);
 }
 .flight-option-card.is-recommended { border-color: var(--teal); background: var(--teal-tint); }
+.flight-option-card.is-selected {
+  border-color: var(--yale);
+  box-shadow: var(--shadow-raised);
+  outline: 3px solid var(--lemon);
+}
 .flight-option-card span { color: var(--teal-text); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 850; }
 .risk-bar { height: 8px; border-radius: var(--r-pill); background: var(--border-light); overflow: hidden; }
 .risk-bar span { display: block; height: 100%; background: var(--teal); }
@@ -364,6 +390,9 @@ textarea { resize: vertical; }
 }
 .suggestion-title { font-size: var(--text-base); font-weight: 700; color: var(--yale); }
 .suggestion-item { background: var(--bg-card); border-radius: var(--r-md); padding: var(--sp-3); }
+.suggestion-item[data-status="accepted"] { border: 2px solid var(--teal); background: var(--teal-tint); }
+.suggestion-item[data-status="declined"] { opacity: 0.72; text-decoration: line-through; }
+.suggestion-item[data-status="modifying"] { border: 2px solid var(--amber); }
 .suggestion-text { font-size: var(--text-sm); color: var(--text-primary); margin: 0 0 var(--sp-2); line-height: var(--leading-normal); }
 .suggestion-supporters { font-size: var(--text-xs); color: var(--text-secondary); margin: 0 0 var(--sp-3); }
 .suggestion-actions { display: flex; flex-wrap: wrap; gap: var(--sp-2); }

@@ -11,7 +11,8 @@ def test_fastapi_serves_frontend_app_shell_at_root():
     assert response.status_code == 200
     assert response.headers["content-type"].startswith("text/html")
     assert '<main id="app"' in response.text
-    assert 'src="app.js"' in response.text
+    assert 'src="app.js' in response.text
+    assert 'v=20260525' in response.text
 
 
 def test_fastapi_serves_frontend_assets_for_same_origin_api_calls():

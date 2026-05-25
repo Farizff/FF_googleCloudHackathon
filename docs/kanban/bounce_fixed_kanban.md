@@ -210,8 +210,12 @@ These are explicitly out of scope in PRD Part 1.6:
 
 ---
 
+## Approved scope addendum
+
+Fariz approved a frontend usability expansion on 2026-05-25: `docs/kanban/frontend_usability_kanban.md` adds BNC-032 through BNC-040 for making the hosted frontend demo-usable rather than a static shell. This does not reopen PRD CUT items.
+
 ## Current next card recommendation
 
-Recommended next action: **Fariz records/uploads the BNC-031 demo video and submits the prepared Devpost package**.
+Recommended next action: **BNC-032 — Frontend usability audit and interaction contract** in `docs/kanban/frontend_usability_kanban.md`.
 
-Reason: BNC-031 repository-side submission materials are prepared, but final video upload and Devpost submission require Fariz's human account/action outside this repo. BNC-016 and BNC-024 remain DONE, and BNC-017/BNC-030 pass live deployment gates.
+Reason: Fariz observed that many hosted frontend buttons were static/demo-only. The PRD expects a working, judge-testable hosted app, so the approved addendum now supersedes the previous submission-only next step until hosted frontend usability is verified.

@@ -29,10 +29,11 @@ def test_frontend_foundation_files_exist_and_index_wires_assets():
     tags = parse_index()
 
     assert '<main id="app"' in html
-    assert '<link rel="manifest" href="manifest.json"' in html
-    assert any(tag == "link" and attrs.get("href") == "style.css" for tag, attrs in tags)
-    assert any(tag == "script" and attrs.get("src") == "app.js" and attrs.get("defer") is not None for tag, attrs in tags)
-    assert "navigator.serviceWorker.register('sw.js')" in html
+    assert '<link rel="manifest" href="manifest.json' in html
+    assert any(tag == "link" and attrs.get("href", "").startswith("style.css") for tag, attrs in tags)
+    assert any(tag == "script" and attrs.get("src", "").startswith("app.js") and attrs.get("defer") is not None for tag, attrs in tags)
+    assert "navigator.serviceWorker.register('sw.js" in html
+    assert "v=20260525" in html
 
 
 def test_manifest_is_installable_pwa_shell():
