@@ -34,7 +34,7 @@ function initBounceMap() {
 
 function showMapFallback(container, message) {
   if (!container) return;
-  container.style.cssText = 'width:100%;height:300px;background:#e8eef4;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#0D3B66;font-weight:600;';
+  container.style.cssText = 'width:100%;height:300px;background:#EDE9FF;border-radius:20px;display:flex;align-items:center;justify-content:center;color:#1A0A6B;font-weight:800;';
   container.textContent = message;
 }
 
@@ -46,10 +46,10 @@ function clearBounceMarkers() {
 function addVenueMarker(lat, lng, label, color) {
   if (!bounceMap) return null;
   const colorMap = {
-    budget: '#2196F3',    // blue
-    recommended: '#4CAF50', // green
-    premium: '#FFC107',   // gold
-    default: '#0D3B66',   // navy
+    budget: '#6B50E8',
+    recommended: '#C8E64A',
+    premium: '#F47B20',
+    default: '#1A0A6B',
   };
   const markerColor = colorMap[color] || colorMap.default;
 
@@ -101,10 +101,13 @@ async function showItineraryView() {
     }
     if (timelineEl && itinerary?.days?.length) {
       const day = itinerary.days[0];
-      timelineEl.innerHTML = (day.activities || []).map(act => {
+      timelineEl.innerHTML = (day.activities || []).map((act) => {
         const time = act.start_time || act.time || '';
         const title = act.title || act.name || act.description || '';
-        return `<li><time>${time}</time><span>${title}</span></li>`;
+        const category = activityCategory(act);
+        const reason = act.reason || act.why || act.description || 'I picked this because it fits the group pace and keeps the route simple.';
+        const colours = categoryStyle(category);
+        return `<li class="activity-card firebase-update" style="--cat-color: ${colours.color}; --cat-tint: ${colours.tint}"><time class="activity-time">${time}</time><span class="activity-name">${title}</span><p class="activity-reason">${reason}</p></li>`;
       }).join('');
     }
 
@@ -324,6 +327,31 @@ function renderPlanningSnapshot(snapshot) {
   renderBudgetTracker(snapshot.budget);
   renderFlightOptions(snapshot.flights);
   renderMapPins(snapshot.map_pins);
+}
+
+function activityCategory(activity = {}) {
+  const raw = `${activity.category || activity.type || activity.title || activity.name || ''}`.toLowerCase();
+  if (raw.includes('hotel') || raw.includes('accommodation') || raw.includes('check-in')) return 'hotel';
+  if (raw.includes('food') || raw.includes('dinner') || raw.includes('breakfast') || raw.includes('cafe') || raw.includes('ramen')) return 'food';
+  if (raw.includes('train') || raw.includes('transit') || raw.includes('flight') || raw.includes('station')) return 'transport';
+  if (raw.includes('shop') || raw.includes('market')) return 'shopping';
+  if (raw.includes('park') || raw.includes('garden') || raw.includes('nature')) return 'nature';
+  if (raw.includes('spa') || raw.includes('wellness')) return 'wellness';
+  return 'culture';
+}
+
+function categoryStyle(category) {
+  const styles = {
+    food: { color: 'var(--cat-food)', tint: 'rgba(244,123,32,0.12)' },
+    culture: { color: 'var(--cat-culture)', tint: 'rgba(124,58,237,0.12)' },
+    nature: { color: 'var(--cat-nature)', tint: 'rgba(22,163,74,0.12)' },
+    transport: { color: 'var(--cat-transport)', tint: 'rgba(26,10,107,0.12)' },
+    shopping: { color: 'var(--cat-shopping)', tint: 'rgba(236,72,153,0.12)' },
+    hotel: { color: 'var(--cat-hotel)', tint: 'rgba(200,230,74,0.16)' },
+    nightlife: { color: 'var(--cat-nightlife)', tint: 'rgba(74,47,196,0.12)' },
+    wellness: { color: 'var(--cat-wellness)', tint: 'rgba(13,148,136,0.12)' },
+  };
+  return styles[category] || styles.culture;
 }
 
 function renderBudgetTracker(budget) {
@@ -677,8 +705,10 @@ async function triggerDisruption() {
     const result = await fetch(`${API_BASE}/judge/trigger-disruption`, { method: 'POST' }).then((response) => response.json());
     setStatus('Disruption event created', 'ok');
     setBounceMessage('Heads up — the disruption is handled. I found alternatives and kept the group timeline intact.');
-    const timelineItem = document.querySelector('#itinerary-timeline li:nth-child(3) span');
+    const timelineItem = document.querySelector('#itinerary-timeline li:nth-child(3) .activity-name, #itinerary-timeline li:nth-child(3) span');
     if (timelineItem) timelineItem.textContent = 'Mori Art Museum alternative selected after disruption';
+    document.querySelector('#itinerary-view')?.classList.add('shake');
+    setTimeout(() => document.querySelector('#itinerary-view')?.classList.remove('shake'), 450);
     renderMapPins(['Hotel', 'teamLab Borderless', 'Mori Art Museum']);
     showOutput(result);
     return result;

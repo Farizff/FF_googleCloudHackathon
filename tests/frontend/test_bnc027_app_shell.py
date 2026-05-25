@@ -43,8 +43,8 @@ def test_manifest_is_installable_pwa_shell():
     assert manifest["short_name"] == "Bounce"
     assert manifest["start_url"] == "."
     assert manifest["display"] == "standalone"
-    assert manifest["theme_color"] == "#0D3B66"
-    assert manifest["background_color"] == "#F7F7F2"
+    assert manifest["theme_color"] == "#1A0A6B"
+    assert manifest["background_color"] == "#FFFFFF"
     assert {icon["sizes"] for icon in manifest["icons"]} >= {"192x192", "512x512"}
 
 

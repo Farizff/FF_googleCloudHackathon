@@ -3,26 +3,32 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0D3B66" />
+    <meta name="theme-color" content="#1A0A6B" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Bounce" />
-    <title>Bounce — Group travel genius</title>
-    <link rel="manifest" href="manifest.json?v=20260525" />
-    <link rel="stylesheet" href="style.css?v=20260525" />
+    <title>Bounce — Group travel planning, together</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&family=Nunito:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+    <link rel="manifest" href="manifest.json?v=20260525v3" />
+    <link rel="stylesheet" href="style.css?v=20260525v3" />
   </head>
   <body>
     <main id="app" class="app-shell">
-      <section class="auth-screen" aria-labelledby="auth-title">
+      <section class="auth-screen page-enter" aria-labelledby="auth-title">
         <div class="auth-logo-wrap">
           <svg class="bounce-logomark" viewBox="0 0 40 40" role="img" aria-label="Bounce">
             <rect width="40" height="40" rx="9" fill="currentColor"></rect>
-            <text x="9" y="29" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-weight="800" font-size="24" fill="var(--lemon)" letter-spacing="-0.5">b</text>
-            <circle cx="29" cy="10" r="4" fill="var(--lemon)"></circle>
-            <path d="M22 22 Q26 14 27 12" stroke="var(--lemon)" stroke-width="1.5" fill="none" stroke-linecap="round"></path>
+            <text x="9" y="29" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-weight="800" font-size="24" fill="var(--lime)" letter-spacing="-0.5">b</text>
+            <circle cx="29" cy="10" r="4" fill="var(--lime)"></circle>
+            <path d="M22 22 Q26 14 27 12" stroke="var(--lime)" stroke-width="1.5" fill="none" stroke-linecap="round"></path>
           </svg>
           <h1 id="auth-title" class="auth-wordmark">Boun<span>ce</span></h1>
-          <p class="auth-tagline">Your group travel genius</p>
+          <p class="auth-tagline">Plan trips together, without the chaos.</p>
+          <img class="auth-graphic" src="assets/v3-1.png" alt="Happy lime map pin bouncing" loading="lazy" />
         </div>
 
         <div class="auth-card">
@@ -48,15 +54,15 @@
         </div>
       </section>
 
-      <section id="entry-conversation" class="planning-shell entry-card" aria-labelledby="entry-title">
+      <section id="entry-conversation" class="planning-shell entry-card page-enter" aria-labelledby="entry-title">
         <div class="section-heading">
           <p class="eyebrow">Screen 1</p>
           <h2 id="entry-title">Tell me about your trip</h2>
-          <p class="muted">Type naturally. Bounce will fill the planning cards below from the conversation.</p>
+          <p class="muted">Tell me about your trip. I’ll figure out the rest.</p>
         </div>
-        <div class="chat-compose">
-          <textarea id="trip-prompt" rows="4" placeholder="We’re 10 friends planning a Tokyo reunion in July. Food, culture, shopping, easy first day…"></textarea>
-          <button id="send-trip-prompt" class="primary-button" type="button">Send to Bounce →</button>
+        <div class="pill-input-bar chat-compose">
+          <textarea id="trip-prompt" rows="3" placeholder="We're 6 friends going to Seoul in November. Cafes, nightlife, shopping, and good food."></textarea>
+          <button id="send-trip-prompt" class="pill-submit-btn" type="button" aria-label="Send to Bounce">→</button>
         </div>
         <div class="quick-chip-row" aria-label="Quick planning chips">
           <button class="quick-chip" data-category="Culture" type="button">Culture</button>
@@ -87,10 +93,10 @@
         <p class="eyebrow">Screen 4</p>
         <h2 id="itinerary-title">Tokyo Reunion — Day 1</h2>
         <p class="ready-callout">Group ready after staggered arrivals: first shared activity starts after international buffer.</p>
-        <ol id="itinerary-timeline" class="itinerary-timeline">
-          <li><time>15:30</time><span>Hotel check-in and low-energy reset</span></li>
-          <li><time>17:30</time><span>Asakusa walk with one-line reasoning note</span></li>
-          <li><time>19:00</time><span>Welcome dinner near Ueno</span></li>
+        <ol id="itinerary-timeline" class="itinerary-timeline stagger">
+          <li class="activity-card" style="--cat-color: var(--cat-hotel); --cat-tint: rgba(200,230,74,0.16)"><time class="activity-time">15:30</time><span class="activity-name">Hotel check-in and low-energy reset</span><p class="activity-reason">I’ve kept this easy after staggered international arrivals.</p></li>
+          <li class="activity-card" style="--cat-color: var(--cat-culture); --cat-tint: rgba(124,58,237,0.12)"><time class="activity-time">17:30</time><span class="activity-name">Asakusa walk</span><p class="activity-reason">Gentle culture first, with food nearby if energy dips.</p></li>
+          <li class="activity-card" style="--cat-color: var(--cat-food); --cat-tint: rgba(244,123,32,0.12)"><time class="activity-time">19:00</time><span class="activity-name">Welcome dinner near Ueno</span><p class="activity-reason">Central, familiar, and easy for everyone to reach.</p></li>
         </ol>
         <button id="load-itinerary-button" class="secondary-button" type="button">Load itinerary →</button>
       </section>
@@ -107,9 +113,7 @@
       <section id="map-preview" class="planning-shell map-card" aria-labelledby="map-title">
         <p class="eyebrow">Maps JS preview</p>
         <h2 id="map-title">Map preview</h2>
-        <!-- Replace YOUR_API_KEY with actual Google Maps JS API key -->
-        <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initBounceMap" async defer></script>
-        <div id="map-canvas" style="width:100%;height:300px;"></div>
+        <div id="map-canvas" class="map-canvas" role="application" aria-label="Trip map showing venue locations" data-pins="Hotel → Asakusa → Ueno dinner"><span class="map-pin map-pin--hotel">1</span><span class="route-line"></span><span class="map-pin map-pin--current">2</span><span class="map-pin">3</span></div>
       </section>
 
       <section id="flight-selection" class="planning-shell flights-card" aria-labelledby="flights-title">
@@ -283,25 +287,25 @@
         <pre id="api-output" class="api-output" aria-live="polite"></pre>
       </section>
 
-      <nav class="bottom-nav" data-phase="active" aria-label="Primary">
+      <nav class="bottom-nav sidebar" data-phase="active" aria-label="Primary">
         <a class="nav-tab nav-home" href="#entry-conversation">
-          <span class="nav-icon" aria-hidden="true">⌂</span>
+          <i class="ti ti-home nav-icon" aria-hidden="true"></i>
           <span class="nav-label">Home</span>
         </a>
         <a class="nav-tab nav-today active" href="#active-trip-view" aria-current="page">
-          <span class="nav-icon" aria-hidden="true">◴</span>
+          <i class="ti ti-calendar-today nav-icon" aria-hidden="true"></i>
           <span class="nav-label">Today</span>
         </a>
         <a class="nav-tab nav-map" href="#map-preview">
-          <span class="nav-icon" aria-hidden="true">⌖</span>
+          <i class="ti ti-map-2 nav-icon" aria-hidden="true"></i>
           <span class="nav-label">Map</span>
         </a>
         <a class="nav-tab nav-split" href="#split-bill">
-          <span class="nav-icon" aria-hidden="true">▤</span>
+          <i class="ti ti-receipt-2 nav-icon" aria-hidden="true"></i>
           <span class="nav-label">Split</span>
         </a>
         <a class="nav-tab nav-alerts" href="#demo-title">
-          <span class="nav-icon" aria-hidden="true">!</span>
+          <i class="ti ti-bell nav-icon" aria-hidden="true"></i>
           <span class="nav-label">Alerts</span>
         </a>
       </nav>
@@ -309,9 +313,9 @@
 
     <script>
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => navigator.serviceWorker.register('sw.js?v=20260525'));
+        window.addEventListener('load', () => navigator.serviceWorker.register('sw.js?v=20260525v3'));
       }
     </script>
-    <script src="app.js?v=20260525" defer="defer"></script>
+    <script src="app.js?v=20260525v3" defer="defer"></script>
   </body>
 </html>
