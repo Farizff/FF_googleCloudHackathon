@@ -606,6 +606,18 @@ h1, h2, h3, .auth-wordmark, .budget-amount, .activity-name { font-family: var(--
   background:
     radial-gradient(ellipse 70% 55% at 50% 38%, rgba(245,255,176,.95) 0%, rgba(250,255,212,.72) 34%, rgba(255,255,255,.05) 62%, transparent 80%),
     linear-gradient(180deg, rgba(26,10,107,.15), rgba(26,10,107,.8));
+  z-index: -2;
+}
+.auth-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('assets/v3-3.png'), url('assets/v3-4.png');
+  background-repeat: no-repeat;
+  background-position: left -110px top 56px, right -130px bottom 96px;
+  background-size: 280px auto, 300px auto;
+  opacity: .35;
+  pointer-events: none;
   z-index: -1;
 }
 .auth-logo-wrap { gap: var(--sp-2); }
@@ -809,7 +821,11 @@ h1, h2, h3, .auth-wordmark, .budget-amount, .activity-name { font-family: var(--
   padding: var(--sp-6) var(--sp-4);
   border: none;
   border-radius: var(--r-2xl);
-  background: var(--purple);
+  background-color: var(--purple);
+  background-image: url('assets/v3-2.png');
+  background-repeat: no-repeat;
+  background-position: right -34px bottom 54px;
+  background-size: 118px auto;
   box-shadow: var(--shadow-float);
 }
 .bottom-nav.sidebar::before {
