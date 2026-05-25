@@ -121,6 +121,8 @@ def seed_demo_trip(db: Any, seed: dict[str, Any] | None = None) -> dict[str, Any
 
     db.group_trips.replace_one({"trip_id": trip_id}, trip, upsert=True)
     _upsert_invite_token(db, token=trip.get("invite_token"), trip_id=trip_id)
+    itinerary = _demo_itinerary(trip_id)
+    db.itineraries.replace_one({"itinerary_id": itinerary["itinerary_id"]}, itinerary, upsert=True)
 
     profiles = deepcopy(seed_data.get("traveller_profiles", []))
     for profile in profiles:
@@ -148,6 +150,35 @@ def seed_demo_trip(db: Any, seed: dict[str, Any] | None = None) -> dict[str, Any
         "profiles_seeded": len(profiles),
         "compliance_reminders_seeded": len(reminders),
         "flocks_seeded": len(flocks),
+        "itinerary_id": itinerary["itinerary_id"],
+    }
+
+
+def _demo_itinerary(trip_id: str) -> dict[str, Any]:
+    now = _utc_now_iso()
+    return {
+        "itinerary_id": DEMO_ITINERARY_ID,
+        "trip_id": trip_id,
+        "created_at": now,
+        "updated_at": now,
+        "status": "draft",
+        "accommodation": {"name": "Shinjuku group hotel", "area": "Shinjuku"},
+        "days": [
+            {
+                "day_number": 1,
+                "date": "2026-07-04",
+                "activities": [
+                    {"start_time": "15:30", "title": "Hotel check-in and low-energy reset", "lat": 35.6909, "lng": 139.7003},
+                    {"start_time": "17:30", "title": "Asakusa culture walk", "lat": 35.7148, "lng": 139.7967},
+                    {"start_time": "19:00", "title": "Welcome dinner near Ueno", "lat": 35.7138, "lng": 139.7770},
+                ],
+            }
+        ],
+        "flights": [
+            {"flight_number": "NH107", "origin_iata": "SFO", "destination_iata": "HND", "live_status": "on_time"}
+        ],
+        "disruption_log": [],
+        "share_url_token": "share_tokyo_reunion_demo",
     }
 
 

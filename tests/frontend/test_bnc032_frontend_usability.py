@@ -123,6 +123,7 @@ def test_friend_feature_demo_path_has_visible_backend_backed_controls():
         "seedDemoTrip",
         "window.currentTripId = result.trip_id",
         "els.inviteToken.value = result.invite_token",
+        "window.currentItineraryId = result.itinerary_id",
         "loadItineraryButton?.addEventListener",
         "refreshSettlementButton?.addEventListener",
         "requestJson('/expenses'",
@@ -130,6 +131,7 @@ def test_friend_feature_demo_path_has_visible_backend_backed_controls():
         "flock_name:",
         "leader_user_id:",
         "member_ids:",
+        "flight.risk ?? flight.risk_score",
     ]:
         assert marker in app_js
 

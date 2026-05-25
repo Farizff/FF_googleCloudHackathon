@@ -54,6 +54,7 @@ class FakeDB:
         self.traveller_profiles = FakeCollection([])
         self.compliance_reminders = FakeCollection([])
         self.flocks = FakeCollection([])
+        self.itineraries = FakeCollection([])
         self.disruption_events = FakeCollection([])
 
 
@@ -86,12 +87,15 @@ def test_judge_seed_demo_trip_loads_reunion_seed_into_demo_collections():
         "profiles_seeded": 10,
         "compliance_reminders_seeded": 3,
         "flocks_seeded": 3,
+        "itinerary_id": "iti_tokyo_reunion_2026",
     }
     assert db.group_trips.replaced[0]["query"] == {"trip_id": "trip_tokyo_reunion_2026"}
     assert db.group_trips.replaced[0]["upsert"] is True
     assert len(db.traveller_profiles.replaced) == 10
     assert len(db.compliance_reminders.replaced) == 3
     assert len(db.flocks.replaced) == 3
+    assert db.itineraries.replaced[0]["document"]["itinerary_id"] == "iti_tokyo_reunion_2026"
+    assert db.itineraries.replaced[0]["document"]["days"][0]["activities"][1]["title"] == "Asakusa culture walk"
 
 
 def test_judge_reset_clears_existing_demo_state_then_reseeds():

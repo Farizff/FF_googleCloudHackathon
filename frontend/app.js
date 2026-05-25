@@ -84,14 +84,16 @@ function addVenueMarker(lat, lng, label, color) {
 
 async function showItineraryView() {
   const tripId = window.currentTripId;
-  if (!tripId) {
+  const itineraryId = window.currentItineraryId || (tripId === 'trip_tokyo_reunion_2026' ? 'iti_tokyo_reunion_2026' : null);
+  if (!tripId && !itineraryId) {
     showOutput('No currentTripId set — cannot load itinerary.');
     return;
   }
   setStatus('Loading itinerary…');
   try {
-    const data = await requestJson(`/itineraries/${tripId}`);
+    const data = await requestJson(`/itineraries/${itineraryId || tripId}`);
     const itinerary = data.itinerary;
+    window.currentItineraryId = itinerary.itinerary_id || itineraryId;
     const titleEl = document.querySelector('#itinerary-title');
     const timelineEl = document.getElementById('itinerary-timeline');
     if (titleEl && itinerary) {
@@ -336,10 +338,11 @@ function renderFlightOptions(flights = []) {
   els.flightOptions.innerHTML = flights.map((flight) => {
     const tier = flight.tier.toLowerCase();
     const selected = tier === state.selectedFlightTier;
+    const risk = flight.risk ?? flight.risk_score ?? 0;
     return `
     <article class="flight-option-card${flight.tier === 'Recommended' ? ' is-recommended' : ''}${selected ? ' is-selected' : ''}" data-tier="${tier}" data-flight-number="${flight.flight_number}" tabindex="0" role="button" aria-pressed="${selected}">
-      <span>${flight.tier}${selected ? ' · selected' : ''}</span><strong>${flight.flight_number}</strong><small>Risk ${flight.risk}/100</small>
-      <div class="risk-bar"><span style="width: ${flight.risk}%"></span></div>
+      <span>${flight.tier}${selected ? ' · selected' : ''}</span><strong>${flight.flight_number}</strong><small>Risk ${risk}/100</small>
+      <div class="risk-bar"><span style="width: ${risk}%"></span></div>
     </article>`;
   }).join('');
 }
@@ -660,6 +663,7 @@ async function seedDemoTrip() {
   setStatus('Seeding demo trip…');
   const result = await fetch(`${API_BASE}/judge/seed-demo-trip`, { method: 'POST' }).then((response) => response.json());
   window.currentTripId = result.trip_id;
+  window.currentItineraryId = result.itinerary_id || window.currentItineraryId;
   if (els.inviteToken && result.invite_token) els.inviteToken.value = result.invite_token;
   setStatus(`Demo trip seeded: ${result.trip_name || result.trip_id}`, 'ok');
   setBounceMessage(`Demo trip is ready. Invite token ${result.invite_token || 'is available after backend seed'} is prefilled for Join Trip.`);
