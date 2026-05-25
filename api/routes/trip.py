@@ -64,6 +64,14 @@ def get_now_fn() -> Callable[[], str]:
     return _utc_now_iso
 
 
+def _insert_invite_token(db: Any, *, token: str, trip_id: str, role: str = "member") -> None:
+    """Persist a joinable invite token when the database exposes the collection."""
+    invite_tokens = getattr(db, "invite_tokens", None)
+    if invite_tokens is None:
+        return
+    invite_tokens.insert_one({"token": token, "trip_id": trip_id, "role": role, "status": "active"})
+
+
 @router.post("")
 def create_trip_endpoint(
     request: TripCreateRequest,
@@ -101,6 +109,7 @@ def create_trip_endpoint(
         "jet_lag_override": False,
     }
     db.group_trips.insert_one(trip)
+    _insert_invite_token(db, token=trip["invite_token"], trip_id=trip_id)
     return {"success": True, "trip": trip}
 
 
@@ -149,6 +158,7 @@ def create_trip_simple_endpoint(
         "jet_lag_override": False,
     }
     db.group_trips.insert_one(trip)
+    _insert_invite_token(db, token=trip["invite_token"], trip_id=trip_id)
     return {"success": True, "trip_id": trip_id, "trip": trip}
 
 

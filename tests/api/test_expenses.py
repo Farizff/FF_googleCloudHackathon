@@ -139,3 +139,36 @@ def test_calculate_settlement_one_person_covers_all():
         {"from": "carlos", "to": "alex", "amount_usd": 30.0},
         {"from": "emma", "to": "alex", "amount_usd": 30.0},
     ]
+
+
+def test_log_expense_everyone_normalizes_trip_members_to_user_ids():
+    db = FakeDB(
+        trips=[
+            {
+                "trip_id": "trip_tokyo",
+                "members": [
+                    {"user_id": "alex", "name": "Alex"},
+                    {"user_id": "priya", "name": "Priya"},
+                    {"user_id": "carlos", "name": "Carlos"},
+                ],
+            }
+        ]
+    )
+
+    result = log_expense(
+        trip_id="trip_tokyo",
+        logged_by_user_id="alex",
+        amount=90,
+        currency="USD",
+        category="Food",
+        description="Ramen dinner",
+        logging_mode="everyone",
+        db=db,
+        exchange_rate_fn=lambda _currency: 1,
+        uuid_fn=lambda: "expense_fixed",
+        clock=lambda: "2026-07-04T09:00:00Z",
+    )
+
+    assert result["success"] is True
+    assert result["participants"] == ["alex", "priya", "carlos"]
+    assert db.expenses.inserted[0]["participants"] == ["alex", "priya", "carlos"]

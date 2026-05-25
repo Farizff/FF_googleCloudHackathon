@@ -120,6 +120,7 @@ def seed_demo_trip(db: Any, seed: dict[str, Any] | None = None) -> dict[str, Any
     trip_id = trip["trip_id"]
 
     db.group_trips.replace_one({"trip_id": trip_id}, trip, upsert=True)
+    _upsert_invite_token(db, token=trip.get("invite_token"), trip_id=trip_id)
 
     profiles = deepcopy(seed_data.get("traveller_profiles", []))
     for profile in profiles:
@@ -142,11 +143,22 @@ def seed_demo_trip(db: Any, seed: dict[str, Any] | None = None) -> dict[str, Any
         "success": True,
         "trip_id": trip_id,
         "trip_name": trip["trip_name"],
+        "invite_token": trip.get("invite_token"),
         "members_seeded": len(trip.get("members", [])),
         "profiles_seeded": len(profiles),
         "compliance_reminders_seeded": len(reminders),
         "flocks_seeded": len(flocks),
     }
+
+
+def _upsert_invite_token(db: Any, *, token: str | None, trip_id: str) -> None:
+    if not token or not hasattr(db, "invite_tokens"):
+        return
+    db.invite_tokens.replace_one(
+        {"token": token},
+        {"token": token, "trip_id": trip_id, "role": "member", "status": "active"},
+        upsert=True,
+    )
 
 
 def _flock_documents(seed_data: dict[str, Any], trip_id: str) -> list[dict[str, Any]]:

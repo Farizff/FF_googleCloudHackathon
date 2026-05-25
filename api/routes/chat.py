@@ -276,6 +276,7 @@ def create_trip_from_extraction(
         "jet_lag_override": False,
     }
     db.group_trips.insert_one(trip)
+    trip_module._insert_invite_token(db, token=trip["invite_token"], trip_id=trip_id)
     return {"success": True, "trip_id": trip_id, "trip": trip}
 
 

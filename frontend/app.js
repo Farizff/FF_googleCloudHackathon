@@ -180,6 +180,8 @@ const els = {
   inviteToken: document.querySelector('#invite-token'),
   joinTripButton: document.querySelector('#join-trip-button'),
   inviteError: document.querySelector('#invite-error'),
+  loadItineraryButton: document.querySelector('#load-itinerary-button'),
+  refreshSettlementButton: document.querySelector('#refresh-settlement-button'),
 };
 
 const state = {
@@ -285,6 +287,7 @@ async function sendTripPrompt() {
         trip_id: 'trip_tokyo_reunion_2026',
       }),
     }).then((res) => res.json());
+    if (response.trip_id) window.currentTripId = response.trip_id;
     renderPlanningSnapshot({ ...fallback, bounce_message: response.message || fallback.bounce_message });
     setStatus('Planning snapshot ready', 'ok');
     // Load live flight options once the planning context is set.
@@ -609,11 +612,20 @@ function selectExpenseCategory(button) {
   setStatus(`Expense category: ${state.selectedExpenseCategory}`, 'ok');
 }
 
-function logDemoExpense() {
+function expenseLoggingMode() {
+  const mode = state.selectedExpenseMode;
+  if (mode === 'Specific people') return 'specific_people';
+  if (mode === 'My Flock') return 'my_flock';
+  if (mode === 'Just me') return 'just_me';
+  return 'everyone';
+}
+
+async function logDemoExpense() {
   const amountInput = document.querySelector('.amount-input input');
   const descriptionInput = document.querySelector('.expense-description');
   const amount = Number.parseFloat(amountInput?.value || '0') || 0;
   const description = descriptionInput?.value?.trim() || 'Shared expense';
+  const tripId = window.currentTripId || 'trip_tokyo_reunion_2026';
   state.expenseCount += 1;
   renderSplitBill({ split_bill: { amount, description, split_between: splitBetweenCopy() } });
   const balanceCards = els.splitBill?.querySelectorAll('.balance-card span');
@@ -621,14 +633,36 @@ function logDemoExpense() {
   if (balanceCards?.[0]) balanceCards[0].textContent = `+$${(share * 2).toFixed(2)}`;
   if (balanceCards?.[1]) balanceCards[1].textContent = `-$${share.toFixed(2)}`;
   if (balanceCards?.[2]) balanceCards[2].textContent = state.selectedExpenseMode === 'Just me' ? '$0.00' : `-$${(share / 2).toFixed(2)}`;
-  setStatus('Demo expense logged', 'ok');
-  showOutput({ expense: description, amount, category: state.selectedExpenseCategory, split_mode: state.selectedExpenseMode, split_between: splitBetweenCopy(), local_demo_state: true });
+  setStatus('Logging expense…');
+  try {
+    const payload = {
+      trip_id: tripId,
+      logged_by_user_id: 'u_alex',
+      amount,
+      currency: 'USD',
+      category: state.selectedExpenseCategory,
+      description,
+      logging_mode: expenseLoggingMode(),
+      participants: state.selectedExpenseMode === 'Specific people' ? ['u_alex', 'u_priya', 'u_marcus'] : undefined,
+      flock_id: state.selectedExpenseMode === 'My Flock' ? 'flock_explorers' : undefined,
+    };
+    const result = await requestJson('/expenses', { method: 'POST', body: JSON.stringify(payload) });
+    setStatus('Expense logged — settlement refreshed', 'ok');
+    showOutput(result);
+    await showSettlementView();
+  } catch (error) {
+    setStatus('Demo expense logged locally — expense API unavailable', 'error');
+    showOutput({ expense: description, amount, category: state.selectedExpenseCategory, split_mode: state.selectedExpenseMode, split_between: splitBetweenCopy(), local_demo_state: true, reason: error.message });
+  }
 }
 
 async function seedDemoTrip() {
   setStatus('Seeding demo trip…');
   const result = await fetch(`${API_BASE}/judge/seed-demo-trip`, { method: 'POST' }).then((response) => response.json());
-  setStatus('Demo trip seeded', 'ok');
+  window.currentTripId = result.trip_id;
+  if (els.inviteToken && result.invite_token) els.inviteToken.value = result.invite_token;
+  setStatus(`Demo trip seeded: ${result.trip_name || result.trip_id}`, 'ok');
+  setBounceMessage(`Demo trip is ready. Invite token ${result.invite_token || 'is available after backend seed'} is prefilled for Join Trip.`);
   showOutput(result);
   return result;
 }
@@ -786,7 +820,18 @@ els.inviteToken?.addEventListener('keydown', (event) => {
 
 els.splitIntoFlocksButton?.addEventListener('click', prepareFlockSplit);
 els.startFlockModeButton?.addEventListener('click', activateFlockMode);
-els.logExpenseButton?.addEventListener('click', logDemoExpense);
+els.logExpenseButton?.addEventListener('click', () => logDemoExpense().catch((error) => {
+  setStatus('Expense logging failed', 'error');
+  showOutput(error.message);
+}));
+els.loadItineraryButton?.addEventListener('click', () => showItineraryView().catch((error) => {
+  setStatus('Itinerary load failed', 'error');
+  showOutput(error.message);
+}));
+els.refreshSettlementButton?.addEventListener('click', () => showSettlementView().catch((error) => {
+  setStatus('Settlement refresh failed', 'error');
+  showOutput(error.message);
+}));
 document.querySelector('.ask-bounce-button')?.addEventListener('click', askBounceAboutToday);
 
 wirePlanningChips();
@@ -1021,18 +1066,27 @@ async function saveFlockMode() {
   setStatus('Saving FlockMode…');
 
   try {
-    const payload = {
-      name: `Day 5 Flocks`,
-      trip_id: tripId,
-      reconvene_time: reconveneTime || '18:30',
-      reconvene_location: reconveneLocation || 'Shinjuku Station East Exit',
-      flocks: flocks,
-    };
+    const savedFlocks = await Promise.all(flocks.map((flock) => {
+      const payload = {
+        flock_name: flock.name,
+        leader_user_id: flock.leader_user_id || flock.member_ids[0],
+        member_ids: flock.member_ids,
+        trip_id: tripId,
+        reconvene_time: reconveneTime || '18:30',
+        reconvene_location: reconveneLocation || 'Shinjuku Station East Exit',
+        day_number: 5,
+        activity: 'Tokyo free-time FlockMode',
+      };
+      return requestJson('/flocks', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+    }));
 
-    const result = await requestJson('/flocks', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    });
+    state.activeFlockName = flocks[0]?.name || state.activeFlockName;
+    renderFlockMode({ ...demoActiveTripSnapshot(), flock: { name: state.activeFlockName, reconvene: reconveneLocation || 'Shinjuku Station East Exit' } });
+    renderActiveTrip();
+    showOutput({ saved_flocks: savedFlocks, trip_id: tripId });
 
     showToast('FlockMode activated 🐦');
     setStatus('FlockMode saved', 'ok');

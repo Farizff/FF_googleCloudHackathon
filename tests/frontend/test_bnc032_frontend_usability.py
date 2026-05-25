@@ -104,3 +104,33 @@ def test_frontend_usability_styles_show_selected_and_stateful_controls():
         ".map-canvas::after",
     ]:
         assert selector in css
+
+
+def test_friend_feature_demo_path_has_visible_backend_backed_controls():
+    html = read_frontend("index.html")
+    app_js = read_frontend("app.js")
+
+    for expected in [
+        'id="join-trip-button"',
+        'id="load-itinerary-button"',
+        'id="add-flock-btn"',
+        'id="save-flockmode-btn"',
+        'id="refresh-settlement-button"',
+    ]:
+        assert expected in html
+
+    for marker in [
+        "seedDemoTrip",
+        "window.currentTripId = result.trip_id",
+        "els.inviteToken.value = result.invite_token",
+        "loadItineraryButton?.addEventListener",
+        "refreshSettlementButton?.addEventListener",
+        "requestJson('/expenses'",
+        "showSettlementView()",
+        "flock_name:",
+        "leader_user_id:",
+        "member_ids:",
+    ]:
+        assert marker in app_js
+
+    assert "flocks: flocks" not in app_js

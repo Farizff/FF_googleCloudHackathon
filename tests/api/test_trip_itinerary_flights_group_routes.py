@@ -228,3 +228,39 @@ def test_group_member_role_changes_respect_prd_governance_boundaries():
     forbidden = client.patch("/trips/trip_tokyo/members/u_alex/role", json={"role": "member", "actor_user_id": "u_carlos"})
     assert forbidden.status_code == 403
     assert forbidden.json()["detail"]["code"] == "ORGANISER_ROLE_LOCKED"
+
+
+def test_simple_trip_invite_token_is_immediately_joinable():
+    db = install_overrides(FakeDB())
+    client = TestClient(app)
+
+    created = client.post(
+        "/trips/simple",
+        json={
+            "user_id": "u_alex",
+            "name": "Alex",
+            "destination_city": "Tokyo",
+            "destination_country": "Japan",
+            "destination_iata": "NRT",
+            "origin_city_iata": "SFO",
+        },
+    )
+
+    assert created.status_code == 200
+    body = created.json()
+    assert body["trip"]["invite_token"] == "invite_fixed"
+    assert db.invite_tokens.find_one({"token": "invite_fixed", "status": "active"}) == {
+        "token": "invite_fixed",
+        "trip_id": "trip_fixed",
+        "role": "member",
+        "status": "active",
+    }
+
+    joined = client.post(
+        "/trips/join",
+        json={"invite_token": "invite_fixed", "user_id": "u_priya", "name": "Priya", "origin_city_iata": "SIN"},
+    )
+
+    assert joined.status_code == 200
+    assert joined.json()["trip_id"] == "trip_fixed"
+    assert db.group_trips.find_one({"trip_id": "trip_fixed"})["members"][-1]["user_id"] == "u_priya"

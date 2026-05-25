@@ -81,6 +81,7 @@ def test_judge_seed_demo_trip_loads_reunion_seed_into_demo_collections():
         "success": True,
         "trip_id": "trip_tokyo_reunion_2026",
         "trip_name": "The Tokyo Reunion",
+        "invite_token": "invite_tokyo_reunion_demo",
         "members_seeded": 10,
         "profiles_seeded": 10,
         "compliance_reminders_seeded": 3,

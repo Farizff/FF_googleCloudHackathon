@@ -159,6 +159,18 @@ def _minimum_transactions(balances: dict[str, float]) -> list[dict[str, Any]]:
     return transactions
 
 
+def _participant_user_ids(members: list[Any]) -> list[str]:
+    user_ids: list[str] = []
+    for member in members:
+        if isinstance(member, dict):
+            user_id = member.get("user_id")
+            if user_id:
+                user_ids.append(str(user_id))
+        elif member:
+            user_ids.append(str(member))
+    return user_ids
+
+
 def _resolve_participants(
     logging_mode: str,
     logged_by_user_id: str,
@@ -169,7 +181,7 @@ def _resolve_participants(
     db: Any,
 ) -> list[str] | dict[str, dict[str, str]]:
     if logging_mode == "everyone":
-        return list(trip.get("members", []))
+        return _participant_user_ids(list(trip.get("members", [])))
     if logging_mode == "specific_people":
         return list(provided_participants or [])
     if logging_mode == "just_me":
