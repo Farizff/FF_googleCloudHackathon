@@ -56,6 +56,7 @@ def create_itinerary_endpoint(
 @router.get("/{itinerary_id}")
 def get_itinerary_endpoint(itinerary_id: str, db: Any = Depends(get_db)) -> dict[str, Any]:
     itinerary = _get_itinerary_or_404(db, itinerary_id)
+    itinerary.pop("_id", None)
     return {"itinerary": itinerary}
 
 

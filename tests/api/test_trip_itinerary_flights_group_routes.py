@@ -72,6 +72,7 @@ class FakeDB:
             [
                 {
                     "itinerary_id": "iti_tokyo",
+                    "_id": object(),
                     "trip_id": "trip_tokyo",
                     "status": "draft",
                     "days": [],
@@ -164,6 +165,10 @@ def test_itinerary_create_get_and_status_update_are_route_wrapped():
     fetched = client.get("/itineraries/itinerary_fixed")
     assert fetched.status_code == 200
     assert fetched.json()["itinerary"]["status"] == "confirmed"
+
+    fetched_seed = client.get("/itineraries/iti_tokyo")
+    assert fetched_seed.status_code == 200
+    assert "_id" not in fetched_seed.json()["itinerary"]
 
 
 def test_flights_list_and_attach_selected_flight_to_itinerary():
