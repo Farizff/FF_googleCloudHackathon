@@ -46,16 +46,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ### TODO
 
-- **BV5-003 — Create the v5 L1 prototype shell**
-  - Objective: Establish the v5 single-file prototype boundary required by PRD v5 AI build instructions.
-  - Files likely touched: `frontend/bounce_v5_prototype.html` or Fariz-approved equivalent path, plus tests.
-  - Acceptance:
-    - Prototype loads as one HTML file.
-    - No build step is required.
-    - No localStorage/sessionStorage is used.
-    - Demo data is declared as `const` objects near the top.
-    - No network fetches are required for L1 demo state.
-
 - **BV5-004 — Apply v5 visual identity and design tokens**
   - Objective: Replace old Yale/lemon visual language in the v5 prototype with the purple/lime/orange v5 system.
   - Acceptance:
@@ -198,6 +188,18 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
     - README points to v5 as current source of truth.
     - v2/v3 docs remain available as historical references.
 
+- **BV5-003 — Create the v5 L1 prototype shell**
+  - Completed on 2026-05-31.
+  - Files:
+    - `frontend/bounce_v5_prototype.html`
+    - `tests/frontend/test_bv5_003_prototype_shell.py`
+  - Acceptance met:
+    - Prototype loads as one self-contained HTML file.
+    - No build step is required.
+    - No localStorage/sessionStorage or network calls are used for L1 state.
+    - Demo data is declared as `const` objects near the top of the inline script.
+    - Existing deployed v3 app files were not modified.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -220,6 +222,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ## Current next card recommendation
 
-Recommended next action: **BV5-003 — Create the v5 L1 prototype shell**.
+Recommended next action: **BV5-004 — Apply v5 visual identity and design tokens**.
 
-Reason: the repository contract is now set to Option C and canonical v5 docs are committed. The next safe, surgical step is to create the standalone L1 prototype shell without touching the existing deployed v3 app.
+Reason: the v5 L1 prototype shell now exists as a separate self-contained file. The next safe, surgical step is to replace the shell-level placeholder styling with the full v5 visual identity and token set without touching the existing deployed v3 app.

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bounce v5 L1 prototype</title>
+  <style>
+    :root {
+      --purple: #1A0A6B;
+      --purple-mid: #4A2FC4;
+      --purple-light: #6B50E8;
+      --purple-tint: #EDE9FF;
+      --lime: #C8E64A;
+      --lime-dark: #8DC63F;
+      --lime-tint: #F0FFD4;
+      --lime-text: #3A5200;
+      --orange: #F47B20;
+      --orange-yellow: #FBBF24;
+      --orange-tint: #FFF7ED;
+      --bg-page: #FAF8FF;
+      --bg-card: #FFFFFF;
+      --text-primary: #1A1A2E;
+      --text-secondary: #5B5F6E;
+      --border-light: #ECE9F4;
+      --font-logo: 'Baloo 2', system-ui, cursive;
+      --font-sans: 'Nunito', system-ui, sans-serif;
+      --r-xl: 24px;
+      --shadow-card: 0 1px 3px rgba(26,10,107,.05), 0 0 0 .5px rgba(26,10,107,.04);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; font-family: var(--font-sans); background: var(--bg-page); color: var(--text-primary); }
+    .app-shell { display: grid; grid-template-columns: 240px minmax(0, 1fr); min-height: 100vh; }
+    .sidebar { background: var(--purple); color: white; padding: 24px 18px; display: flex; flex-direction: column; gap: 18px; }
+    .wordmark { font-family: var(--font-logo); font-weight: 900; font-size: 32px; letter-spacing: -.03em; color: white; }
+    .wordmark span { color: var(--lime); }
+    .nav { display: grid; gap: 8px; }
+    .nav button, .judge-panel button { border: 0; border-radius: 16px; padding: 11px 14px; font-weight: 800; cursor: pointer; }
+    .nav button { text-align: left; background: transparent; color: rgba(255,255,255,.74); }
+    .nav button.active { background: var(--lime); color: var(--purple); }
+    .trip-card-context { border-left: 3px solid var(--lime); background: rgba(255,255,255,.06); border-radius: 14px; padding: 14px; }
+    .page-body { max-width: 1320px; margin: 0 auto; padding: 32px; }
+    .hero { background: var(--purple); color: white; border-radius: 30px; padding: 28px; display: grid; gap: 12px; }
+    .hero h1 { margin: 0; font-size: 34px; line-height: 1.1; }
+    .hero p { margin: 0; color: rgba(255,255,255,.82); }
+    .button-primary { background: var(--lime); color: var(--lime-text); border: 0; border-radius: 99px; padding: 12px 18px; font-weight: 900; cursor: pointer; }
+    .trips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 18px; }
+    .card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--r-xl); padding: 20px; box-shadow: var(--shadow-card); }
+    .tag { display: inline-flex; border-radius: 99px; padding: 4px 10px; font-size: 12px; font-weight: 900; background: var(--lime-tint); color: var(--lime-text); }
+    .muted { color: var(--text-secondary); }
+    .cut-note { border-style: dashed; background: white; }
+    .judge-panel { position: fixed; left: 24px; bottom: 24px; z-index: 500; background: var(--purple); color: white; border: 2px solid var(--lime); border-radius: 24px; padding: 14px; box-shadow: 0 12px 36px rgba(26,10,107,.14); }
+    .judge-panel label { display: block; margin: 8px 0 4px; font-size: 12px; color: rgba(255,255,255,.75); }
+    .judge-panel select { width: 100%; border-radius: 12px; border: 0; padding: 8px; }
+    @media (max-width: 900px) {
+      .app-shell { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .page-body { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <main id="app" aria-label="Bounce v5 L1 prototype"></main>
+  <script>
+    const DEMO_TRIPS = [
+      { id: 'lisbon_planning', name: 'Lisbon Summer Sendoff', city: 'Lisbon', state: 'planning', dates: '12–17 Jun', travelers: 6 },
+      { id: 'tokyo_active', name: 'Tokyo Reunion', city: 'Tokyo', state: 'active', activeDay: 3, totalDays: 7, dates: '24–30 May', travelers: 7 },
+      { id: 'seoul_past', name: 'Seoul Food Loop', city: 'Seoul', state: 'past', dates: 'Feb 2026', travelers: 4 },
+      { id: 'bali_past', name: 'Bali Reset', city: 'Bali', state: 'past', dates: 'Jan 2026', travelers: 5 },
+      { id: 'melbourne_past', name: 'Melbourne Long Weekend', city: 'Melbourne', state: 'past', dates: 'Nov 2025', travelers: 3 }
+    ];
+    const WRAP_DATA = {
+      seoul_past: { currency: '₩', total: '1,240,000', note: 'Street food wins kept the group under budget.' },
+      bali_past: { currency: 'Rp', total: '9,800,000', note: 'Villas and scooters made this feel easy.' },
+      melbourne_past: { currency: 'A$', total: '2,180', note: 'Coffee, galleries, and one excellent tram day.' }
+    };
+    const ROUTES = ['/', '/trip/:id', '/trip/:id/plan', '/trip/:id/active', '/trip/:id/flock', '/trip/:id/wrap', '/chat', '/join/:token'];
+    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null };
+
+    function tripById(id) { return DEMO_TRIPS.find((trip) => trip.id === id) || null; }
+    function setTripContext(id) { state.tripId = id; const trip = tripById(id); state.phase = trip ? trip.state : 'home'; renderApp(); }
+    function setRole(role) { state.role = role; renderApp(); }
+    function setPhase(phase) { state.phase = phase; renderApp(); }
+
+    function renderShell(content) {
+      const trip = tripById(state.tripId);
+      return `<div class="app-shell">
+        <aside class="sidebar">
+          <div class="wordmark">B<span>o</span>unce</div>
+          ${trip ? `<button class="button-primary" onclick="setTripContext(null)">← All trips</button><div class="trip-card-context"><strong>${trip.name}</strong><br><span>${trip.city} · ${trip.state}</span></div>` : ''}
+          <nav class="nav" aria-label="Prototype navigation">
+            <button class="${state.phase === 'home' ? 'active' : ''}" onclick="setPhase('home')">Home</button>
+            <button onclick="setPhase('plan')">Plan a new trip</button>
+            <button onclick="setPhase('join')">Join a trip</button>
+            <button onclick="setPhase('chat')">Chat</button>
+          </nav>
+        </aside>
+        <section class="page-body">${content}</section>
+      </div>${renderJudgePanel()}`;
+    }
+
+    function renderHomeScreen() {
+      const upcoming = DEMO_TRIPS.filter((trip) => trip.state === 'planning');
+      const active = DEMO_TRIPS.filter((trip) => trip.state === 'active');
+      const past = DEMO_TRIPS.filter((trip) => trip.state === 'past');
+      return renderShell(`<section class="hero"><span class="tag">Bounce v5 L1 prototype</span><h1>Plan trips together, without the chaos.</h1><p>Your trip starts here. Tell me what you've got in mind.</p><button class="button-primary" onclick="setPhase('plan')">Ready to bounce →</button></section>${renderTripSection('Upcoming trips', upcoming)}${renderTripSection('On the road right now', active)}${renderTripSection('Past trips', past)}<section class="card cut-note"><strong>Prototype boundaries</strong><p>Photo sharing coming soon</p><p>Multi-city trips are future scope</p><p>Travel DNA is removed</p></section>`);
+    }
+
+    function renderTripSection(title, trips) {
+      return `<h2>${title}</h2><div class="trips-grid">${trips.map((trip) => `<article class="card"><span class="tag">${trip.state}</span><h3>${trip.name}</h3><p class="muted">${trip.dates} · ${trip.city} · ${trip.travelers} going</p><button class="button-primary" onclick="setTripContext('${trip.id}')">Open trip</button></article>`).join('')}</div>`;
+    }
+
+    function renderTripScreen() {
+      const trip = tripById(state.tripId) || DEMO_TRIPS[0];
+      const wrap = WRAP_DATA[trip.id];
+      return renderShell(`<section class="card"><span class="tag">${trip.state}</span><h1>${trip.name}</h1><p>${trip.city} · ${trip.dates}</p><p class="muted">Route contract: ${ROUTES.join(' · ')}</p>${trip.state === 'active' ? `<p>Day ${trip.activeDay}/${trip.totalDays}: keep the flock together.</p>` : ''}${wrap ? `<p>Total spent: ${wrap.currency}${wrap.total}. ${wrap.note}</p>` : ''}</section>`);
+    }
+
+    function renderJudgePanel() {
+      return `<aside class="judge-panel" aria-label="Demo controls"><strong>⚡ Demo controls · drag me</strong><label>Role</label><select onchange="setRole(this.value)"><option value="organiser">Organiser</option><option value="co-leader">Co-leader</option><option value="member">Member</option></select><label>Phase</label><select onchange="setPhase(this.value)"><option value="home">Home</option><option value="planning">Planning</option><option value="active">Active</option><option value="past">Past</option></select></aside>`;
+    }
+
+    function renderApp() {
+      const app = document.getElementById('app');
+      if (!app) return;
+      app.innerHTML = state.tripId ? renderTripScreen() : renderHomeScreen();
+    }
+
+    renderApp();
+  </script>
+</body>
+</html>
