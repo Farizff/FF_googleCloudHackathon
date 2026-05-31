@@ -97,7 +97,7 @@ def test_bv5_l1_prototype_has_minimal_render_and_role_state_hooks():
         assert marker in script
 
     for copy in [
-        "Plan trips together, without the chaos.",
+        "Plan a new trip",
         "Your trip starts here. Tell me what you've got in mind.",
         "⚡ Demo controls · drag me",
     ]:

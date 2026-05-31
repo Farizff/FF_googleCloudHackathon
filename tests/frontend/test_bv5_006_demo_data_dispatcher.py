@@ -97,8 +97,8 @@ def test_home_sections_are_derived_from_trip_state():
     assert "⭐" in script
 
 
-def test_bv5_contract_marks_demo_data_done_and_points_to_home_entry():
+def test_bv5_contract_marks_demo_data_done():
     contract = CONTRACT.read_text(encoding="utf-8")
     assert "### DONE" in contract
     assert "- **BV5-006 — Implement v5 demo data and phase dispatcher**" in contract
-    assert "Recommended next action: **BV5-007 — Build Home and Entry Conversation screens**" in contract
+    assert "Hash-based prototype routing uses the v5 L1" in contract

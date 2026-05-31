@@ -46,13 +46,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ### TODO
 
-- **BV5-007 — Build Home and Entry Conversation screens**
-  - Objective: Implement the v5 Home screen and static L1 Plan a new trip entry.
-  - Acceptance:
-    - Home sections and TripCard states match PRD/design v5.
-    - Plan CTA copy matches v5: `Your trip starts here. Tell me what you've got in mind.`
-    - Entry has free-text textarea, mascot/hero treatment, trip-type chips, and deterministic Bounce response.
-
 - **BV5-008 — Build Profile tabs with anchored save buttons**
   - Objective: Implement v5 tabbed profile UI and save-button placement fixes.
   - Acceptance:
@@ -211,6 +204,17 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
     - Hash-based prototype routing uses the v5 L1 `screen=X&phase=Y&user=Z` shape with trip id support.
     - Wrap data is keyed by `WRAP_DATA[trip.id]` and uses destination local currency only.
 
+- **BV5-007 — Build Home and Entry Conversation screens**
+  - Completed on 2026-05-31.
+  - Files:
+    - `frontend/bounce_v5_prototype.html`
+    - `tests/frontend/test_bv5_007_home_entry.py`
+  - Acceptance met:
+    - Home screen uses the v5 `home-plan-new` CTA, Upcoming/Active/Past sections, and TripCard component markers.
+    - TripCard states include planning `In planning`, active `● Day X/Y`, past `⭐ rating`, days-to-go, cover area, trip metadata, and avatar stack.
+    - Plan CTA copy matches v5: `Your trip starts here. Tell me what you've got in mind.`
+    - Entry Conversation screen has textarea, Bounce mascot hero, trip-type chips, deterministic Bounce response, and no network/SSE calls in L1.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -233,6 +237,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ## Current next card recommendation
 
-Recommended next action: **BV5-007 — Build Home and Entry Conversation screens**.
+Recommended next action: **BV5-008 — Build Profile tabs with anchored save buttons**.
 
-Reason: the v5 L1 prototype now has PRD v5 demo data and hash-based phase dispatch. The next safe, surgical step is to upgrade the Home and Entry Conversation screens against the v5 screen/component specs.
+Reason: the v5 L1 prototype now has the Home and Entry Conversation screens with deterministic local planning feedback. The next bounded card is the tabbed Profile screen and bottom-anchored save behavior.
