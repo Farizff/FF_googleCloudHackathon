@@ -89,8 +89,8 @@ def test_nav_clicks_close_mobile_drawer_and_exit_trip_context():
     assert "state.tripId = null" in script
 
 
-def test_bv5_contract_marks_app_shell_done_and_points_to_demo_data():
+def test_bv5_contract_marks_app_shell_done():
     contract = CONTRACT.read_text(encoding="utf-8")
     assert "### DONE" in contract
     assert "- **BV5-005 — Implement v5 app shell, navigation, and mobile drawer**" in contract
-    assert "Recommended next action: **BV5-006 — Implement v5 demo data and phase dispatcher**" in contract
+    assert "Mobile top bar, drawer, and backdrop are stateful" in contract

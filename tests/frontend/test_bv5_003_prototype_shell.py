@@ -58,7 +58,7 @@ def test_bv5_l1_prototype_uses_const_demo_data_near_top_without_browser_storage_
 
     assert "const DEMO_TRIPS" in first_1200
     assert "const WRAP_DATA" in script
-    for required_trip in ["lisbon_planning", "tokyo_active", "seoul_past", "bali_past", "melbourne_past"]:
+    for required_trip in ["lisbon-bday", "reunion-tk26", "cdmx-reunion", "seoul-food-crawl", "lisbon-long-weekend"]:
         assert required_trip in script
 
     banned = ["localStorage", "sessionStorage", "indexedDB", "fetch(", "XMLHttpRequest", "navigator.sendBeacon"]

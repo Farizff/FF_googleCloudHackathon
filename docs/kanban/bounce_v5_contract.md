@@ -46,14 +46,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ### TODO
 
-- **BV5-006 — Implement v5 demo data and phase dispatcher**
-  - Objective: Encode the 5-trip v5 demo dataset and route/phase dispatch behavior.
-  - Acceptance:
-    - Home shows Lisbon planning, Tokyo active, and 3 past trips.
-    - `trip.state` controls phase and nav.
-    - Tokyo active uses `activeDay: 3` and `totalDays: 7`.
-    - Wrap screens read from `WRAP_DATA[trip.id]` with destination local currency only.
-
 - **BV5-007 — Build Home and Entry Conversation screens**
   - Objective: Implement the v5 Home screen and static L1 Plan a new trip entry.
   - Acceptance:
@@ -207,6 +199,18 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
     - Trip context card uses selected trip name/city/state dynamically.
     - Mobile top bar, drawer, and backdrop are stateful; nav/backdrop clicks close the drawer under the v5 900px breakpoint.
 
+- **BV5-006 — Implement v5 demo data and phase dispatcher**
+  - Completed on 2026-05-31.
+  - Files:
+    - `frontend/bounce_v5_prototype.html`
+    - `tests/frontend/test_bv5_006_demo_data_dispatcher.py`
+  - Acceptance met:
+    - Home data now contains Lisbon planning, Tokyo active, and 3 past trips from PRD v5.
+    - `trip.state` drives default phase selection through `phaseForTrip(trip)`.
+    - Tokyo active uses `activeDay: 3` and `totalDays: 7`.
+    - Hash-based prototype routing uses the v5 L1 `screen=X&phase=Y&user=Z` shape with trip id support.
+    - Wrap data is keyed by `WRAP_DATA[trip.id]` and uses destination local currency only.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -229,6 +233,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ## Current next card recommendation
 
-Recommended next action: **BV5-006 — Implement v5 demo data and phase dispatcher**.
+Recommended next action: **BV5-007 — Build Home and Entry Conversation screens**.
 
-Reason: the v5 L1 prototype now has the phase-aware app shell, global/trip nav, dynamic trip context card, user pill, and mobile drawer foundation. The next safe, surgical step is to refine the five-trip demo dataset and route/phase dispatcher against the v5 PRD.
+Reason: the v5 L1 prototype now has PRD v5 demo data and hash-based phase dispatch. The next safe, surgical step is to upgrade the Home and Entry Conversation screens against the v5 screen/component specs.

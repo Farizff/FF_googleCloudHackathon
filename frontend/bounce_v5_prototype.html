@@ -151,26 +151,76 @@
 <body>
   <main id="app" aria-label="Bounce v5 L1 prototype"></main>
   <script>
+    // Prototype hash route shape: screen=X&phase=Y&user=Z
     const DEMO_TRIPS = [
-      { id: 'lisbon_planning', name: 'Lisbon Summer Sendoff', city: 'Lisbon', state: 'planning', dates: '12–17 Jun', travelers: 6 },
-      { id: 'tokyo_active', name: 'Tokyo Reunion', city: 'Tokyo', state: 'active', activeDay: 3, totalDays: 7, dates: '24–30 May', travelers: 7 },
-      { id: 'seoul_past', name: 'Seoul Food Loop', city: 'Seoul', state: 'past', dates: 'Feb 2026', travelers: 4 },
-      { id: 'bali_past', name: 'Bali Reset', city: 'Bali', state: 'past', dates: 'Jan 2026', travelers: 5 },
-      { id: 'melbourne_past', name: 'Melbourne Long Weekend', city: 'Melbourne', state: 'past', dates: 'Nov 2025', travelers: 3 }
+      {
+        id: 'lisbon-bday',
+        name: "Maya's 30th",
+        city: 'Lisbon', country: 'Portugal',
+        dates: 'Jul 12 – Jul 17, 2025',
+        state: 'planning',
+        daysToGo: 48, totalDays: 6,
+        budget: { total: 2950, perDay: 98, currency: 'EUR' },
+        members: ['maya', 'sofiaA', 'priyaN', 'chloe', 'zara'],
+      },
+      {
+        id: 'reunion-tk26',
+        name: 'The Reunion',
+        city: 'Tokyo', country: 'Japan',
+        dates: 'Oct 15 – Oct 21, 2026',
+        state: 'active',
+        activeDay: 3, totalDays: 7,
+        members: ['alex', 'priya', 'marcus', 'sofia', 'jake', 'aditya', 'emma', 'carlos', 'liam', 'rania'],
+      },
+      { id: 'cdmx-reunion', name: 'CDMX reunion', city: 'Mexico City', country: 'Mexico', dates: 'Jun 2025', state: 'past', travelers: 4, rating: '4.9' },
+      { id: 'seoul-food-crawl', name: 'Seoul food crawl', city: 'Seoul', country: 'South Korea', dates: 'Nov 2025', state: 'past', travelers: 6, rating: '4.8' },
+      { id: 'lisbon-long-weekend', name: 'Lisbon long weekend', city: 'Lisbon', country: 'Portugal', dates: 'Apr 2026', state: 'past', travelers: 4, rating: '4.9' }
     ];
     const WRAP_DATA = {
-      seoul_past: { currency: '₩', total: '1,240,000', note: 'Street food wins kept the group under budget.' },
-      bali_past: { currency: 'Rp', total: '9,800,000', note: 'Villas and scooters made this feel easy.' },
-      melbourne_past: { currency: 'A$', total: '2,180', note: 'Coffee, galleries, and one excellent tram day.' }
+      'cdmx-reunion': { currency: 'MXN', total: 'MX$37,000', perPerson: 'MX$9,250/person', note: 'Markets, tacos, and easy settling kept the reunion relaxed.' },
+      'seoul-food-crawl': { currency: 'KRW', total: '₩5,900,000', perPerson: '₩983,000/person', note: 'Food crawls and late trains made this one feel effortless.' },
+      'lisbon-long-weekend': { currency: 'EUR', total: '€1,160', perPerson: '€290/person', note: 'A compact weekend with sunny walks and no budget drama.' }
     };
     const ROUTES = ['/', '/trip/:id', '/trip/:id/plan', '/trip/:id/active', '/trip/:id/flock', '/trip/:id/wrap', '/chat', '/join/:token'];
-    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null, isDrawerOpen: false };
+    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null, screen: 'home', user: 'maya', isDrawerOpen: false };
 
     function tripById(id) { return DEMO_TRIPS.find((trip) => trip.id === id) || null; }
+    function parseHashRoute() {
+      const rawHash = window.location.hash.replace(/^#/, '');
+      const params = new URLSearchParams(rawHash || 'screen=home');
+      return {
+        screen: params.get('screen') || 'home',
+        phase: params.get('phase') || null,
+        user: params.get('user') || state.user,
+        tripId: params.get('trip') || null,
+      };
+    }
+    function phaseForTrip(trip) {
+      if (!trip) return 'home';
+      if (trip.state === 'planning') return 'planning-itinerary';
+      if (trip.state === 'active') return 'active-today';
+      if (trip.state === 'past') return 'wrap';
+      return 'home';
+    }
+    function routeToTrip(trip) {
+      const phase = phaseForTrip(trip);
+      const params = new URLSearchParams({ screen: 'trip', phase, user: state.user, trip: trip.id });
+      window.location.hash = params.toString();
+      return phase;
+    }
+    function applyHashRoute() {
+      const route = parseHashRoute();
+      state.screen = route.screen;
+      state.user = route.user;
+      state.tripId = route.tripId;
+      const trip = tripById(route.tripId);
+      state.phase = route.phase || phaseForTrip(trip);
+      renderApp();
+    }
     function closeMobileDrawer() { state.isDrawerOpen = false; }
     function toggleMobileDrawer() { state.isDrawerOpen = !state.isDrawerOpen; renderApp(); }
     function navigate(phase) { state.phase = phase; closeMobileDrawer(); renderApp(); }
-    function setTripContext(id) { if (id === null) state.tripId = null; else state.tripId = id; const trip = tripById(id); state.phase = trip ? trip.state : 'home'; closeMobileDrawer(); renderApp(); }
+    function setTripContext(id) { if (id === null) state.tripId = null; else state.tripId = id; const trip = tripById(id); state.phase = trip ? routeToTrip(trip) : 'home'; if (id === null) window.location.hash = 'screen=home&phase=home&user=' + encodeURIComponent(state.user); closeMobileDrawer(); renderApp(); }
     function setRole(role) { state.role = role; renderApp(); }
     function setPhase(phase) { state.phase = phase; closeMobileDrawer(); renderApp(); }
 
@@ -222,14 +272,20 @@
       return renderShell(`<section class="hero"><span class="tag tag-lime">Bounce v5 L1 prototype</span><div class="bounce-avatar bounce-avatar-sm" aria-hidden="true">B</div><h1>Plan trips together, without the chaos.</h1><p>Your trip starts here. Tell me what you've got in mind.</p><button class="btn btn-primary" onclick="setPhase('plan')">Ready to bounce →</button></section>${renderTripSection('Upcoming trips', upcoming)}${renderTripSection('On the road right now', active)}${renderTripSection('Past trips', past)}<section class="card cut-note"><strong>Prototype boundaries</strong><p>Photo sharing coming soon</p><p>Multi-city trips are future scope</p><p>Travel DNA is removed</p></section>`);
     }
 
+    function tripStateBadge(trip) {
+      if (trip.state === 'planning') return 'In planning';
+      if (trip.state === 'active') return `● Day ${trip.activeDay}/${trip.totalDays}`;
+      return `⭐ ${trip.rating || '4.9'}`;
+    }
+
     function renderTripSection(title, trips) {
-      return `<h2>${title}</h2><div class="trips-grid">${trips.map((trip) => `<article class="card card-elevated"><span class="tag ${trip.state === 'active' ? 'tag-orange' : trip.state === 'past' ? 'tag-purple' : 'tag-lime'}">${trip.state}</span><h3>${trip.name}</h3><p class="muted">${trip.dates} · ${trip.city} · ${trip.travelers} going</p><button class="btn btn-lime" onclick="setTripContext('${trip.id}')">Open trip</button></article>`).join('')}</div>`;
+      return `<h2>${title}</h2><div class="trips-grid">${trips.map((trip) => `<article class="card card-elevated"><span class="tag ${trip.state === 'active' ? 'tag-orange' : trip.state === 'past' ? 'tag-purple' : 'tag-lime'}">${tripStateBadge(trip)}</span><h3>${trip.name}</h3><p class="muted">${trip.dates} · ${trip.city} · ${(trip.members ? trip.members.length : trip.travelers)} going${trip.daysToGo ? ` · ${trip.daysToGo} days to go` : ''}</p><button class="btn btn-lime" onclick="setTripContext('${trip.id}')">Open trip</button></article>`).join('')}</div>`;
     }
 
     function renderTripScreen() {
       const trip = tripById(state.tripId) || DEMO_TRIPS[0];
       const wrap = WRAP_DATA[trip.id];
-      return renderShell(`<section class="card card-purple"><span class="tag tag-lime">${trip.state}</span><h1>${trip.name}</h1><p>${trip.city} · ${trip.dates}</p><p>Route contract: ${ROUTES.join(' · ')}</p>${trip.state === 'active' ? `<p>Day ${trip.activeDay}/${trip.totalDays}: keep the flock together.</p>` : ''}${wrap ? `<p>Total spent: ${wrap.currency}${wrap.total}. ${wrap.note}</p>` : ''}<button class="btn btn-ghost" onclick="setTripContext(null)">Back to Home</button></section>`);
+      return renderShell(`<section class="card card-purple"><span class="tag tag-lime">${trip.state}</span><h1>${trip.name}</h1><p>${trip.city} · ${trip.dates}</p><p>Route contract: ${ROUTES.join(' · ')}</p>${trip.state === 'active' ? `<p>Day ${trip.activeDay}/${trip.totalDays}: keep the flock together.</p>` : ''}${wrap ? `<p>Total spent: ${wrap.total} · ${wrap.perPerson}. ${wrap.note}</p>` : ''}<button class="btn btn-ghost" onclick="setTripContext(null)">Back to Home</button></section>`);
     }
 
     function renderJudgePanel() {
@@ -242,7 +298,8 @@
       app.innerHTML = state.tripId ? renderTripScreen() : renderHomeScreen();
     }
 
-    renderApp();
+    window.addEventListener('hashchange', applyHashRoute);
+    applyHashRoute();
   </script>
 </body>
 </html>
