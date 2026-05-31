@@ -44,12 +44,14 @@ BNC-031 demo/submission artifacts live under [`docs/submission/`](docs/submissio
 
 ## Product docs
 
-These two synchronized v2.1 docs are the project source of truth:
+The current v5 source of truth is:
 
-- [Technical PRD](docs/prd/bounce_prd_v2.md) — tool contracts, schemas, algorithms, cloud setup, demo scenario data, and build order.
-- [Design System](docs/design/bounce_design_v2.md) — UI styling, screens, flows, components, visual identity, and microcopy.
+- [Technical PRD v5](docs/prd/bounce_prd_v5.md) — product architecture, routing, roles, demo data, L1/L2 boundaries, backend contracts, and acceptance criteria.
+- [Design System v5](docs/design/bounce_design_v5.md) — visual identity, tokens, components, layouts, screen trees, accessibility, motion, and copy.
 
 When a feature crosses the boundary, use the PRD for data/logic and the Design System for presentation.
+
+Historical references remain available under `docs/prd/` and `docs/design/`, including the v2.1 and v3 docs used for earlier BNC work.
 
 ## Deployment target
 
@@ -61,11 +63,13 @@ When a feature crosses the boundary, use the PRD for data/logic and the Design S
 
 ## Current implementation status
 
-The fixed Kanban contract is tracked in [`docs/kanban/bounce_fixed_kanban.md`](docs/kanban/bounce_fixed_kanban.md).
+The v5 repository contract is tracked in [`docs/kanban/bounce_v5_contract.md`](docs/kanban/bounce_v5_contract.md). Older BNC status remains in [`docs/kanban/bounce_fixed_kanban.md`](docs/kanban/bounce_fixed_kanban.md) and [`docs/kanban/frontend_usability_kanban.md`](docs/kanban/frontend_usability_kanban.md) for historical reference.
 
 Current checkpoint:
 
-- Core backend, agent tools, frontend shell, live Firebase integration, live MongoDB Atlas wiring, Cloud Run deployment, and production smoke checks are complete.
+- v5 execution mode is **Option C**: build a clean L1 single-file prototype first, without touching the existing deployed v3 app until Fariz approves deployment/merge.
+- Canonical v5 PRD/design docs are committed under `docs/prd/` and `docs/design/`.
+- Existing core backend, agent tools, frontend shell, live Firebase integration, live MongoDB Atlas wiring, Cloud Run deployment, and production smoke checks remain available from the earlier BNC track.
 - BNC-031 submission package is prepared in `docs/submission/` and awaits final video upload / Devpost submission.
 
 ## Local backend quick start
