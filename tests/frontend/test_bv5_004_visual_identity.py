@@ -116,8 +116,8 @@ def test_bv5_visual_identity_components_exist_in_prototype_markup_and_css():
         assert marker in html, f"missing prototype markup marker {marker}"
 
 
-def test_bv5_contract_marks_visual_identity_done_and_points_to_app_shell():
+def test_bv5_contract_marks_visual_identity_done():
     contract = CONTRACT.read_text(encoding="utf-8")
     assert "### DONE" in contract
     assert "- **BV5-004 — Apply v5 visual identity and design tokens**" in contract
-    assert "Recommended next action: **BV5-005 — Implement v5 app shell, navigation, and mobile drawer**" in contract
+    assert "Bounce logomark fallback, Bounce avatar, FAB alert state, cards, tags, and button variants exist" in contract

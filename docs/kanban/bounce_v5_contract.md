@@ -46,15 +46,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ### TODO
 
-- **BV5-005 — Implement v5 app shell, navigation, and mobile drawer**
-  - Objective: Build the global/trip-scoped sidebar behavior and mobile top bar/drawer.
-  - Acceptance:
-    - Global nav shows Home, Plan, Join, with Profile accessed by user pill.
-    - Trip-scoped nav adapts for planning, active, and past trips.
-    - `← All trips` exits trip context.
-    - Trip context card uses selected trip data dynamically.
-    - Mobile drawer opens/closes under 900px and closes on backdrop/nav click.
-
 - **BV5-006 — Implement v5 demo data and phase dispatcher**
   - Objective: Encode the 5-trip v5 demo dataset and route/phase dispatch behavior.
   - Acceptance:
@@ -203,6 +194,19 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
     - Component CSS uses variables instead of raw component-level hex values.
     - Bounce logomark fallback, Bounce avatar, FAB alert state, cards, tags, and button variants exist in the prototype shell.
 
+- **BV5-005 — Implement v5 app shell, navigation, and mobile drawer**
+  - Completed on 2026-05-31.
+  - Files:
+    - `frontend/bounce_v5_prototype.html`
+    - `tests/frontend/test_bv5_005_app_shell_navigation.py`
+  - Acceptance met:
+    - Global nav shows Home, Plan a new trip, and Join a trip.
+    - Profile is accessed through the user pill.
+    - Trip-scoped nav adapts for planning, active, and past trips.
+    - `← All trips` exits trip context and closes the drawer.
+    - Trip context card uses selected trip name/city/state dynamically.
+    - Mobile top bar, drawer, and backdrop are stateful; nav/backdrop clicks close the drawer under the v5 900px breakpoint.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -225,6 +229,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ## Current next card recommendation
 
-Recommended next action: **BV5-005 — Implement v5 app shell, navigation, and mobile drawer**.
+Recommended next action: **BV5-006 — Implement v5 demo data and phase dispatcher**.
 
-Reason: the v5 L1 prototype now has the v5 token block and visual identity components. The next safe, surgical step is to replace the shell-level placeholder navigation with the phase-aware app shell and mobile drawer behavior, still without touching the existing deployed v3 app.
+Reason: the v5 L1 prototype now has the phase-aware app shell, global/trip nav, dynamic trip context card, user pill, and mobile drawer foundation. The next safe, surgical step is to refine the five-trip demo dataset and route/phase dispatcher against the v5 PRD.

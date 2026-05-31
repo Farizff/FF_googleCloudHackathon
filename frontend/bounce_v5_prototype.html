@@ -131,10 +131,18 @@
     .judge-panel { position: fixed; left: var(--sp-6); bottom: var(--sp-6); z-index: var(--z-judge); background: var(--purple); color: var(--text-inverse); border: 2px solid var(--lime); border-radius: var(--r-xl); padding: var(--sp-3); box-shadow: var(--shadow-float); min-width: 240px; user-select: none; }
     .judge-panel label { display: block; margin: var(--sp-2) 0 var(--sp-1); font-size: var(--text-xs); color: rgba(255,255,255,.75); text-transform: uppercase; font-weight: 900; letter-spacing: .08em; }
     .judge-panel select { width: 100%; border-radius: var(--r-sm); border: 0; padding: var(--sp-2); }
+    .user-pill { margin-top: auto; width: 100%; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); color: var(--text-inverse); border-radius: var(--r-lg); padding: var(--sp-3); display: flex; align-items: center; gap: var(--sp-3); cursor: pointer; text-align: left; }
+    .user-pill:hover { background: rgba(255,255,255,.12); }
+    .mobile-topbar { display: none; align-items: center; justify-content: space-between; gap: var(--sp-3); position: sticky; top: 0; z-index: var(--z-nav); background: var(--purple); color: var(--text-inverse); padding: var(--sp-3) var(--sp-4); }
+    .mobile-menu-button { width: 40px; height: 40px; border-radius: var(--r-md); border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.08); color: var(--text-inverse); font-weight: 900; cursor: pointer; }
+    .mobile-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 150; opacity: 0; pointer-events: none; transition: opacity var(--t-normal); }
+    .mobile-backdrop.show { opacity: 1; pointer-events: auto; }
     *:focus-visible { outline: 2.5px solid var(--purple-mid); outline-offset: 2px; border-radius: var(--r-xs); }
     @media (max-width: 900px) {
       .app-shell { grid-template-columns: 1fr; }
-      .sidebar { position: static; }
+      .mobile-topbar { display: flex; }
+      .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100vh; z-index: var(--z-chat); transform: translateX(-100%); transition: transform 260ms cubic-bezier(.4,0,.2,1); }
+      .sidebar.open { transform: translateX(0); }
       .page-body { padding: var(--sp-4); }
       .bounce-fab { right: var(--sp-4); bottom: var(--sp-4); }
     }
@@ -156,25 +164,52 @@
       melbourne_past: { currency: 'A$', total: '2,180', note: 'Coffee, galleries, and one excellent tram day.' }
     };
     const ROUTES = ['/', '/trip/:id', '/trip/:id/plan', '/trip/:id/active', '/trip/:id/flock', '/trip/:id/wrap', '/chat', '/join/:token'];
-    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null };
+    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null, isDrawerOpen: false };
 
     function tripById(id) { return DEMO_TRIPS.find((trip) => trip.id === id) || null; }
-    function setTripContext(id) { state.tripId = id; const trip = tripById(id); state.phase = trip ? trip.state : 'home'; renderApp(); }
+    function closeMobileDrawer() { state.isDrawerOpen = false; }
+    function toggleMobileDrawer() { state.isDrawerOpen = !state.isDrawerOpen; renderApp(); }
+    function navigate(phase) { state.phase = phase; closeMobileDrawer(); renderApp(); }
+    function setTripContext(id) { if (id === null) state.tripId = null; else state.tripId = id; const trip = tripById(id); state.phase = trip ? trip.state : 'home'; closeMobileDrawer(); renderApp(); }
     function setRole(role) { state.role = role; renderApp(); }
-    function setPhase(phase) { state.phase = phase; renderApp(); }
+    function setPhase(phase) { state.phase = phase; closeMobileDrawer(); renderApp(); }
+
+    function renderMobileTopbar() {
+      const trip = tripById(state.tripId);
+      return `<header class="mobile-topbar"><button class="mobile-menu-button" aria-label="Open navigation" onclick="toggleMobileDrawer()">☰</button><a class="logomark" aria-label="Bounce" href="#" onclick="setTripContext(null); return false;">B<span class="logomark-o">o</span>unce</a><button class="mobile-menu-button" aria-label="Chat with Bounce" onclick="navigate('chat')">B</button>${trip ? `<span class="muted">${trip.city}</span>` : ''}</header>`;
+    }
+
+    function renderUserPill() {
+      return `<button class="user-pill" onclick="setPhase('profile')"><span class="bounce-avatar bounce-avatar-sm" aria-hidden="true">F</span><span><strong>Fariz</strong><br><small>${state.role}</small></span></button>`;
+    }
+
+    function renderTripContextCard(trip) {
+      return `<div class="trip-card-context"><strong>${trip.name}</strong><br><span>${trip.city} · ${trip.state}</span></div>`;
+    }
+
+    function navButton(label, phase) {
+      return `<button class="${state.phase === phase ? 'active' : ''}" onclick="navigate('${phase}')">${label}</button>`;
+    }
+
+    function renderGlobalNav() {
+      return `<nav class="nav" aria-label="Global navigation">${navButton('Home', 'home')}${navButton('Plan a new trip', 'plan')}${navButton('Join a trip', 'join')}</nav>`;
+    }
+
+    function renderTripNav(trip) {
+      let items = [];
+      if (trip.state === 'planning') items = [['Itinerary', 'planning-itinerary'], ['Flights', 'planning-flights'], ['Suggestions', 'planning-suggestions'], ['FlockMode', 'planning-flock']];
+      if (trip.state === 'active') items = [['Today', 'active-today'], ['On the trip', 'active-trip'], ['FlockMode', 'active-flock'], ['Expenses', 'active-expenses'], ['Alerts', 'active-alerts']];
+      if (trip.state === 'past') items = [['Wrapped', 'wrap']];
+      return `<nav class="nav" aria-label="Trip navigation"><button onclick="setTripContext(null)">← All trips</button>${items.map(([label, phase]) => navButton(label, phase)).join('')}</nav>`;
+    }
 
     function renderShell(content) {
       const trip = tripById(state.tripId);
-      return `<div class="app-shell">
-        <aside class="sidebar">
+      return `${renderMobileTopbar()}<div class="mobile-backdrop ${state.isDrawerOpen ? 'show' : ''}" onclick="closeMobileDrawer(); renderApp();"></div><div class="app-shell">
+        <aside class="sidebar ${state.isDrawerOpen ? 'open' : ''}">
           <a class="logomark" aria-label="Bounce" href="#" onclick="setTripContext(null); return false;">B<span class="logomark-o">o</span>unce</a>
-          ${trip ? `<button class="btn btn-lime" onclick="setTripContext(null)">← All trips</button><div class="trip-card-context"><strong>${trip.name}</strong><br><span>${trip.city} · ${trip.state}</span></div>` : ''}
-          <nav class="nav" aria-label="Prototype navigation">
-            <button class="${state.phase === 'home' ? 'active' : ''}" onclick="setPhase('home')">Home</button>
-            <button onclick="setPhase('plan')">Plan a new trip</button>
-            <button onclick="setPhase('join')">Join a trip</button>
-            <button onclick="setPhase('chat')">Chat</button>
-          </nav>
+          ${trip ? renderTripContextCard(trip) + renderTripNav(trip) : renderGlobalNav()}
+          ${renderUserPill()}
         </aside>
         <section class="page-body">${content}</section>
       </div><button class="bounce-fab has-alert" aria-label="Chat with Bounce">B</button>${renderJudgePanel()}`;
