@@ -46,13 +46,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ### TODO
 
-- **BV5-004 — Apply v5 visual identity and design tokens**
-  - Objective: Replace old Yale/lemon visual language in the v5 prototype with the purple/lime/orange v5 system.
-  - Acceptance:
-    - `:root` includes v5 tokens from the design system.
-    - Component CSS uses variables, not raw component-level hex values except inside token definitions or encoded assets.
-    - Bounce avatar, fallback logo, FAB, cards, tags, and buttons match v5 specs.
-
 - **BV5-005 — Implement v5 app shell, navigation, and mobile drawer**
   - Objective: Build the global/trip-scoped sidebar behavior and mobile top bar/drawer.
   - Acceptance:
@@ -200,6 +193,16 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
     - Demo data is declared as `const` objects near the top of the inline script.
     - Existing deployed v3 app files were not modified.
 
+- **BV5-004 — Apply v5 visual identity and design tokens**
+  - Completed on 2026-05-31.
+  - Files:
+    - `frontend/bounce_v5_prototype.html`
+    - `tests/frontend/test_bv5_004_visual_identity.py`
+  - Acceptance met:
+    - `:root` includes v5 design-system tokens for brand, accents, semantic colors, categories, typography, spacing, radius, shadows, and z-index.
+    - Component CSS uses variables instead of raw component-level hex values.
+    - Bounce logomark fallback, Bounce avatar, FAB alert state, cards, tags, and button variants exist in the prototype shell.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -222,6 +225,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ## Current next card recommendation
 
-Recommended next action: **BV5-004 — Apply v5 visual identity and design tokens**.
+Recommended next action: **BV5-005 — Implement v5 app shell, navigation, and mobile drawer**.
 
-Reason: the v5 L1 prototype shell now exists as a separate self-contained file. The next safe, surgical step is to replace the shell-level placeholder styling with the full v5 visual identity and token set without touching the existing deployed v3 app.
+Reason: the v5 L1 prototype now has the v5 token block and visual identity components. The next safe, surgical step is to replace the shell-level placeholder navigation with the phase-aware app shell and mobile drawer behavior, still without touching the existing deployed v3 app.

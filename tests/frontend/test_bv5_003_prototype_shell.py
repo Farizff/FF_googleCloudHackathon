@@ -104,8 +104,9 @@ def test_bv5_l1_prototype_has_minimal_render_and_role_state_hooks():
         assert copy in html
 
 
-def test_bv5_contract_marks_card_done_and_points_to_next_card():
+def test_bv5_contract_marks_card_done_and_preserves_fixed_kanban():
     contract = CONTRACT.read_text(encoding="utf-8")
     assert "### DONE" in contract
     assert "- **BV5-003 — Create the v5 L1 prototype shell**" in contract
-    assert "Recommended next action: **BV5-004 — Apply v5 visual identity and design tokens**" in contract
+    assert "Prototype loads as one self-contained HTML file" in contract
+    assert "### TODO" in contract
