@@ -52,14 +52,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ### BLOCKED
 
-- **BV5-016 — Decide and perform deployment path**
-  - Objective: Choose whether to deploy the v5 prototype to existing Cloud Run, Firebase Hosting, or keep local only until L2 integration.
-  - Acceptance:
-    - Fariz-approved deployment target is recorded.
-    - If deployed, hosted URL loads the v5 prototype and `/health` remains healthy.
-    - Smoke evidence records exact URLs, status codes, and revision/version identifier.
-  - Blocker: needs Fariz decision after local v5 L1 prototype is built and smoke-tested.
-
 - **BV5-017 — Reconcile L2 backend contract to v5**
   - Objective: Align production API contracts with v5 without overbuilding beyond the approved prototype/deployment mode.
   - Acceptance:
@@ -242,6 +234,26 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
     - Browser console had no startup or representative-path errors.
     - Representative v5 demo path was exercised end to end.
 
+- **BV5-016 — Decide and perform deployment path**
+  - Completed on 2026-06-01.
+  - Approved path: Option 2 — deploy the v5 prototype to a new Cloud Run service in the existing Google Cloud project.
+  - Google Cloud project: `project-411e0419-48bd-4b5b-97f`.
+  - Region: `asia-southeast1`.
+  - Service: `bounce-v5-prototype`.
+  - Public URL: `https://bounce-v5-prototype-4dynllwdeq-as.a.run.app`.
+  - Latest ready revision: `bounce-v5-prototype-00001-cpt`.
+  - Files:
+    - `cloudrun/bounce-v5-prototype/Dockerfile`
+    - `cloudrun/bounce-v5-prototype/app.py`
+    - `cloudrun/bounce-v5-prototype/index.html`
+    - `docs/qa/bv5_016_cloud_run_deployment.md`
+    - `tests/infra/test_bv5_016_cloud_run_prototype.py`
+  - Acceptance met:
+    - Fariz-approved deployment target is recorded.
+    - Hosted URL loads the v5 prototype with HTTP 200.
+    - `/health` returns HTTP 200 with `status: ok` and `service: bounce-v5-prototype`.
+    - Smoke evidence records exact URL, status codes, and revision/version identifier.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -264,6 +276,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ## Current next card recommendation
 
-Recommended next action: **BV5-016 — Decide and perform deployment path**.
+Recommended next action: **BV5-017 — Reconcile L2 backend contract to v5**.
 
-Reason: the v5 L1 prototype has passed local visual/responsive smoke at desktop, tablet, and mobile widths. The next card is blocked on Fariz choosing the deployment path.
+Reason: the v5 L1 prototype is now deployed to a separate Cloud Run service in the existing Google Cloud project, while the existing `bounce-api` service remains untouched. BV5-017 remains blocked until Fariz approves starting L2 backend reconciliation.

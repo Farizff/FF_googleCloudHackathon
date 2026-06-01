@@ -33,9 +33,10 @@ def test_smoke_report_records_layout_acceptance_evidence():
         assert marker in report
 
 
-def test_bv5_contract_marks_visual_smoke_done_and_points_to_blocked_deployment_decision():
+def test_bv5_contract_marks_visual_smoke_done_with_deployment_checkpoint_preserved():
     contract = CONTRACT.read_text(encoding="utf-8")
     assert "### DONE" in contract
     assert "- **BV5-015 — Local visual/responsive smoke pass**" in contract
     assert "docs/qa/bv5_015_visual_responsive_smoke.md" in contract
-    assert "Recommended next action: **BV5-016 — Decide and perform deployment path**" in contract
+    assert "- **BV5-016 — Decide and perform deployment path**" in contract
+    assert "Recommended next action: **BV5-017 — Reconcile L2 backend contract to v5**" in contract
