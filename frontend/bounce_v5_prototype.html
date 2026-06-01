@@ -187,6 +187,22 @@
     .suggestion-card { border-left: 4px solid var(--lime-dark); }
     .suggestions-nav-label { position: relative; display: inline-flex; align-items: center; gap: var(--sp-2); }
     .suggestions-nav-badge { position: absolute; right: -16px; top: -10px; min-width: 20px; height: 20px; border-radius: 50%; background: var(--lime); color: var(--lime-text); display: inline-flex; align-items: center; justify-content: center; font-size: var(--text-xs); font-weight: 900; border: 1px solid var(--purple); }
+
+    .active-today-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr); gap: var(--sp-5); align-items: start; }
+    .quick-action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--sp-3); }
+    .today-card { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--sp-3); border: 1px solid var(--border-light); border-radius: var(--r-lg); padding: var(--sp-4); background: var(--bg-card); }
+    .flock-switcher { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+    .flock-switcher button { border: 1px solid var(--border-light); border-radius: var(--r-pill); background: var(--bg-card); color: var(--purple); padding: 9px 13px; font-weight: 900; cursor: pointer; }
+    .flock-switcher button.active { background: var(--lime); color: var(--lime-text); border-color: var(--lime-dark); }
+    .countdown-chip { display: inline-flex; border-radius: var(--r-pill); background: var(--orange-tint); color: var(--warning); padding: 6px 12px; font-weight: 900; }
+    .flock-map-svg { width: 100%; min-height: 210px; border-radius: var(--r-lg); background: var(--purple-tint); }
+    .modal-backdrop { position: fixed; inset: 0; z-index: var(--z-overlay); background: rgba(26,10,107,.38); display: grid; place-items: center; padding: var(--sp-5); }
+    .disruption-modal { max-width: 720px; width: min(720px, 100%); display: grid; gap: var(--sp-3); }
+    .expense-mode-grid, .expense-category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--sp-3); }
+    .expense-mode-grid button, .expense-category-grid button { border: 1px solid var(--border-light); border-radius: var(--r-lg); background: var(--bg-card); color: var(--purple); padding: var(--sp-3); font-weight: 900; cursor: pointer; }
+    .expense-mode-grid button.active, .expense-category-grid button.active { background: var(--purple); color: var(--text-inverse); }
+    .alert-list { display: grid; gap: var(--sp-3); }
+    .alert-card { border-left: 4px solid var(--orange); }
     .judge-panel { position: fixed; left: var(--sp-6); bottom: var(--sp-6); z-index: var(--z-judge); background: var(--purple); color: var(--text-inverse); border: 2px solid var(--lime); border-radius: var(--r-xl); padding: var(--sp-3); box-shadow: var(--shadow-float); min-width: 240px; user-select: none; }
     .judge-panel label { display: block; margin: var(--sp-2) 0 var(--sp-1); font-size: var(--text-xs); color: rgba(255,255,255,.75); text-transform: uppercase; font-weight: 900; letter-spacing: .08em; }
     .judge-panel select { width: 100%; border-radius: var(--r-sm); border: 0; padding: var(--sp-2); }
@@ -206,6 +222,7 @@
       .profile-layout { grid-template-columns: 1fr; }
       .profile-tabs { position: static; grid-template-columns: 1fr; }
       .planning-main-grid { grid-template-columns: 1fr; }
+      .active-today-grid { grid-template-columns: 1fr; }
       .budget-input-grid { grid-template-columns: 1fr; }
       .bounce-fab { right: var(--sp-4); bottom: var(--sp-4); }
     }
@@ -287,6 +304,36 @@
       { title: 'Sunset miradouro picnic', by: 'Priya', status: 'pending', note: 'Low-cost birthday moment with great photos.' }
     ];
 
+
+    const ACTIVE_TODAY = [
+      { time: '09:20', title: 'Shibuya crossing coffee check-in', meta: 'Tokyo Day 3 · everyone meets near Hachikō' },
+      { time: '11:00', title: 'TeamLab Borderless window', meta: 'Tickets held · 22 min transit buffer' },
+      { time: '15:30', title: 'Harajuku snack loop', meta: 'Flexible flock split before dinner' }
+    ];
+    const FLOCKS = [
+      { id: 'main', label: 'Main flock', countdown: '18 min until meetup', schedule: ['Meet at Shibuya Hachikō', 'Walk to coffee checkpoint', 'Transit to TeamLab together'] },
+      { id: 'slow', label: 'Slow morning flock', countdown: '42 min until meetup', schedule: ['Start at hotel lobby', 'Taxi to Shibuya', 'Join main flock at coffee'] },
+      { id: 'food', label: 'Snack scout flock', countdown: '25 min until meetup', schedule: ['Pick up onigiri', 'Find covered waiting spot', 'Share snack options in chat'] }
+    ];
+    const DISRUPTION_OPTIONS = [
+      { title: 'Shinjuku food hall pivot', impact: 'Keeps dinner indoors and reduces wet walking.' },
+      { title: 'Harajuku indoor arcade', impact: 'Preserves group energy with a shorter train hop.' },
+      { title: 'Hotel reset + later ramen', impact: 'Best for tired members and heavy rain.' }
+    ];
+    const SPLIT_MODES = ['Equally', 'By item', 'By percentage', 'Custom shares'];
+    const EXPENSE_CATEGORIES = [
+      { category: 'Food', amount: '¥18,400' },
+      { category: 'Culture', amount: '¥26,000' },
+      { category: 'Transport', amount: '¥7,800' },
+      { category: 'Shopping', amount: '¥12,200' },
+      { category: 'Hotel', amount: '¥88,000' },
+      { category: 'Wellness', amount: '¥6,500' }
+    ];
+    const ALERTS = [
+      { title: 'Rain starts near Shinjuku at 17:30', detail: 'Bounce suggests moving dinner backup earlier.' },
+      { title: 'JR Yamanote crowding is high', detail: 'Leave 12 minutes earlier for TeamLab transfer.' }
+    ];
+
     const PROFILE_TABS = [
       { id: 'about-me', label: 'About me', intro: 'The profile summary Bounce uses to keep group planning human.', fields: [['Home base', 'Singapore'], ['Vibe', 'Food-first planner, relaxed mornings'], ['Group note', 'Prefer consensus, then clear decisions']] },
       { id: 'food-diet', label: 'Food & diet', intro: 'Diet and food preferences that should shape every itinerary.', fields: [['Diet', 'Pescatarian-friendly picks'], ['Avoid', 'Shellfish and rushed breakfasts'], ['Loved cuisines', 'Japanese, Portuguese, Mexican street food']] },
@@ -294,7 +341,7 @@
       { id: 'past-trips', label: 'Past trips', readOnly: true, intro: 'Past trips tab is read-only so demo history stays stable.', fields: [['CDMX reunion', 'MX$37,000 · ⭐ 4.9'], ['Seoul food crawl', '₩5,900,000 · ⭐ 4.8'], ['Lisbon long weekend', '€1,160 · ⭐ 4.9']] },
       { id: 'passport-visas', label: 'Passport & visas', intro: 'Travel document reminders without exposing private document numbers.', fields: [['Passport', 'Valid through 2030'], ['Schengen', 'No visa needed for short stays'], ['Japan', 'Visa-free tourist entry']] }
     ];
-    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null, screen: 'home', user: 'maya', isDrawerOpen: false, entryPrompt: '', selectedTripChips: ['Friends reunion'], planningResponse: '', activeProfileTab: 'about-me', profileFeedback: '', activePlanningDay: 0, planningView: 'Timeline', budgetFeedback: '' };
+    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null, screen: 'home', user: 'maya', isDrawerOpen: false, entryPrompt: '', selectedTripChips: ['Friends reunion'], planningResponse: '', activeProfileTab: 'about-me', profileFeedback: '', activePlanningDay: 0, planningView: 'Timeline', budgetFeedback: '', activeFlock: 'main', disruptionOpen: false, expenseSplitMode: 'Equally', expenseCategory: 'Food', expenseFeedback: '', showEmptyAlerts: false };
 
     function tripById(id) { return DEMO_TRIPS.find((trip) => trip.id === id) || null; }
     function parseHashRoute() {
@@ -481,6 +528,42 @@
       return renderShell(`<section class="planning-layout">${renderPlanningHero('Pending suggestions', 'Two local suggestions are ready for organiser review.')}<div class="suggestions-list">${cards}</div></section>`);
     }
 
+
+    function activeTrip() { return tripById(state.tripId) || DEMO_TRIPS.find((trip) => trip.state === 'active') || DEMO_TRIPS[1]; }
+    function activeHero(title, subtitle) {
+      const trip = activeTrip();
+      return `<section class="card card-purple"><span class="tag tag-lime">Tokyo Day ${trip.activeDay}</span><h1>${title}</h1><p>${subtitle}</p><p>${trip.name} · ${trip.city} · Day ${trip.activeDay}/${trip.totalDays}</p></section>`;
+    }
+    function openDisruptionModal() { state.disruptionOpen = true; renderApp(); }
+    function closeDisruptionModal() { state.disruptionOpen = false; renderApp(); }
+    function setActiveFlock(id) { state.activeFlock = id; renderApp(); }
+    function setExpenseSplitMode(mode) { state.expenseSplitMode = mode; state.expenseFeedback = 'Expense split updated locally'; renderApp(); }
+    function setExpenseCategory(category) { state.expenseCategory = category; state.expenseFeedback = 'Expense split updated locally'; renderApp(); }
+    function toggleEmptyAlerts() { state.showEmptyAlerts = !state.showEmptyAlerts; renderApp(); }
+    function renderDisruptionModal() {
+      if (!state.disruptionOpen) return '';
+      return `<div class="modal-backdrop" role="presentation"><section class="card disruption-modal" role="dialog" aria-label="Disruption alternatives"><span class="tag tag-orange">Disruption</span><h2>Rain is about to hit Shinjuku</h2><p class="muted">Pick one deterministic L1 alternative for the demo.</p>${DISRUPTION_OPTIONS.map((option) => `<article class="card"><strong>${option.title}</strong><p class="muted">${option.impact}</p></article>`).join('')}<div class="quick-action-grid"><button class="btn btn-lime" onclick="closeDisruptionModal()">Lock this in & ping everyone →</button><button class="btn btn-ghost" onclick="closeDisruptionModal()">Not now</button></div></section></div>`;
+    }
+    function renderActiveTodayScreen() {
+      const cards = ACTIVE_TODAY.map((item) => `<article class="today-card"><span class="activity-time">${item.time}</span><span><strong>${item.title}</strong><br><span class="muted">${item.meta}</span></span></article>`).join('');
+      return renderShell(`<section class="planning-layout">${activeHero('Tokyo Day 3', 'Today keeps the active trip moving with quick local actions.')}<div class="active-today-grid"><section class="card"><h2>Today schedule</h2>${cards}</section><aside class="card"><h2>Quick actions</h2><div class="quick-action-grid"><button class="btn btn-primary">Ping late group</button><button class="btn btn-lime" onclick="setPhase('active-flock')">Open FlockMode</button><button class="btn btn-ghost" onclick="openDisruptionModal()">Trigger disruption</button></div></aside></div></section>${renderDisruptionModal()}`);
+    }
+    function renderActiveFlockScreen() {
+      const flock = FLOCKS.find((item) => item.id === state.activeFlock) || FLOCKS[0];
+      const switcher = FLOCKS.map((item) => `<button class="${item.id === flock.id ? 'active' : ''}" onclick="setActiveFlock('${item.id}')">${item.label}</button>`).join('');
+      const schedule = flock.schedule.map((item) => `<li>${item}</li>`).join('');
+      return renderShell(`<section class="planning-layout">${activeHero('FlockMode', 'Switcher, active flock schedule, countdown, and offline SVG map.')}<div class="flock-switcher" aria-label="FlockMode switcher">${switcher}</div><div class="active-today-grid"><section class="card"><span class="countdown-chip">${flock.countdown}</span><h2>active flock schedule</h2><ul>${schedule}</ul><p class="profile-readonly-note">Photo sharing placeholder — uploads stay CUT in L1.</p></section><aside class="card"><svg class="flock-map-svg" viewBox="0 0 320 220" role="img" aria-label="Tokyo flock map"><path d="M30 160 C80 60 130 90 170 50 S250 80 290 35" fill="none" stroke="#1A0A6B" stroke-width="8" stroke-linecap="round"/><circle cx="65" cy="122" r="16" fill="#C8E64A"/><circle cx="170" cy="50" r="16" fill="#F47B20"/><circle cx="260" cy="58" r="16" fill="#4A2FC4"/><text x="34" y="195" fill="#1A0A6B">Shibuya → TeamLab</text></svg></aside></div></section>`);
+    }
+    function renderActiveExpensesScreen() {
+      const modes = SPLIT_MODES.map((mode) => `<button class="${state.expenseSplitMode === mode ? 'active' : ''}" onclick="setExpenseSplitMode('${mode}')">${mode}</button>`).join('');
+      const categories = EXPENSE_CATEGORIES.map((item) => `<button class="${state.expenseCategory === item.category ? 'active' : ''}" onclick="setExpenseCategory('${item.category}')">${item.category}<br><span>${item.amount}</span></button>`).join('');
+      return renderShell(`<section class="planning-layout">${activeHero('Trip expenses', 'Four split modes and six local categories update without storage.')}<section class="card"><h2>Split mode</h2><div class="expense-mode-grid">${modes}</div></section><section class="card"><h2>Categories</h2><div class="expense-category-grid">${categories}</div><p class="profile-feedback" aria-live="polite">${state.expenseFeedback}</p></section></section>`);
+    }
+    function renderActiveAlertsScreen() {
+      const body = state.showEmptyAlerts ? `<section class="card"><h2>No alerts for this view</h2><p class="muted">Everything is calm after filters.</p></section>` : `<div class="alert-list">${ALERTS.map((alert) => `<article class="card alert-card"><span class="tag tag-orange">Active alert</span><h2>${alert.title}</h2><p class="muted">${alert.detail}</p></article>`).join('')}</div>`;
+      return renderShell(`<section class="planning-layout">${activeHero('Alerts', 'Populated and empty states for active trip operations.')}<button class="btn btn-ghost" onclick="toggleEmptyAlerts()">${state.showEmptyAlerts ? 'Show populated alerts' : 'Show empty state'}</button>${body}</section>`);
+    }
+
     function renderTripScreen() {
       const trip = tripById(state.tripId) || DEMO_TRIPS[0];
       const wrap = WRAP_DATA[trip.id];
@@ -498,6 +581,10 @@
       if (state.phase === 'planning-itinerary') { app.innerHTML = renderPlanningItineraryScreen(); return; }
       if (state.phase === 'planning-flights') { app.innerHTML = renderPlanningFlightsScreen(); return; }
       if (state.phase === 'planning-suggestions') { app.innerHTML = renderPlanningSuggestionsScreen(); return; }
+      if (state.phase === 'active-today') { app.innerHTML = renderActiveTodayScreen(); return; }
+      if (state.phase === 'active-flock') { app.innerHTML = renderActiveFlockScreen(); return; }
+      if (state.phase === 'active-expenses') { app.innerHTML = renderActiveExpensesScreen(); return; }
+      if (state.phase === 'active-alerts') { app.innerHTML = renderActiveAlertsScreen(); return; }
       if (state.tripId) { app.innerHTML = renderTripScreen(); return; }
       if (state.phase === 'plan') { app.innerHTML = renderEntryScreen(); return; }
       if (state.phase === 'home') { app.innerHTML = renderHomeScreen(); return; }

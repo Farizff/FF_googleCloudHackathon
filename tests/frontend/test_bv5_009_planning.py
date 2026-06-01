@@ -122,8 +122,8 @@ def test_planning_phases_route_to_specific_screens():
     assert "if (state.phase === 'planning-suggestions') { app.innerHTML = renderPlanningSuggestionsScreen(); return; }" in script
 
 
-def test_bv5_contract_marks_planning_done_and_points_to_active_card():
+def test_bv5_contract_marks_planning_done():
     contract = CONTRACT.read_text(encoding="utf-8")
     assert "### DONE" in contract
     assert "- **BV5-009 — Build Planning itinerary, budget, map, flights, and suggestions**" in contract
-    assert "Recommended next action: **BV5-010 — Build Active Today, FlockMode, disruption, expenses, and alerts**" in contract
+    assert "Itinerary layout has day rail, view toggles, activity cards, BudgetCard, and map placeholder/card" in contract

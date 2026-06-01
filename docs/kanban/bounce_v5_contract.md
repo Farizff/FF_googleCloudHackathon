@@ -46,15 +46,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ### TODO
 
-- **BV5-010 — Build Active Today, FlockMode, disruption, expenses, and alerts**
-  - Objective: Implement active-trip screens and demo interactions.
-  - Acceptance:
-    - Today screen uses Tokyo Day 3 data and quick actions.
-    - FlockMode switcher, active flock schedule, countdown, SVG map, and photo-sharing placeholder render.
-    - Disruption modal shows 3 alternatives and uses `Lock this in & ping everyone →` / `Not now` copy.
-    - Expenses include 4 split modes and 6 categories with visible local state updates.
-    - Alerts have populated/empty states per v5.
-
 - **BV5-011 — Build Post-trip Wrap screens**
   - Objective: Implement trip-aware wrap screens for all 3 past trips.
   - Acceptance:
@@ -221,6 +212,18 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
     - Flights show 3 options per origin group with risk labels.
     - Suggestions show 2 pending items and a lime nav badge positioned over the icon/label.
 
+- **BV5-010 — Build Active Today, FlockMode, disruption, expenses, and alerts**
+  - Completed on 2026-06-01.
+  - Files:
+    - `frontend/bounce_v5_prototype.html`
+    - `tests/frontend/test_bv5_010_active_trip.py`
+  - Acceptance met:
+    - Today screen uses Tokyo Day 3 data and quick actions.
+    - FlockMode switcher, active flock schedule, countdown, SVG map, and photo-sharing placeholder render.
+    - Disruption modal shows 3 alternatives and uses `Lock this in & ping everyone →` / `Not now` copy.
+    - Expenses include 4 split modes and 6 categories with visible local state updates.
+    - Alerts have populated and empty states.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -243,6 +246,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ## Current next card recommendation
 
-Recommended next action: **BV5-010 — Build Active Today, FlockMode, disruption, expenses, and alerts**.
+Recommended next action: **BV5-011 — Build Post-trip Wrap screens**.
 
-Reason: the v5 L1 prototype now has the planning itinerary, budget, map placeholder, flights, and suggestions surfaces. The next bounded card is the active-trip Today/FlockMode/disruption/expenses/alerts surface.
+Reason: the v5 L1 prototype now has active-trip Today, FlockMode, disruption, expenses, and alerts surfaces. The next bounded card is the post-trip Wrap screens for all 3 past trips.
