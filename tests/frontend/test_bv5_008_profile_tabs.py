@@ -86,8 +86,8 @@ def test_profile_nav_phase_renders_profile_screen():
     assert script.index("if (state.phase === 'profile')") < script.index("if (state.tripId)")
 
 
-def test_bv5_contract_marks_profile_done_and_points_to_planning_card():
+def test_bv5_contract_marks_profile_done():
     contract = CONTRACT.read_text(encoding="utf-8")
     assert "### DONE" in contract
     assert "- **BV5-008 — Build Profile tabs with anchored save buttons**" in contract
-    assert "Recommended next action: **BV5-009 — Build Planning itinerary, budget, map, flights, and suggestions**" in contract
+    assert "Profile has tabs for About me, Food & diet, How I travel, Past trips, and Passport & visas" in contract

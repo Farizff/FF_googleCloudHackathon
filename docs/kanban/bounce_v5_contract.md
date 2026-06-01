@@ -46,15 +46,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ### TODO
 
-- **BV5-009 — Build Planning itinerary, budget, map, flights, and suggestions**
-  - Objective: Implement the planning phase demo screens and role-aware controls.
-  - Acceptance:
-    - Itinerary layout has day rail, view toggles, activity cards, BudgetCard, and map placeholder/card.
-    - Admin roles see 3-dot activity menus in planning; members do not directly edit.
-    - Budget editor has two inputs and bottom save behavior.
-    - Flights show 3 options per origin group with risk labels.
-    - Suggestions show 2 pending items and lime nav badge positioned over the icon.
-
 - **BV5-010 — Build Active Today, FlockMode, disruption, expenses, and alerts**
   - Objective: Implement active-trip screens and demo interactions.
   - Acceptance:
@@ -218,6 +209,18 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
     - Past trips is read-only and has no save button.
     - Save action produces visible local demo feedback.
 
+- **BV5-009 — Build Planning itinerary, budget, map, flights, and suggestions**
+  - Completed on 2026-06-01.
+  - Files:
+    - `frontend/bounce_v5_prototype.html`
+    - `tests/frontend/test_bv5_009_planning.py`
+  - Acceptance met:
+    - Itinerary layout has day rail, view toggles, activity cards, BudgetCard, and map placeholder/card.
+    - Admin roles see 3-dot activity menus in planning; members get read-only/suggestion copy.
+    - Budget editor has two inputs and bottom save behavior.
+    - Flights show 3 options per origin group with risk labels.
+    - Suggestions show 2 pending items and a lime nav badge positioned over the icon/label.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -240,6 +243,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ## Current next card recommendation
 
-Recommended next action: **BV5-009 — Build Planning itinerary, budget, map, flights, and suggestions**.
+Recommended next action: **BV5-010 — Build Active Today, FlockMode, disruption, expenses, and alerts**.
 
-Reason: the v5 L1 prototype now has the Profile tabs with anchored save behavior. The next bounded card is the planning phase itinerary, budget, map, flights, and suggestions surface.
+Reason: the v5 L1 prototype now has the planning itinerary, budget, map placeholder, flights, and suggestions surfaces. The next bounded card is the active-trip Today/FlockMode/disruption/expenses/alerts surface.

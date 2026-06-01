@@ -163,6 +163,30 @@
     .profile-save-row.is-anchored { position: sticky; bottom: var(--sp-4); background: linear-gradient(180deg, rgba(255,255,255,.82), var(--bg-card)); border-radius: var(--r-lg); padding: var(--sp-3); box-shadow: var(--shadow-card); }
     .profile-feedback { color: var(--success); font-weight: 900; min-height: 22px; }
     .profile-readonly-note { border: 1px dashed var(--border-medium); border-radius: var(--r-lg); padding: var(--sp-3); color: var(--text-secondary); background: var(--bg-raised); }
+
+    .planning-layout { display: grid; gap: var(--sp-5); }
+    .planning-main-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr); gap: var(--sp-5); align-items: start; }
+    .planning-day-rail { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+    .planning-day-rail button { border: 1px solid var(--border-light); background: var(--bg-card); color: var(--purple); border-radius: var(--r-pill); padding: 9px 13px; font-weight: 900; cursor: pointer; }
+    .planning-day-rail button.active { background: var(--lime); color: var(--lime-text); border-color: var(--lime-dark); }
+    .view-toggle { display: inline-flex; gap: var(--sp-1); padding: var(--sp-1); border-radius: var(--r-pill); background: var(--purple-tint); }
+    .view-toggle button { border: 0; border-radius: var(--r-pill); padding: 8px 12px; background: transparent; color: var(--purple); font-weight: 900; cursor: pointer; }
+    .view-toggle button.active { background: var(--purple); color: var(--text-inverse); }
+    .activity-card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--sp-3); align-items: start; border: 1px solid var(--border-light); border-radius: var(--r-lg); padding: var(--sp-4); background: var(--bg-card); }
+    .activity-time { color: var(--purple); font-weight: 900; }
+    .activity-menu { width: 34px; height: 34px; border: 1px solid var(--border-light); border-radius: 50%; background: var(--bg-card); color: var(--purple); font-weight: 900; cursor: pointer; }
+    .budget-card { display: grid; gap: var(--sp-3); }
+    .budget-input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+    .budget-input-grid input { width: 100%; border: 1px solid var(--border-light); border-radius: var(--r-md); padding: var(--sp-3); font: inherit; }
+    .budget-save-row { margin-top: auto; padding-top: var(--sp-3); border-top: 1px solid var(--border-light); display: flex; justify-content: space-between; gap: var(--sp-3); align-items: center; }
+    .budget-save-row.is-anchored { position: sticky; bottom: var(--sp-4); background: var(--bg-card); border-radius: var(--r-lg); padding: var(--sp-3); box-shadow: var(--shadow-card); }
+    .planning-map-card { min-height: 220px; display: grid; place-items: center; text-align: center; background: linear-gradient(135deg, var(--purple-tint), var(--lime-tint)); }
+    .flight-group { display: grid; gap: var(--sp-3); }
+    .flight-option { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--sp-3); border: 1px solid var(--border-light); border-radius: var(--r-lg); padding: var(--sp-4); background: var(--bg-card); }
+    .suggestions-list { display: grid; gap: var(--sp-3); }
+    .suggestion-card { border-left: 4px solid var(--lime-dark); }
+    .suggestions-nav-label { position: relative; display: inline-flex; align-items: center; gap: var(--sp-2); }
+    .suggestions-nav-badge { position: absolute; right: -16px; top: -10px; min-width: 20px; height: 20px; border-radius: 50%; background: var(--lime); color: var(--lime-text); display: inline-flex; align-items: center; justify-content: center; font-size: var(--text-xs); font-weight: 900; border: 1px solid var(--purple); }
     .judge-panel { position: fixed; left: var(--sp-6); bottom: var(--sp-6); z-index: var(--z-judge); background: var(--purple); color: var(--text-inverse); border: 2px solid var(--lime); border-radius: var(--r-xl); padding: var(--sp-3); box-shadow: var(--shadow-float); min-width: 240px; user-select: none; }
     .judge-panel label { display: block; margin: var(--sp-2) 0 var(--sp-1); font-size: var(--text-xs); color: rgba(255,255,255,.75); text-transform: uppercase; font-weight: 900; letter-spacing: .08em; }
     .judge-panel select { width: 100%; border-radius: var(--r-sm); border: 0; padding: var(--sp-2); }
@@ -181,6 +205,8 @@
       .page-body { padding: var(--sp-4); }
       .profile-layout { grid-template-columns: 1fr; }
       .profile-tabs { position: static; grid-template-columns: 1fr; }
+      .planning-main-grid { grid-template-columns: 1fr; }
+      .budget-input-grid { grid-template-columns: 1fr; }
       .bounce-fab { right: var(--sp-4); bottom: var(--sp-4); }
     }
   </style>
@@ -221,6 +247,46 @@
     const ROUTES = ['/', '/trip/:id', '/trip/:id/plan', '/trip/:id/active', '/trip/:id/flock', '/trip/:id/wrap', '/chat', '/join/:token'];
     const TRIP_TYPE_CHIPS = ['Birthday trip', 'Friends reunion', 'Food crawl', 'Low walking first day', 'Beach reset'];
 
+
+    const PLANNING_DAYS = [
+      { day: 'Day 1', title: 'Arrival + Alfama ease-in', activities: [
+        { time: '10:30', title: 'Arrivals and apartment drop', meta: 'Baixa · keep it light' },
+        { time: '15:00', title: 'Alfama wander with photo stops', meta: 'Culture · low walking loops' },
+        { time: '20:00', title: 'Birthday dinner shortlist', meta: 'Food · organiser picks final spot' },
+      ]},
+      { day: 'Day 2', title: 'Belém and riverside food day', activities: [
+        { time: '09:30', title: 'Pastéis de Belém breakfast', meta: 'Food · pending suggestion fit' },
+        { time: '13:00', title: 'MAAT riverside walk', meta: 'Culture · tram-friendly' },
+        { time: '18:30', title: 'Sunset miradouro picnic', meta: 'Nature · group vote' },
+      ]},
+      { day: 'Day 3', title: 'Beach reset and easy evening', activities: [
+        { time: '11:00', title: 'Cascais beach window', meta: 'Transport · train first' },
+        { time: '17:00', title: 'Free time buffer', meta: 'Wellness · no pressure' },
+        { time: '21:00', title: 'Late snacks near Bairro Alto', meta: 'Nightlife · optional' },
+      ]}
+    ];
+    const FLIGHT_GROUPS = [
+      { origin: 'London', options: [
+        { airline: 'TAP direct', time: '08:15 → 11:05', price: '€180', risk: 'Low risk' },
+        { airline: 'BA direct', time: '13:40 → 16:30', price: '€210', risk: 'Medium risk' },
+        { airline: 'Iberia via MAD', time: '16:20 → 22:10', price: '€155', risk: 'Tight connection' },
+      ]},
+      { origin: 'Singapore', options: [
+        { airline: 'Qatar via DOH', time: '02:00 → 13:45', price: '€760', risk: 'Low risk' },
+        { airline: 'Emirates via DXB', time: '01:40 → 14:20', price: '€810', risk: 'Medium risk' },
+        { airline: 'Turkish via IST', time: '23:35 → 12:55', price: '€720', risk: 'Tight connection' },
+      ]},
+      { origin: 'New York', options: [
+        { airline: 'United direct', time: '20:10 → 08:05', price: '€540', risk: 'Low risk' },
+        { airline: 'TAP direct', time: '22:05 → 09:50', price: '€510', risk: 'Medium risk' },
+        { airline: 'Air Europa via MAD', time: '18:40 → 11:45', price: '€465', risk: 'Tight connection' },
+      ]}
+    ];
+    const SUGGESTIONS = [
+      { title: 'Pastéis de Belém breakfast', by: 'Sofia', status: 'pending', note: 'Add it before MAAT so nobody starts hungry.' },
+      { title: 'Sunset miradouro picnic', by: 'Priya', status: 'pending', note: 'Low-cost birthday moment with great photos.' }
+    ];
+
     const PROFILE_TABS = [
       { id: 'about-me', label: 'About me', intro: 'The profile summary Bounce uses to keep group planning human.', fields: [['Home base', 'Singapore'], ['Vibe', 'Food-first planner, relaxed mornings'], ['Group note', 'Prefer consensus, then clear decisions']] },
       { id: 'food-diet', label: 'Food & diet', intro: 'Diet and food preferences that should shape every itinerary.', fields: [['Diet', 'Pescatarian-friendly picks'], ['Avoid', 'Shellfish and rushed breakfasts'], ['Loved cuisines', 'Japanese, Portuguese, Mexican street food']] },
@@ -228,7 +294,7 @@
       { id: 'past-trips', label: 'Past trips', readOnly: true, intro: 'Past trips tab is read-only so demo history stays stable.', fields: [['CDMX reunion', 'MX$37,000 · ⭐ 4.9'], ['Seoul food crawl', '₩5,900,000 · ⭐ 4.8'], ['Lisbon long weekend', '€1,160 · ⭐ 4.9']] },
       { id: 'passport-visas', label: 'Passport & visas', intro: 'Travel document reminders without exposing private document numbers.', fields: [['Passport', 'Valid through 2030'], ['Schengen', 'No visa needed for short stays'], ['Japan', 'Visa-free tourist entry']] }
     ];
-    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null, screen: 'home', user: 'maya', isDrawerOpen: false, entryPrompt: '', selectedTripChips: ['Friends reunion'], planningResponse: '', activeProfileTab: 'about-me', profileFeedback: '' };
+    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null, screen: 'home', user: 'maya', isDrawerOpen: false, entryPrompt: '', selectedTripChips: ['Friends reunion'], planningResponse: '', activeProfileTab: 'about-me', profileFeedback: '', activePlanningDay: 0, planningView: 'Timeline', budgetFeedback: '' };
 
     function tripById(id) { return DEMO_TRIPS.find((trip) => trip.id === id) || null; }
     function parseHashRoute() {
@@ -322,7 +388,7 @@
 
     function renderTripNav(trip) {
       let items = [];
-      if (trip.state === 'planning') items = [['Itinerary', 'planning-itinerary'], ['Flights', 'planning-flights'], ['Suggestions', 'planning-suggestions'], ['FlockMode', 'planning-flock']];
+      if (trip.state === 'planning') items = [['Itinerary', 'planning-itinerary'], ['Flights', 'planning-flights'], ['<span class=\"suggestions-nav-label\">Suggestions<span class=\"suggestions-nav-badge\">2</span></span>', 'planning-suggestions'], ['FlockMode', 'planning-flock']];
       if (trip.state === 'active') items = [['Today', 'active-today'], ['On the trip', 'active-trip'], ['FlockMode', 'active-flock'], ['Expenses', 'active-expenses'], ['Alerts', 'active-alerts']];
       if (trip.state === 'past') items = [['Wrapped', 'wrap']];
       return `<nav class="nav" aria-label="Trip navigation"><button onclick="setTripContext(null)">← All trips</button>${items.map(([label, phase]) => navButton(label, phase)).join('')}</nav>`;
@@ -381,6 +447,40 @@
       return renderShell(`<section class="card card-purple"><span class="tag tag-lime">Profile</span><h1>Fariz travel profile</h1><p>Tabbed profile data for the v5 L1 demo. Editable tabs keep their Save changes button anchored at the bottom.</p></section><section class="profile-layout"><aside class="profile-tabs" role="tablist" aria-label="Profile tabs">${tabButtons}</aside><article class="card profile-tab-panel" role="tabpanel"><span class="tag tag-purple">${tab.label}</span><h2>${tab.label}</h2><p class="muted">${tab.intro}</p><div class="profile-field-grid">${fieldCards}</div>${saveRow}</article></section>`);
     }
 
+
+    function canEditPlanning() { return state.role !== 'member'; }
+    function setPlanningDay(index) { state.activePlanningDay = index; renderApp(); }
+    function setPlanningView(view) { state.planningView = view; renderApp(); }
+    function saveBudgetDraft() { state.budgetFeedback = 'Budget saved for the demo'; renderApp(); }
+    function planningTrip() { return tripById(state.tripId) || DEMO_TRIPS.find((trip) => trip.state === 'planning') || DEMO_TRIPS[0]; }
+    function renderPlanningHero(title, subtitle) {
+      const trip = planningTrip();
+      const roleCopy = canEditPlanning() ? 'Admin roles can rebalance timing, budget, and options.' : 'Members can suggest changes, but organisers edit the plan.';
+      return `<section class="card card-purple"><span class="tag tag-lime">Planning · ${trip.city}</span><h1>${title}</h1><p>${subtitle}</p><p>${roleCopy}</p></section>`;
+    }
+    function renderActivityCard(activity) {
+      const menu = canEditPlanning() ? `<button class="activity-menu" aria-label="Activity options">⋯</button>` : `<span class="tag tag-purple">View only</span>`;
+      return `<article class="activity-card"><span class="activity-time">${activity.time}</span><span><strong>${activity.title}</strong><br><span class="muted">${activity.meta}</span></span>${menu}</article>`;
+    }
+    function renderBudgetCard() {
+      const trip = planningTrip();
+      return `<aside class="card budget-card"><span class="tag tag-lime">BudgetCard</span><h2>Budget</h2><p class="muted">${trip.budget.currency} ${trip.budget.total} total · ${trip.budget.currency} ${trip.budget.perDay}/person/day target</p><div class="budget-input-grid"><label><strong>Total budget</strong><input id="budget-total-input" value="${trip.budget.total}" inputmode="numeric"></label><label><strong>Per-day target</strong><input id="budget-per-day-input" value="${trip.budget.perDay}" inputmode="numeric"></label></div><div class="budget-save-row is-anchored"><span class="profile-feedback" aria-live="polite">${state.budgetFeedback}</span><button class="btn btn-lime" onclick="saveBudgetDraft()">Save budget</button></div></aside>`;
+    }
+    function renderPlanningItineraryScreen() {
+      const activeDay = PLANNING_DAYS[state.activePlanningDay] || PLANNING_DAYS[0];
+      const dayRail = PLANNING_DAYS.map((day, index) => `<button class="${index === state.activePlanningDay ? 'active' : ''}" onclick="setPlanningDay(${index})">${day.day}</button>`).join('');
+      const toggles = ['Timeline', 'Map'].map((view) => `<button class="${state.planningView === view ? 'active' : ''}" onclick="setPlanningView('${view}')">${view}</button>`).join('');
+      return renderShell(`<section class="planning-layout">${renderPlanningHero('Lisbon planning board', 'Itinerary, budget, map, flights, and suggestions for Maya’s 30th.')}<div class="planning-day-rail" aria-label="Planning day rail">${dayRail}</div><div class="planning-main-grid"><section class="card"><div class="view-toggle" aria-label="Itinerary view toggle">${toggles}</div><h2>${activeDay.day}: ${activeDay.title}</h2>${activeDay.activities.map(renderActivityCard).join('')}</section><div class="planning-layout">${renderBudgetCard()}<aside class="card planning-map-card"><strong>Lisbon map placeholder</strong><span class="muted">Offline L1 map card: Baixa, Alfama, Belém, Cascais.</span></aside></div></div></section>`);
+    }
+    function renderPlanningFlightsScreen() {
+      const groups = FLIGHT_GROUPS.map((group) => `<section class="card flight-group"><h2>${group.origin}</h2>${group.options.map((option) => `<article class="flight-option"><span><strong>${option.airline}</strong><br><span class="muted">${option.time} · ${option.price}</span></span><span class="tag ${option.risk === 'Low risk' ? 'tag-lime' : option.risk === 'Medium risk' ? 'tag-orange' : 'tag-purple'}">${option.risk}</span></article>`).join('')}</section>`).join('');
+      return renderShell(`<section class="planning-layout">${renderPlanningHero('Flight options by origin', 'Three visible options per origin group, with demo risk labels for judge review.')}<div class="planning-layout">${groups}</div></section>`);
+    }
+    function renderPlanningSuggestionsScreen() {
+      const cards = SUGGESTIONS.map((item) => `<article class="card suggestion-card"><span class="tag tag-lime">${item.status}</span><h2>${item.title}</h2><p class="muted">Suggested by ${item.by}. ${item.note}</p>${canEditPlanning() ? '<button class="btn btn-primary">Review suggestion</button>' : '<span class="tag tag-purple">Waiting for organiser</span>'}</article>`).join('');
+      return renderShell(`<section class="planning-layout">${renderPlanningHero('Pending suggestions', 'Two local suggestions are ready for organiser review.')}<div class="suggestions-list">${cards}</div></section>`);
+    }
+
     function renderTripScreen() {
       const trip = tripById(state.tripId) || DEMO_TRIPS[0];
       const wrap = WRAP_DATA[trip.id];
@@ -395,6 +495,9 @@
       const app = document.getElementById('app');
       if (!app) return;
       if (state.phase === 'profile') { app.innerHTML = renderProfileScreen(); return; }
+      if (state.phase === 'planning-itinerary') { app.innerHTML = renderPlanningItineraryScreen(); return; }
+      if (state.phase === 'planning-flights') { app.innerHTML = renderPlanningFlightsScreen(); return; }
+      if (state.phase === 'planning-suggestions') { app.innerHTML = renderPlanningSuggestionsScreen(); return; }
       if (state.tripId) { app.innerHTML = renderTripScreen(); return; }
       if (state.phase === 'plan') { app.innerHTML = renderEntryScreen(); return; }
       if (state.phase === 'home') { app.innerHTML = renderHomeScreen(); return; }
