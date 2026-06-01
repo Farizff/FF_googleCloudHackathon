@@ -410,7 +410,7 @@
       { id: 'past-trips', label: 'Past trips', readOnly: true, intro: 'Past trips tab is read-only so demo history stays stable.', fields: [['CDMX reunion', 'MX$37,000 · ⭐ 4.9'], ['Seoul food crawl', '₩5,900,000 · ⭐ 4.8'], ['Lisbon long weekend', '€1,160 · ⭐ 4.9']] },
       { id: 'passport-visas', label: 'Passport & visas', intro: 'Travel document reminders without exposing private document numbers.', fields: [['Passport', 'Valid through 2030'], ['Schengen', 'No visa needed for short stays'], ['Japan', 'Visa-free tourist entry']] }
     ];
-    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null, screen: 'home', user: 'maya', isDrawerOpen: false, entryPrompt: '', selectedTripChips: ['Friends reunion'], planningResponse: '', activeProfileTab: 'about-me', profileFeedback: '', activePlanningDay: 0, planningView: 'Timeline', activityAction: null, suggestionReview: null, suggestionFeedback: '', budgetFeedback: '', activeFlock: 'main', disruptionOpen: false, activeActionFeedback: '', expenseSplitMode: 'Equally', expenseCategory: 'Food', expenseFeedback: '', showEmptyAlerts: false, isBounceOpen: false, bounceInput: '', bounceMessages: [{ sender: 'Bounce', text: 'I can help with the current demo screen using local prototype data.' }], isJudgeOpen: true, judgePosition: null, judgeDrag: null, judgeFeedback: 'Ready for judge walkthrough.' };
+    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null, screen: 'home', user: 'maya', isDrawerOpen: false, entryPrompt: '', selectedTripChips: ['Friends reunion'], planningResponse: '', joinCode: 'MAYA30', joinFeedback: '', activeProfileTab: 'about-me', profileFeedback: '', activePlanningDay: 0, planningView: 'Timeline', activityAction: null, suggestionReview: null, suggestionFeedback: '', budgetFeedback: '', activeFlock: 'main', disruptionOpen: false, activeActionFeedback: '', expenseSplitMode: 'Equally', expenseCategory: 'Food', expenseFeedback: '', showEmptyAlerts: false, isBounceOpen: false, bounceInput: '', bounceMessages: [{ sender: 'Bounce', text: 'I can help with the current demo screen using local prototype data.' }], isJudgeOpen: true, judgePosition: null, judgeDrag: null, judgeFeedback: 'Ready for judge walkthrough.' };
 
     function tripById(id) { return DEMO_TRIPS.find((trip) => trip.id === id) || null; }
     function parseHashRoute() {
@@ -536,6 +536,13 @@
       renderApp();
     }
 
+    function previewJoinCode() {
+      const input = document.getElementById('join-code-input');
+      state.joinCode = input ? input.value.trim() || 'MAYA30' : state.joinCode;
+      state.joinFeedback = `Join preview loaded for the demo: ${state.joinCode.toUpperCase()}`;
+      renderApp();
+    }
+
     function renderMobileTopbar() {
       const trip = tripById(state.tripId);
       return `<header class="mobile-topbar"><button class="mobile-menu-button" aria-label="Open navigation" onclick="toggleMobileDrawer()">☰</button><a class="logomark" aria-label="Bounce" href="#" onclick="setTripContext(null); return false;">B<span class="logomark-o">o</span>unce</a><button class="mobile-menu-button" aria-label="Chat with Bounce" onclick="navigate('chat')">B</button>${trip ? `<span class="muted">${trip.city}</span>` : ''}</header>`;
@@ -607,6 +614,11 @@
     function renderEntryScreen() {
       const response = state.planningResponse || 'Organising everyone\'s ideas… Pick a few trip vibes, then tell Bounce what your group has in mind.';
       return renderShell(`<section class="entry-conversation"><div class="card entry-hero"><div class="entry-mascot" aria-hidden="true">B</div><div><span class="tag tag-lime">Plan a new trip</span><h1>Where should we bounce next?</h1><p class="muted">Your trip starts here. Tell me what you've got in mind.</p></div></div><div class="card"><label for="trip-prompt-textarea"><strong>Tell Bounce about the trip</strong></label><textarea id="trip-prompt-textarea" class="trip-prompt-textarea" placeholder="e.g. Five friends, Lisbon in July, food, music, not too much walking…">${state.entryPrompt}</textarea><p><strong>What kind of trip is this?</strong></p><div class="trip-type-chips">${TRIP_TYPE_CHIPS.map((chip) => `<button class="trip-type-chip ${state.selectedTripChips.includes(chip) ? 'is-selected' : ''}" onclick="toggleTripChip('${chip}')">${chip}</button>`).join('')}</div><div style="margin-top: var(--sp-4)"><button class="btn btn-primary" onclick="submitTripPrompt()">Ready to bounce →</button></div></div><div class="entry-response"><strong>Bounce</strong><p>${response}</p></div></section>`);
+    }
+
+    function renderJoinScreen() {
+      const feedback = state.joinFeedback ? `<p class="profile-feedback" aria-live="polite">${state.joinFeedback}</p>` : '';
+      return renderShell(`<section class="entry-conversation"><div class="card entry-hero"><div class="entry-mascot" aria-hidden="true">B</div><div><span class="tag tag-lime">Join a trip</span><h1>Enter invite code</h1><p class="muted">Use this L1 invite preview to show how members would join a shared plan.</p></div></div><div class="card"><label for="join-code-input"><strong>Invite code</strong></label><input id="join-code-input" class="budget-input" value="${state.joinCode}" placeholder="MAYA30" oninput="state.joinCode=this.value"><button class="btn btn-lime" onclick="previewJoinCode()">Preview invite →</button>${feedback}</div><aside class="card bouncesay-card"><span class="tag tag-purple">L1 invite preview</span><h2>Join Maya's 30th preview</h2><p>Lisbon · Jul 12 – Jul 17 · 5 travellers</p><p>Backend join flow stays deferred in L1, so this preview is deterministic and local.</p></aside></section>`);
     }
 
 
@@ -836,6 +848,7 @@
       if (state.phase === 'chat') { app.innerHTML = renderChatScreen(); return; }
       if (state.tripId) { app.innerHTML = renderTripScreen(); return; }
       if (state.phase === 'plan') { app.innerHTML = renderEntryScreen(); return; }
+      if (state.phase === 'join') { app.innerHTML = renderJoinScreen(); return; }
       if (state.phase === 'home') { app.innerHTML = renderHomeScreen(); return; }
       app.innerHTML = renderHomeScreen();
     }

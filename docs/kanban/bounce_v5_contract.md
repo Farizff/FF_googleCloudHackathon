@@ -234,7 +234,7 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
   - Region: `asia-southeast1`.
   - Service: `bounce-v5-prototype`.
   - Public URL: `https://bounce-v5-prototype-4dynllwdeq-as.a.run.app`.
-  - Latest ready revision: `bounce-v5-prototype-00001-cpt`.
+  - Latest ready revision: `bounce-v5-prototype-00011-9vx`.
   - Files:
     - `cloudrun/bounce-v5-prototype/Dockerfile`
     - `cloudrun/bounce-v5-prototype/app.py`
@@ -261,6 +261,47 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
     - MongoDB collection names and Firebase RTDB paths match PRD v5 where L2 work is in scope.
     - Existing live `bounce-api` deployment remains untouched by this checkpoint.
 
+## Approved v5 polish addendum
+
+Source of approval: Fariz approved creating and working **BV5-A02** on 2026-06-01 after the V5 judge/demo polish audit.
+
+Scope-control rules:
+
+1. This addendum is fixed to the approved V5 polish sequence; do not silently add more BV5-A cards.
+2. Keep changes limited to the separate V5 prototype service unless Fariz explicitly approves changing the main `bounce-api` app.
+3. Use deterministic local L1 behavior for prototype polish; do not claim live backend join behavior.
+4. Stop after one card when working under the 5-hour/weekly usage-limit boundary.
+
+### TODO
+
+- **BV5-A03 — Make Plan-new-trip response reflect typed prompt**
+  - Source: V5 judge/demo polish audit on 2026-06-01.
+  - Deliverable: deterministic plan-entry response should echo obvious prompt destinations such as Tokyo, Lisbon, or Seoul instead of always using Lisbon fallback copy.
+  - Acceptance: typed prompt affects visible destination copy; no network/storage is introduced; existing entry-flow tests remain green.
+
+### IN_PROGRESS
+
+- None.
+
+### BLOCKED
+
+- None.
+
+### DONE
+
+- **BV5-A02 — Fix global Join a trip nav**
+  - Status: DONE.
+  - Source: V5 judge/demo polish audit on 2026-06-01.
+  - Files:
+    - `frontend/bounce_v5_prototype.html`
+    - `cloudrun/bounce-v5-prototype/index.html`
+    - `tests/frontend/test_bv5_a02_join_trip.py`
+  - Acceptance met:
+    - Global `Join a trip` nav opens a deterministic V5 L1 Join screen.
+    - Join screen includes invite-code entry and a visible invite-preview action.
+    - The screen clearly states that the backend join flow stays deferred in L1.
+    - Main `bounce-api` deployment remains untouched.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -283,6 +324,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ## Current next card recommendation
 
-Recommended next action: **No fixed BV5 card remains open.**
+Recommended next action: **BV5-A03 — Make Plan-new-trip response reflect typed prompt**.
 
-Reason: the v5 L1 prototype is built, smoke-tested, deployed separately, and the L2 backend contract has been reconciled without changing the existing live `bounce-api` deployment. Further work should be explicitly approved as either a new BV5 addendum, a deployment change to `bounce-api`, or reopening a CUT item.
+Reason: BV5-A02 is implemented and verified. The next approved V5 polish addendum item is to make the deterministic plan-entry response echo obvious prompt destinations instead of always using Lisbon fallback copy. Do not start it without Fariz approval and a usage-limit preflight.

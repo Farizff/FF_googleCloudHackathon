@@ -40,4 +40,5 @@ def test_bv5_contract_marks_visual_smoke_done_with_deployment_checkpoint_preserv
     assert "docs/qa/bv5_015_visual_responsive_smoke.md" in contract
     assert "- **BV5-016 — Decide and perform deployment path**" in contract
     assert "- **BV5-017 — Reconcile L2 backend contract to v5**" in contract
-    assert "Recommended next action: **No fixed BV5 card remains open.**" in contract
+    assert "Public URL: `https://bounce-v5-prototype-4dynllwdeq-as.a.run.app`" in contract
+    assert "Source of approval: Fariz approved creating and working **BV5-A02**" in contract
