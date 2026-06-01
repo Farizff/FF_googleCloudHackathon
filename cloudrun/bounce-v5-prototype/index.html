@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bounce v5 L1 prototype</title>
+  <meta name="google-maps-api-key" content="__GOOGLE_MAPS_API_KEY__">
   <style>
     :root {
       --purple: #1A0A6B;
@@ -180,7 +181,10 @@
     .budget-input-grid input { width: 100%; border: 1px solid var(--border-light); border-radius: var(--r-md); padding: var(--sp-3); font: inherit; }
     .budget-save-row { margin-top: auto; padding-top: var(--sp-3); border-top: 1px solid var(--border-light); display: flex; justify-content: space-between; gap: var(--sp-3); align-items: center; }
     .budget-save-row.is-anchored { position: sticky; bottom: var(--sp-4); background: var(--bg-card); border-radius: var(--r-lg); padding: var(--sp-3); box-shadow: var(--shadow-card); }
-    .planning-map-card { min-height: 220px; display: grid; place-items: center; text-align: center; background: linear-gradient(135deg, var(--purple-tint), var(--lime-tint)); }
+    .planning-map-card { min-height: 220px; display: grid; gap: var(--sp-3); background: linear-gradient(135deg, var(--purple-tint), var(--lime-tint)); }
+    .google-map-canvas { min-height: 260px; width: 100%; border-radius: var(--r-lg); border: 1px solid rgba(26,10,107,.14); background: var(--purple-tint); overflow: hidden; }
+    .map-fallback { display: grid; gap: var(--sp-2); place-items: center; min-height: 220px; border: 1px dashed var(--border-medium); border-radius: var(--r-lg); padding: var(--sp-4); text-align: center; background: rgba(255,255,255,.72); }
+    .map-point-list { margin: 0; padding-left: 20px; color: var(--text-secondary); line-height: var(--leading-relaxed); }
     .flight-group { display: grid; gap: var(--sp-3); }
     .flight-option { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--sp-3); border: 1px solid var(--border-light); border-radius: var(--r-lg); padding: var(--sp-4); background: var(--bg-card); }
     .suggestions-list { display: grid; gap: var(--sp-3); }
@@ -320,6 +324,20 @@
         { time: '21:00', title: 'Late snacks near Bairro Alto', meta: 'Nightlife · optional' },
       ]}
     ];
+    const BOUNCE_MAP_POINTS = {
+      planning: [
+        { label: 'Baixa apartment drop', lat: 38.7109, lng: -9.1399 },
+        { label: 'Alfama photo loop', lat: 38.7128, lng: -9.1300 },
+        { label: 'Pastéis de Belém', lat: 38.6979, lng: -9.2032 },
+        { label: 'Cascais beach reset', lat: 38.6971, lng: -9.4215 },
+      ],
+      flock: [
+        { label: 'Shibuya Hachikō', lat: 35.6595, lng: 139.7005 },
+        { label: 'TeamLab Borderless', lat: 35.6663, lng: 139.7302 },
+        { label: 'Harajuku snack loop', lat: 35.6702, lng: 139.7027 },
+      ],
+    };
+
     const FLIGHT_GROUPS = [
       { origin: 'London', options: [
         { airline: 'TAP direct', time: '08:15 → 11:05', price: '€180', risk: 'Low risk' },
@@ -595,6 +613,54 @@
     function setPlanningDay(index) { state.activePlanningDay = index; renderApp(); }
     function setPlanningView(view) { state.planningView = view; renderApp(); }
     function saveBudgetDraft() { state.budgetFeedback = 'Budget saved for the demo'; renderApp(); }
+    function getGoogleMapsApiKey() {
+      const tag = document.querySelector('meta[name="google-maps-api-key"]');
+      const key = tag ? tag.getAttribute('content').trim() : '';
+      return key && key !== '__GOOGLE_MAPS_API_KEY__' ? key : '';
+    }
+    function mapFallbackCopy() { return 'Map unavailable — check Google Maps API key/restrictions.'; }
+    function renderMapFallback(points) {
+      return `<div class="map-fallback"><strong>${mapFallbackCopy()}</strong><span class="muted">Demo stops: ${points.map((point) => point.label).join(' → ')}</span></div>`;
+    }
+    function renderGoogleMapCard(id, title, points) {
+      return `<aside class="card planning-map-card"><strong>${title}</strong><div id="${id}" class="google-map-canvas" role="application" aria-label="${title}">${renderMapFallback(points)}</div><ul class="map-point-list">${points.map((point) => `<li>${point.label}</li>`).join('')}</ul></aside>`;
+    }
+    function loadBounceGoogleMapsScript() {
+      if (window.google?.maps) return Promise.resolve();
+      const key = getGoogleMapsApiKey();
+      if (!key) return Promise.reject(new Error('missing Google Maps API key'));
+      if (window.__bounceMapsPromise) return window.__bounceMapsPromise;
+      window.__bounceMapsPromise = new Promise((resolve, reject) => {
+        window.initBounceMaps = () => resolve();
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&callback=initBounceMaps&loading=async`;
+        script.async = true;
+        script.defer = true;
+        script.onerror = () => reject(new Error('Google Maps script failed to load'));
+        document.head.appendChild(script);
+      });
+      return window.__bounceMapsPromise;
+    }
+    function drawBounceMap(elementId, points, zoom) {
+      const el = document.getElementById(elementId);
+      if (!el || !window.google?.maps) return;
+      const center = points[0];
+      const map = new google.maps.Map(el, { center, zoom, disableDefaultUI: true, zoomControl: true });
+      points.forEach((point, index) => new google.maps.Marker({ position: point, map, label: String(index + 1), title: point.label }));
+    }
+    function ensureGoogleMapsRendered() {
+      const mapTargets = [
+        ['planning-google-map', BOUNCE_MAP_POINTS.planning, 11],
+        ['flock-google-map', BOUNCE_MAP_POINTS.flock, 12],
+      ].filter(([id]) => document.getElementById(id));
+      if (!mapTargets.length) return;
+      loadBounceGoogleMapsScript()
+        .then(() => mapTargets.forEach(([id, points, zoom]) => drawBounceMap(id, points, zoom)))
+        .catch(() => mapTargets.forEach(([id, points]) => {
+          const el = document.getElementById(id);
+          if (el) el.innerHTML = renderMapFallback(points);
+        }));
+    }
     function planningTrip() { return tripById(state.tripId) || DEMO_TRIPS.find((trip) => trip.state === 'planning') || DEMO_TRIPS[0]; }
     function renderPlanningHero(title, subtitle) {
       const trip = planningTrip();
@@ -613,7 +679,9 @@
       const activeDay = PLANNING_DAYS[state.activePlanningDay] || PLANNING_DAYS[0];
       const dayRail = PLANNING_DAYS.map((day, index) => `<button class="${index === state.activePlanningDay ? 'active' : ''}" onclick="setPlanningDay(${index})">${day.day}</button>`).join('');
       const toggles = ['Timeline', 'Map'].map((view) => `<button class="${state.planningView === view ? 'active' : ''}" onclick="setPlanningView('${view}')">${view}</button>`).join('');
-      return renderShell(`<section class="planning-layout">${renderPlanningHero('Lisbon planning board', 'Itinerary, budget, map, flights, and suggestions for Maya’s 30th.')}<div class="planning-day-rail" aria-label="Planning day rail">${dayRail}</div><div class="planning-main-grid"><section class="card"><div class="view-toggle" aria-label="Itinerary view toggle">${toggles}</div><h2>${activeDay.day}: ${activeDay.title}</h2>${activeDay.activities.map(renderActivityCard).join('')}</section><div class="planning-layout">${renderBudgetCard()}<aside class="card planning-map-card"><strong>Lisbon map placeholder</strong><span class="muted">Offline L1 map card: Baixa, Alfama, Belém, Cascais.</span></aside></div></div></section>`);
+      const planningMap = renderGoogleMapCard('planning-google-map', 'Real Google map · Lisbon planning route', BOUNCE_MAP_POINTS.planning);
+      window.setTimeout(ensureGoogleMapsRendered, 0);
+      return renderShell(`<section class="planning-layout">${renderPlanningHero('Lisbon planning board', 'Itinerary, budget, map, flights, and suggestions for Maya’s 30th.')}<div class="planning-day-rail" aria-label="Planning day rail">${dayRail}</div><div class="planning-main-grid"><section class="card"><div class="view-toggle" aria-label="Itinerary view toggle">${toggles}</div><h2>${activeDay.day}: ${activeDay.title}</h2>${activeDay.activities.map(renderActivityCard).join('')}</section><div class="planning-layout">${renderBudgetCard()}${planningMap}</div></div></section>`);
     }
     function renderPlanningFlightsScreen() {
       const groups = FLIGHT_GROUPS.map((group) => `<section class="card flight-group"><h2>${group.origin}</h2>${group.options.map((option) => `<article class="flight-option"><span><strong>${option.airline}</strong><br><span class="muted">${option.time} · ${option.price}</span></span><span class="tag ${option.risk === 'Low risk' ? 'tag-lime' : option.risk === 'Medium risk' ? 'tag-orange' : 'tag-purple'}">${option.risk}</span></article>`).join('')}</section>`).join('');
@@ -648,7 +716,8 @@
       const flock = FLOCKS.find((item) => item.id === state.activeFlock) || FLOCKS[0];
       const switcher = FLOCKS.map((item) => `<button class="${item.id === flock.id ? 'active' : ''}" onclick="setActiveFlock('${item.id}')">${item.label}</button>`).join('');
       const schedule = flock.schedule.map((item) => `<li>${item}</li>`).join('');
-      return renderShell(`<section class="planning-layout">${activeHero('FlockMode', 'Switcher, active flock schedule, countdown, and offline SVG map.')}<div class="flock-switcher" aria-label="FlockMode switcher">${switcher}</div><div class="active-today-grid"><section class="card"><span class="countdown-chip">${flock.countdown}</span><h2>active flock schedule</h2><ul>${schedule}</ul><p class="profile-readonly-note">Photo sharing placeholder — uploads stay CUT in L1.</p></section><aside class="card"><svg class="flock-map-svg" viewBox="0 0 320 220" role="img" aria-label="Tokyo flock map"><path d="M30 160 C80 60 130 90 170 50 S250 80 290 35" fill="none" stroke="#1A0A6B" stroke-width="8" stroke-linecap="round"/><circle cx="65" cy="122" r="16" fill="#C8E64A"/><circle cx="170" cy="50" r="16" fill="#F47B20"/><circle cx="260" cy="58" r="16" fill="#4A2FC4"/><text x="34" y="195" fill="#1A0A6B">Shibuya → TeamLab</text></svg></aside></div></section>`);
+      window.setTimeout(ensureGoogleMapsRendered, 0);
+      return renderShell(`<section class="planning-layout">${activeHero('FlockMode', 'Switcher, active flock schedule, countdown, and real Google map.')}<div class="flock-switcher" aria-label="FlockMode switcher">${switcher}</div><div class="active-today-grid"><section class="card"><span class="countdown-chip">${flock.countdown}</span><h2>active flock schedule</h2><ul>${schedule}</ul><p class="profile-readonly-note">Photo sharing placeholder — uploads stay CUT in L1.</p></section>${renderGoogleMapCard('flock-google-map', 'Real Google map · Tokyo FlockMode', BOUNCE_MAP_POINTS.flock)}</div></section>`);
     }
     function renderActiveExpensesScreen() {
       const modes = SPLIT_MODES.map((mode) => `<button class="${state.expenseSplitMode === mode ? 'active' : ''}" onclick="setExpenseSplitMode('${mode}')">${mode}</button>`).join('');

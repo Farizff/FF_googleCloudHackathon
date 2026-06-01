@@ -18,7 +18,11 @@ def test_bv5_016_cloud_run_source_serves_v5_prototype_and_health():
     assert '"status": "ok"' in app_py
     assert '"service": "bounce-v5-prototype"' in app_py
     assert "Cache-Control" in app_py
+    assert "GOOGLE_MAPS_API_KEY" in app_py
+    assert "__GOOGLE_MAPS_API_KEY__" in app_py
     assert index_html == prototype_html
+    assert "__GOOGLE_MAPS_API_KEY__" in index_html
+    assert "AIza" not in index_html
     assert "Your trip starts here" in index_html
 
 

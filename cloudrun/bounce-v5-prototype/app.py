@@ -1,3 +1,4 @@
+import html
 import json
 import os
 from http import HTTPStatus
@@ -9,6 +10,17 @@ ROOT = Path(__file__).resolve().parent
 INDEX_HTML = ROOT / "index.html"
 SERVICE_NAME = "bounce-v5-prototype"
 VERSION = "v5-l1"
+GOOGLE_MAPS_PLACEHOLDER = "__GOOGLE_MAPS_API_KEY__"
+
+
+def render_index_html() -> bytes:
+    html_text = INDEX_HTML.read_text(encoding="utf-8")
+    maps_key = html.escape(os.environ.get("GOOGLE_MAPS_API_KEY", "").strip(), quote=True)
+    return html_text.replace(
+        f'content="{GOOGLE_MAPS_PLACEHOLDER}"',
+        f'content="{maps_key}"',
+        1,
+    ).encode("utf-8")
 
 
 class BounceV5Handler(BaseHTTPRequestHandler):
@@ -27,11 +39,11 @@ class BounceV5Handler(BaseHTTPRequestHandler):
             return
 
         if path in {"", "/", "/index.html"}:
-            self._send_html(INDEX_HTML.read_bytes())
+            self._send_html(render_index_html())
             return
 
         # Keep the single-file prototype resilient to manual deep-link attempts.
-        self._send_html(INDEX_HTML.read_bytes())
+        self._send_html(render_index_html())
 
     def log_message(self, format: str, *args: object) -> None:  # noqa: A002
         print("%s - - [%s] %s" % (self.address_string(), self.log_date_time_string(), format % args))

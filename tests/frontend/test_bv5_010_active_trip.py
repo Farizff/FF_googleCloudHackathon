@@ -41,7 +41,7 @@ def test_active_today_uses_tokyo_day_3_data_and_quick_actions():
         assert marker in script or marker in css
 
 
-def test_flockmode_switcher_schedule_countdown_svg_map_and_photo_placeholder():
+def test_flockmode_switcher_schedule_countdown_google_map_and_photo_placeholder():
     script = script_text()
     css = style_text()
     for marker in [
@@ -52,8 +52,8 @@ def test_flockmode_switcher_schedule_countdown_svg_map_and_photo_placeholder():
         "Meet at Shibuya Hachikō",
         "countdown-chip",
         "18 min until meetup",
-        "flock-map-svg",
-        "<svg",
+        "flock-google-map",
+        "Real Google map · Tokyo FlockMode",
         "Photo sharing placeholder",
     ]:
         assert marker in script or marker in css

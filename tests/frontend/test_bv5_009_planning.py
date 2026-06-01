@@ -25,9 +25,11 @@ def style_text():
 def test_planning_itinerary_has_day_rail_toggles_cards_budget_and_map():
     script = script_text()
     css = style_text()
+    html = html_text()
 
     for marker in [
         "PLANNING_DAYS",
+        "BOUNCE_MAP_POINTS",
         "renderPlanningItineraryScreen",
         "planning-layout",
         "planning-day-rail",
@@ -40,9 +42,10 @@ def test_planning_itinerary_has_day_rail_toggles_cards_budget_and_map():
         "activity-card",
         "BudgetCard",
         "planning-map-card",
-        "Lisbon map placeholder",
+        "planning-google-map",
+        "Real Google map",
     ]:
-        assert marker in script or marker in css
+        assert marker in script or marker in css or marker in html
 
     for selector in [
         ".planning-layout",
@@ -53,8 +56,23 @@ def test_planning_itinerary_has_day_rail_toggles_cards_budget_and_map():
         ".activity-menu",
         ".budget-card",
         ".planning-map-card",
+        ".google-map-canvas",
+        ".map-fallback",
     ]:
         assert selector in css
+
+
+def test_google_maps_key_is_runtime_injected_and_has_clear_fallback():
+    html = html_text()
+    script = script_text()
+
+    assert "__GOOGLE_MAPS_API_KEY__" in html
+    assert "AIza" not in html
+    assert "getGoogleMapsApiKey" in script
+    assert "loadBounceGoogleMapsScript" in script
+    assert "maps.googleapis.com/maps/api/js" in script
+    assert "Map unavailable — check Google Maps API key/restrictions." in script
+    assert "initBounceMaps" in script
 
 
 def test_planning_role_aware_activity_menus_and_member_read_only_copy():
