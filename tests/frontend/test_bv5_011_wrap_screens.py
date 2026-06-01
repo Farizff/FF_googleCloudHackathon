@@ -88,8 +88,8 @@ def test_wrap_phase_routes_to_wrap_screen_before_generic_trip_screen():
     assert script.index("if (state.phase === 'wrap')") < script.index("if (state.tripId)")
 
 
-def test_bv5_contract_marks_wrap_done_and_points_to_bounce_assistant_card():
+def test_bv5_contract_marks_wrap_done():
     contract = CONTRACT.read_text(encoding="utf-8")
     assert "### DONE" in contract
     assert "- **BV5-011 — Build Post-trip Wrap screens**" in contract
-    assert "Recommended next action: **BV5-012 — Build Bounce assistant panel, FAB, and role labels**" in contract
+    assert "Each past trip renders unique total, per-person amount, category breakdown, settlements, and BounceSay insight" in contract

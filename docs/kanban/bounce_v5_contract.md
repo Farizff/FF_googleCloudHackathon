@@ -46,14 +46,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ### TODO
 
-- **BV5-012 — Build Bounce assistant panel, FAB, and role labels**
-  - Objective: Implement the v5 Bounce chat surface and role-specific permission copy.
-  - Acceptance:
-    - FAB matches v5 mascot/ring/pulse behavior.
-    - Chat panel has dialog ARIA, header, message stream, pill input, and close behavior.
-    - Permission label changes for Organiser/Co-leader, Flock leader, and Member.
-    - L1 responses are deterministic and do not fetch.
-
 - **BV5-013 — Build draggable Judge / Demo Controls panel**
   - Objective: Implement the v5 judge panel as the primary demo driver.
   - Acceptance:
@@ -227,6 +219,17 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
     - Destination local currency is used only; no USD conversion is shown.
     - Travel DNA does not appear.
 
+- **BV5-012 — Build Bounce assistant panel, FAB, and role labels**
+  - Completed on 2026-06-01.
+  - Files:
+    - `frontend/bounce_v5_prototype.html`
+    - `tests/frontend/test_bv5_012_bounce_assistant.py`
+  - Acceptance met:
+    - FAB matches v5 mascot/ring/pulse behavior and opens the assistant.
+    - Chat panel has dialog ARIA, header, message stream, pill input, and close behavior.
+    - Permission label changes for Organiser/Co-leader, Flock leader, and Member.
+    - L1 responses are deterministic and do not fetch.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -249,6 +252,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ## Current next card recommendation
 
-Recommended next action: **BV5-012 — Build Bounce assistant panel, FAB, and role labels**.
+Recommended next action: **BV5-013 — Build draggable Judge / Demo Controls panel**.
 
-Reason: the v5 L1 prototype now has post-trip Wrap screens for all 3 past trips. The next bounded card is the Bounce assistant panel, FAB, and role labels.
+Reason: the v5 L1 prototype now has the Bounce assistant panel, FAB behavior, role labels, and deterministic offline responses. The next bounded card is the draggable Judge / Demo Controls panel.
