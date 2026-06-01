@@ -44,11 +44,11 @@ def test_cloudrun_copy_contains_same_join_screen_contract():
     assert "if (state.phase === 'join') { app.innerHTML = renderJoinScreen(); return; }" in script
 
 
-def test_bv5_a02_addendum_is_recorded_done_with_next_pointer():
+def test_bv5_a02_addendum_is_recorded_done_with_durable_evidence():
     contract = CONTRACT.read_text(encoding="utf-8")
 
     assert "## Approved v5 polish addendum" in contract
     assert "- **BV5-A02 — Fix global Join a trip nav**" in contract
     assert "Status: DONE" in contract
     assert "tests/frontend/test_bv5_a02_join_trip.py" in contract
-    assert "Recommended next action: **BV5-A03 — Make Plan-new-trip response reflect typed prompt**" in contract
+    assert "Global `Join a trip` nav opens a deterministic V5 L1 Join screen." in contract

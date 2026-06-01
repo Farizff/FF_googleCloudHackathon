@@ -512,9 +512,22 @@
         : [...state.selectedTripChips, chip];
       renderApp();
     }
+    const PROMPT_DESTINATION_RESPONSES = {
+      lisbon: "For Lisbon, I’d start with a gentle arrival day, one food-led evening, and a sunny group moment everyone can say yes to.",
+      tokyo: "For Tokyo, I’d start with one low-walking arrival plan, a food-led Shibuya evening, and a clear FlockMode meetup for the group.",
+      seoul: "For Seoul, I’d start with a market food crawl, a relaxed cafe checkpoint, and one easy transit route everyone can follow."
+    };
+    function destinationFromPrompt(prompt) {
+      const normalized = (prompt || '').toLowerCase();
+      if (normalized.includes('tokyo')) return 'tokyo';
+      if (normalized.includes('seoul')) return 'seoul';
+      if (normalized.includes('lisbon')) return 'lisbon';
+      return 'lisbon';
+    }
     function deterministicPlanningResponse() {
       const interests = state.selectedTripChips.length ? state.selectedTripChips.join(', ') : 'group-friendly days';
-      return `Organising everyone's ideas… I’ll shape this around ${interests}. For Lisbon, I’d start with a gentle arrival day, one food-led evening, and a sunny group moment everyone can say yes to.`;
+      const destination = destinationFromPrompt(state.entryPrompt);
+      return `Organising everyone's ideas… I’ll shape this around ${interests}. ${PROMPT_DESTINATION_RESPONSES[destination]}`;
     }
 
     function setProfileTab(tabId) {

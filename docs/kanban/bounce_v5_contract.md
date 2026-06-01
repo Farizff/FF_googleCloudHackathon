@@ -234,7 +234,7 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
   - Region: `asia-southeast1`.
   - Service: `bounce-v5-prototype`.
   - Public URL: `https://bounce-v5-prototype-4dynllwdeq-as.a.run.app`.
-  - Latest ready revision: `bounce-v5-prototype-00011-9vx`.
+  - Latest ready revision: `bounce-v5-prototype-00012-wsk`.
   - Files:
     - `cloudrun/bounce-v5-prototype/Dockerfile`
     - `cloudrun/bounce-v5-prototype/app.py`
@@ -274,10 +274,10 @@ Scope-control rules:
 
 ### TODO
 
-- **BV5-A03 — Make Plan-new-trip response reflect typed prompt**
+- **BV5-A04 — Add disruption locked and pinged confirmation**
   - Source: V5 judge/demo polish audit on 2026-06-01.
-  - Deliverable: deterministic plan-entry response should echo obvious prompt destinations such as Tokyo, Lisbon, or Seoul instead of always using Lisbon fallback copy.
-  - Acceptance: typed prompt affects visible destination copy; no network/storage is introduced; existing entry-flow tests remain green.
+  - Deliverable: after `Lock this in & ping everyone →`, show visible confirmation that the disruption alternative was locked and the group ping was drafted.
+  - Acceptance: disruption modal close action leaves visible confirmation; no network/storage is introduced; existing active-trip tests remain green.
 
 ### IN_PROGRESS
 
@@ -302,6 +302,19 @@ Scope-control rules:
     - The screen clearly states that the backend join flow stays deferred in L1.
     - Main `bounce-api` deployment remains untouched.
 
+- **BV5-A03 — Make Plan-new-trip response reflect typed prompt**
+  - Status: DONE.
+  - Source: V5 judge/demo polish audit on 2026-06-01.
+  - Files:
+    - `frontend/bounce_v5_prototype.html`
+    - `cloudrun/bounce-v5-prototype/index.html`
+    - `tests/frontend/test_bv5_a03_prompt_destination.py`
+  - Acceptance met:
+    - Deterministic plan-entry response echoes obvious prompt destinations for Tokyo, Lisbon, and Seoul.
+    - Unknown destinations still fall back to Lisbon demo copy.
+    - No network/storage was introduced.
+    - Main `bounce-api` deployment remains untouched.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -324,6 +337,6 @@ Scope-control rules:
 
 ## Current next card recommendation
 
-Recommended next action: **BV5-A03 — Make Plan-new-trip response reflect typed prompt**.
+Recommended next action: **BV5-A04 — Add disruption locked and pinged confirmation**.
 
-Reason: BV5-A02 is implemented and verified. The next approved V5 polish addendum item is to make the deterministic plan-entry response echo obvious prompt destinations instead of always using Lisbon fallback copy. Do not start it without Fariz approval and a usage-limit preflight.
+Reason: BV5-A03 is implemented and verified. The next approved V5 polish addendum item is to leave visible confirmation after the disruption lock-and-ping action. Do not start it without Fariz approval and a usage-limit preflight.
