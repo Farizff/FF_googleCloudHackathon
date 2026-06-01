@@ -52,14 +52,7 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ### BLOCKED
 
-- **BV5-017 — Reconcile L2 backend contract to v5**
-  - Objective: Align production API contracts with v5 without overbuilding beyond the approved prototype/deployment mode.
-  - Acceptance:
-    - `/health` can report v5-shaped status when L2 mode is enabled.
-    - `/api/chat` SSE contract is documented/tested or explicitly deferred.
-    - MongoDB/Firebase collection/path names match v5 PRD where L2 is in scope.
-    - Existing live deployment is not broken by prototype work.
-  - Blocker: should not start until Fariz approves L2 work after the L1 prototype path is clear.
+- None.
 
 ### DONE
 
@@ -254,6 +247,20 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
     - `/health` returns HTTP 200 with `status: ok` and `service: bounce-v5-prototype`.
     - Smoke evidence records exact URL, status codes, and revision/version identifier.
 
+- **BV5-017 — Reconcile L2 backend contract to v5**
+  - Completed on 2026-06-01.
+  - Boundary: local/backend contract reconciliation only; no live `bounce-api` replacement and no Agent Builder/Firebase/MongoDB live provider claim.
+  - Files:
+    - `api/main.py`
+    - `api/settings.py`
+    - `docs/architecture/bounce_v5_l2_backend_contract.md`
+    - `tests/api/test_bv5_017_l2_backend_contract.py`
+  - Acceptance met:
+    - `/health` can report a v5-shaped L2 status when `BOUNCE_API_MODE=v5` is enabled.
+    - `/api/chat` SSE streaming contract is documented and explicitly deferred until Agent Builder streaming is configured/approved.
+    - MongoDB collection names and Firebase RTDB paths match PRD v5 where L2 work is in scope.
+    - Existing live `bounce-api` deployment remains untouched by this checkpoint.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -276,6 +283,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ## Current next card recommendation
 
-Recommended next action: **BV5-017 — Reconcile L2 backend contract to v5**.
+Recommended next action: **No fixed BV5 card remains open.**
 
-Reason: the v5 L1 prototype is now deployed to a separate Cloud Run service in the existing Google Cloud project, while the existing `bounce-api` service remains untouched. BV5-017 remains blocked until Fariz approves starting L2 backend reconciliation.
+Reason: the v5 L1 prototype is built, smoke-tested, deployed separately, and the L2 backend contract has been reconciled without changing the existing live `bounce-api` deployment. Further work should be explicitly approved as either a new BV5 addendum, a deployment change to `bounce-api`, or reopening a CUT item.

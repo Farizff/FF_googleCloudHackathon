@@ -39,4 +39,5 @@ def test_bv5_contract_marks_visual_smoke_done_with_deployment_checkpoint_preserv
     assert "- **BV5-015 — Local visual/responsive smoke pass**" in contract
     assert "docs/qa/bv5_015_visual_responsive_smoke.md" in contract
     assert "- **BV5-016 — Decide and perform deployment path**" in contract
-    assert "Recommended next action: **BV5-017 — Reconcile L2 backend contract to v5**" in contract
+    assert "- **BV5-017 — Reconcile L2 backend contract to v5**" in contract
+    assert "Recommended next action: **No fixed BV5 card remains open.**" in contract

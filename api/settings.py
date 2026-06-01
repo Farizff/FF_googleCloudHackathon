@@ -10,6 +10,8 @@ class AppSettings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
+    bounce_api_mode: str = "v0"
+
     gcp_project_id: str = "bounce-hackathon-2026"
     gcp_region: str = "asia-southeast1"
     agent_builder_agent_id: str = ""

@@ -17,6 +17,7 @@ from api.routes.scheduler import router as scheduler_router
 from api.routes.settlements import router as settlements_router
 from api.routes.travel_dna import router as travel_dna_router
 from api.routes.trip import router as trip_router
+from api.settings import get_settings
 
 app = FastAPI(title="Bounce API", version="v0")
 app.include_router(chat_router)
@@ -39,7 +40,17 @@ FRONTEND_DIR = Path(__file__).resolve().parents[1] / "frontend"
 
 @app.get("/health")
 def health() -> dict[str, str]:
-    """Return a minimal health response for Cloud Run and local checks."""
+    """Return health status for the current Bounce backend mode."""
+    settings = get_settings()
+    if settings.bounce_api_mode.lower() == "v5":
+        return {
+            "status": "ok",
+            "app": "Bounce",
+            "version": "v5",
+            "mongo": "configured" if settings.mongodb_connection_string else "not_configured",
+            "firebase": "configured" if settings.firebase_database_url else "not_configured",
+            "mode": "l2",
+        }
     return {"status": "ok", "app": "Bounce", "version": "v0"}
 
 
