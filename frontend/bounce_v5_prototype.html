@@ -203,6 +203,12 @@
     .expense-mode-grid button.active, .expense-category-grid button.active { background: var(--purple); color: var(--text-inverse); }
     .alert-list { display: grid; gap: var(--sp-3); }
     .alert-card { border-left: 4px solid var(--orange); }
+
+    .wrap-summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--sp-3); }
+    .wrap-category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--sp-3); }
+    .wrap-category-card { border: 1px solid var(--border-light); border-radius: var(--r-lg); padding: var(--sp-4); background: var(--bg-raised); }
+    .wrap-settlement-list { display: grid; gap: var(--sp-2); padding-left: 20px; }
+    .bouncesay-card { border-left: 4px solid var(--lime-dark); background: var(--lime-tint); }
     .judge-panel { position: fixed; left: var(--sp-6); bottom: var(--sp-6); z-index: var(--z-judge); background: var(--purple); color: var(--text-inverse); border: 2px solid var(--lime); border-radius: var(--r-xl); padding: var(--sp-3); box-shadow: var(--shadow-float); min-width: 240px; user-select: none; }
     .judge-panel label { display: block; margin: var(--sp-2) 0 var(--sp-1); font-size: var(--text-xs); color: rgba(255,255,255,.75); text-transform: uppercase; font-weight: 900; letter-spacing: .08em; }
     .judge-panel select { width: 100%; border-radius: var(--r-sm); border: 0; padding: var(--sp-2); }
@@ -257,9 +263,27 @@
       { id: 'lisbon-long-weekend', name: 'Lisbon long weekend', city: 'Lisbon', country: 'Portugal', dates: 'Apr 2026', state: 'past', travelers: 4, rating: '4.9' }
     ];
     const WRAP_DATA = {
-      'cdmx-reunion': { currency: 'MXN', total: 'MX$37,000', perPerson: 'MX$9,250/person', note: 'Markets, tacos, and easy settling kept the reunion relaxed.' },
-      'seoul-food-crawl': { currency: 'KRW', total: '₩5,900,000', perPerson: '₩983,000/person', note: 'Food crawls and late trains made this one feel effortless.' },
-      'lisbon-long-weekend': { currency: 'EUR', total: '€1,160', perPerson: '€290/person', note: 'A compact weekend with sunny walks and no budget drama.' }
+      'cdmx-reunion': {
+        currency: 'MXN', total: 'MX$37,000', perPerson: 'MX$9,250/person',
+        note: 'Markets, tacos, and easy settling kept the reunion relaxed.',
+        categoryBreakdown: [['Tacos + markets', 'MX$14,400'], ['Museums + lucha', 'MX$8,600'], ['Metro + rideshare', 'MX$5,200'], ['Apartment', 'MX$8,800']],
+        settlements: ['Alex pays Maya MX$1,250', 'Sofia pays Priya MX$840'],
+        bounceSay: 'BounceSay insight: CDMX worked because food stops doubled as flexible regroup moments.'
+      },
+      'seoul-food-crawl': {
+        currency: 'KRW', total: '₩5,900,000', perPerson: '₩983,000/person',
+        note: 'Food crawls and late trains made this one feel effortless.',
+        categoryBreakdown: [['K-BBQ + markets', '₩2,150,000'], ['Cafes + dessert', '₩820,000'], ['Subway passes', '₩390,000'], ['Hanok stay', '₩2,540,000']],
+        settlements: ['Jake pays Emma ₩74,000', 'Marcus pays Rania ₩52,000'],
+        bounceSay: 'BounceSay insight: Seoul felt smooth because transit and food choices stayed clustered.'
+      },
+      'lisbon-long-weekend': {
+        currency: 'EUR', total: '€1,160', perPerson: '€290/person',
+        note: 'A compact weekend with sunny walks and no budget drama.',
+        categoryBreakdown: [['Pastéis + seafood', '€420'], ['Views + museums', '€180'], ['Tram + train', '€96'], ['Apartment', '€464']],
+        settlements: ['Sofia pays Priya €38', 'Alex pays Maya €24'],
+        bounceSay: 'BounceSay insight: Lisbon stayed easy because the group kept one anchor plan per day.'
+      }
     };
     const ROUTES = ['/', '/trip/:id', '/trip/:id/plan', '/trip/:id/active', '/trip/:id/flock', '/trip/:id/wrap', '/chat', '/join/:token'];
     const TRIP_TYPE_CHIPS = ['Birthday trip', 'Friends reunion', 'Food crawl', 'Low walking first day', 'Beach reset'];
@@ -564,6 +588,15 @@
       return renderShell(`<section class="planning-layout">${activeHero('Alerts', 'Populated and empty states for active trip operations.')}<button class="btn btn-ghost" onclick="toggleEmptyAlerts()">${state.showEmptyAlerts ? 'Show populated alerts' : 'Show empty state'}</button>${body}</section>`);
     }
 
+
+    function renderWrapScreen() {
+      const trip = tripById(state.tripId) || DEMO_TRIPS.find((item) => item.state === 'past') || DEMO_TRIPS[2];
+      const wrap = WRAP_DATA[trip.id] || WRAP_DATA['cdmx-reunion'];
+      const categories = wrap.categoryBreakdown.map(([label, amount]) => `<article class="wrap-category-card"><strong>${label}</strong><br><span class="muted">${amount}</span></article>`).join('');
+      const settlements = wrap.settlements.map((item) => `<li>${item}</li>`).join('');
+      return renderShell(`<section class="planning-layout"><section class="card card-purple"><span class="tag tag-lime">Post-trip wrap</span><h1>${trip.name}</h1><p>${trip.city} · ${trip.dates}</p><p>${wrap.note}</p></section><section class="wrap-summary-grid"><article class="card"><span class="tag tag-purple">Total</span><h2>${wrap.total}</h2><p class="muted">Destination local currency only: ${wrap.currency}</p></article><article class="card"><span class="tag tag-lime">Per person</span><h2>${wrap.perPerson}</h2><p class="muted">No conversion shown in L1.</p></article><article class="card bouncesay-card"><strong>BounceSay insight</strong><p>${wrap.bounceSay}</p></article></section><section class="card"><h2>Category breakdown</h2><div class="wrap-category-grid">${categories}</div></section><section class="card"><h2>Settlements</h2><ul class="wrap-settlement-list">${settlements}</ul></section></section>`);
+    }
+
     function renderTripScreen() {
       const trip = tripById(state.tripId) || DEMO_TRIPS[0];
       const wrap = WRAP_DATA[trip.id];
@@ -585,6 +618,7 @@
       if (state.phase === 'active-flock') { app.innerHTML = renderActiveFlockScreen(); return; }
       if (state.phase === 'active-expenses') { app.innerHTML = renderActiveExpensesScreen(); return; }
       if (state.phase === 'active-alerts') { app.innerHTML = renderActiveAlertsScreen(); return; }
+      if (state.phase === 'wrap') { app.innerHTML = renderWrapScreen(); return; }
       if (state.tripId) { app.innerHTML = renderTripScreen(); return; }
       if (state.phase === 'plan') { app.innerHTML = renderEntryScreen(); return; }
       if (state.phase === 'home') { app.innerHTML = renderHomeScreen(); return; }

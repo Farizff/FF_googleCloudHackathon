@@ -126,8 +126,8 @@ def test_active_phases_route_to_specific_screens_before_generic_trip_screen():
     assert script.index("if (state.phase === 'active-today')") < script.index("if (state.tripId)")
 
 
-def test_bv5_contract_marks_active_done_and_points_to_wrap_card():
+def test_bv5_contract_marks_active_done():
     contract = CONTRACT.read_text(encoding="utf-8")
     assert "### DONE" in contract
     assert "- **BV5-010 — Build Active Today, FlockMode, disruption, expenses, and alerts**" in contract
-    assert "Recommended next action: **BV5-011 — Build Post-trip Wrap screens**" in contract
+    assert "Today screen uses Tokyo Day 3 data and quick actions" in contract

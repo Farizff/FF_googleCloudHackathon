@@ -46,13 +46,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ### TODO
 
-- **BV5-011 — Build Post-trip Wrap screens**
-  - Objective: Implement trip-aware wrap screens for all 3 past trips.
-  - Acceptance:
-    - Each past trip renders unique total, per-person amount, category breakdown, settlements, and BounceSay insight.
-    - Destination local currency is used only; no USD conversion is shown.
-    - Travel DNA does not appear.
-
 - **BV5-012 — Build Bounce assistant panel, FAB, and role labels**
   - Objective: Implement the v5 Bounce chat surface and role-specific permission copy.
   - Acceptance:
@@ -224,6 +217,16 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
     - Expenses include 4 split modes and 6 categories with visible local state updates.
     - Alerts have populated and empty states.
 
+- **BV5-011 — Build Post-trip Wrap screens**
+  - Completed on 2026-06-01.
+  - Files:
+    - `frontend/bounce_v5_prototype.html`
+    - `tests/frontend/test_bv5_011_wrap_screens.py`
+  - Acceptance met:
+    - Each past trip renders unique total, per-person amount, category breakdown, settlements, and BounceSay insight.
+    - Destination local currency is used only; no USD conversion is shown.
+    - Travel DNA does not appear.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -246,6 +249,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ## Current next card recommendation
 
-Recommended next action: **BV5-011 — Build Post-trip Wrap screens**.
+Recommended next action: **BV5-012 — Build Bounce assistant panel, FAB, and role labels**.
 
-Reason: the v5 L1 prototype now has active-trip Today, FlockMode, disruption, expenses, and alerts surfaces. The next bounded card is the post-trip Wrap screens for all 3 past trips.
+Reason: the v5 L1 prototype now has post-trip Wrap screens for all 3 past trips. The next bounded card is the Bounce assistant panel, FAB, and role labels.
