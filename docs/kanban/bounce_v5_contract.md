@@ -46,14 +46,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ### TODO
 
-- **BV5-008 — Build Profile tabs with anchored save buttons**
-  - Objective: Implement v5 tabbed profile UI and save-button placement fixes.
-  - Acceptance:
-    - Tabs: About me, Food & diet, How I travel, Past trips, Passport & visas.
-    - Editable tabs have bottom-anchored `Save changes` buttons.
-    - Past trips tab is read-only and has no save button.
-    - Save action produces visible demo feedback.
-
 - **BV5-009 — Build Planning itinerary, budget, map, flights, and suggestions**
   - Objective: Implement the planning phase demo screens and role-aware controls.
   - Acceptance:
@@ -215,6 +207,17 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
     - Plan CTA copy matches v5: `Your trip starts here. Tell me what you've got in mind.`
     - Entry Conversation screen has textarea, Bounce mascot hero, trip-type chips, deterministic Bounce response, and no network/SSE calls in L1.
 
+- **BV5-008 — Build Profile tabs with anchored save buttons**
+  - Completed on 2026-06-01.
+  - Files:
+    - `frontend/bounce_v5_prototype.html`
+    - `tests/frontend/test_bv5_008_profile_tabs.py`
+  - Acceptance met:
+    - Profile has tabs for About me, Food & diet, How I travel, Past trips, and Passport & visas.
+    - Editable tabs have bottom-anchored `Save changes` buttons.
+    - Past trips is read-only and has no save button.
+    - Save action produces visible local demo feedback.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -237,6 +240,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ## Current next card recommendation
 
-Recommended next action: **BV5-008 — Build Profile tabs with anchored save buttons**.
+Recommended next action: **BV5-009 — Build Planning itinerary, budget, map, flights, and suggestions**.
 
-Reason: the v5 L1 prototype now has the Home and Entry Conversation screens with deterministic local planning feedback. The next bounded card is the tabbed Profile screen and bottom-anchored save behavior.
+Reason: the v5 L1 prototype now has the Profile tabs with anchored save behavior. The next bounded card is the planning phase itinerary, budget, map, flights, and suggestions surface.

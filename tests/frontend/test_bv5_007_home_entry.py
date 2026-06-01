@@ -122,8 +122,8 @@ def test_home_plan_cta_and_nav_phase_render_entry_screen():
     assert "if (state.phase === 'home') { app.innerHTML = renderHomeScreen(); return; }" in script
 
 
-def test_bv5_contract_marks_home_entry_done_and_points_to_profile():
+def test_bv5_contract_marks_home_entry_done():
     contract = CONTRACT.read_text(encoding="utf-8")
     assert "### DONE" in contract
     assert "- **BV5-007 — Build Home and Entry Conversation screens**" in contract
-    assert "Recommended next action: **BV5-008 — Build Profile tabs with anchored save buttons**" in contract
+    assert "Entry Conversation screen has textarea, Bounce mascot hero, trip-type chips, deterministic Bounce response" in contract

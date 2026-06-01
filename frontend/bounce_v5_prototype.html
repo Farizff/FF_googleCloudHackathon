@@ -150,6 +150,19 @@
     .trip-type-chip { border: 1px solid var(--border-light); background: var(--bg-card); color: var(--purple); border-radius: var(--r-pill); padding: 8px 12px; font-weight: 800; cursor: pointer; }
     .trip-type-chip.is-selected { background: var(--lime); color: var(--lime-text); border-color: var(--lime-dark); }
     .entry-response { border-left: 4px solid var(--lime-dark); background: var(--lime-tint); border-radius: 0 var(--r-lg) var(--r-lg) 0; padding: var(--sp-4) var(--sp-5); }
+
+    .profile-layout { display: grid; grid-template-columns: minmax(180px, 260px) minmax(0, 1fr); gap: var(--sp-5); align-items: start; }
+    .profile-tabs { display: grid; gap: var(--sp-2); position: sticky; top: var(--sp-5); }
+    .profile-tab { width: 100%; text-align: left; border: 1px solid var(--border-light); background: var(--bg-card); color: var(--purple); border-radius: var(--r-lg); padding: var(--sp-3) var(--sp-4); font-weight: 900; cursor: pointer; }
+    .profile-tab.active { background: var(--purple); color: var(--text-inverse); border-color: var(--purple); box-shadow: var(--shadow-raised); }
+    .profile-tab-panel { min-height: 460px; display: flex; flex-direction: column; gap: var(--sp-4); }
+    .profile-field-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--sp-3); }
+    .profile-field { border: 1px solid var(--border-light); border-radius: var(--r-lg); padding: var(--sp-4); background: var(--bg-raised); }
+    .profile-field strong { display: block; margin-bottom: var(--sp-1); color: var(--purple); }
+    .profile-save-row { margin-top: auto; padding-top: var(--sp-4); border-top: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+    .profile-save-row.is-anchored { position: sticky; bottom: var(--sp-4); background: linear-gradient(180deg, rgba(255,255,255,.82), var(--bg-card)); border-radius: var(--r-lg); padding: var(--sp-3); box-shadow: var(--shadow-card); }
+    .profile-feedback { color: var(--success); font-weight: 900; min-height: 22px; }
+    .profile-readonly-note { border: 1px dashed var(--border-medium); border-radius: var(--r-lg); padding: var(--sp-3); color: var(--text-secondary); background: var(--bg-raised); }
     .judge-panel { position: fixed; left: var(--sp-6); bottom: var(--sp-6); z-index: var(--z-judge); background: var(--purple); color: var(--text-inverse); border: 2px solid var(--lime); border-radius: var(--r-xl); padding: var(--sp-3); box-shadow: var(--shadow-float); min-width: 240px; user-select: none; }
     .judge-panel label { display: block; margin: var(--sp-2) 0 var(--sp-1); font-size: var(--text-xs); color: rgba(255,255,255,.75); text-transform: uppercase; font-weight: 900; letter-spacing: .08em; }
     .judge-panel select { width: 100%; border-radius: var(--r-sm); border: 0; padding: var(--sp-2); }
@@ -166,6 +179,8 @@
       .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100vh; z-index: var(--z-chat); transform: translateX(-100%); transition: transform 260ms cubic-bezier(.4,0,.2,1); }
       .sidebar.open { transform: translateX(0); }
       .page-body { padding: var(--sp-4); }
+      .profile-layout { grid-template-columns: 1fr; }
+      .profile-tabs { position: static; grid-template-columns: 1fr; }
       .bounce-fab { right: var(--sp-4); bottom: var(--sp-4); }
     }
   </style>
@@ -205,7 +220,15 @@
     };
     const ROUTES = ['/', '/trip/:id', '/trip/:id/plan', '/trip/:id/active', '/trip/:id/flock', '/trip/:id/wrap', '/chat', '/join/:token'];
     const TRIP_TYPE_CHIPS = ['Birthday trip', 'Friends reunion', 'Food crawl', 'Low walking first day', 'Beach reset'];
-    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null, screen: 'home', user: 'maya', isDrawerOpen: false, entryPrompt: '', selectedTripChips: ['Friends reunion'], planningResponse: '' };
+
+    const PROFILE_TABS = [
+      { id: 'about-me', label: 'About me', intro: 'The profile summary Bounce uses to keep group planning human.', fields: [['Home base', 'Singapore'], ['Vibe', 'Food-first planner, relaxed mornings'], ['Group note', 'Prefer consensus, then clear decisions']] },
+      { id: 'food-diet', label: 'Food & diet', intro: 'Diet and food preferences that should shape every itinerary.', fields: [['Diet', 'Pescatarian-friendly picks'], ['Avoid', 'Shellfish and rushed breakfasts'], ['Loved cuisines', 'Japanese, Portuguese, Mexican street food']] },
+      { id: 'how-i-travel', label: 'How I travel', intro: 'Travel style controls Bounce recommendations and pacing.', fields: [['Pace', 'One anchor plan per day'], ['Transport', 'Trains first, taxis late at night'], ['Accessibility', 'Low walking on arrival day']] },
+      { id: 'past-trips', label: 'Past trips', readOnly: true, intro: 'Past trips tab is read-only so demo history stays stable.', fields: [['CDMX reunion', 'MX$37,000 · ⭐ 4.9'], ['Seoul food crawl', '₩5,900,000 · ⭐ 4.8'], ['Lisbon long weekend', '€1,160 · ⭐ 4.9']] },
+      { id: 'passport-visas', label: 'Passport & visas', intro: 'Travel document reminders without exposing private document numbers.', fields: [['Passport', 'Valid through 2030'], ['Schengen', 'No visa needed for short stays'], ['Japan', 'Visa-free tourist entry']] }
+    ];
+    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null, screen: 'home', user: 'maya', isDrawerOpen: false, entryPrompt: '', selectedTripChips: ['Friends reunion'], planningResponse: '', activeProfileTab: 'about-me', profileFeedback: '' };
 
     function tripById(id) { return DEMO_TRIPS.find((trip) => trip.id === id) || null; }
     function parseHashRoute() {
@@ -256,6 +279,19 @@
       const interests = state.selectedTripChips.length ? state.selectedTripChips.join(', ') : 'group-friendly days';
       return `Organising everyone's ideas… I’ll shape this around ${interests}. For Lisbon, I’d start with a gentle arrival day, one food-led evening, and a sunny group moment everyone can say yes to.`;
     }
+
+    function setProfileTab(tabId) {
+      state.activeProfileTab = tabId;
+      state.profileFeedback = '';
+      renderApp();
+    }
+    function saveProfileTab(tabId) {
+      const tab = PROFILE_TABS.find((item) => item.id === tabId) || PROFILE_TABS[0];
+      if (tab.readOnly) return;
+      state.profileFeedback = `Saved ${tab.label} changes for the demo`;
+      renderApp();
+    }
+
     function submitTripPrompt() {
       const input = document.getElementById('trip-prompt-textarea');
       state.entryPrompt = input ? input.value.trim() : state.entryPrompt;
@@ -336,6 +372,15 @@
       return renderShell(`<section class="entry-conversation"><div class="card entry-hero"><div class="entry-mascot" aria-hidden="true">B</div><div><span class="tag tag-lime">Plan a new trip</span><h1>Where should we bounce next?</h1><p class="muted">Your trip starts here. Tell me what you've got in mind.</p></div></div><div class="card"><label for="trip-prompt-textarea"><strong>Tell Bounce about the trip</strong></label><textarea id="trip-prompt-textarea" class="trip-prompt-textarea" placeholder="e.g. Five friends, Lisbon in July, food, music, not too much walking…">${state.entryPrompt}</textarea><p><strong>What kind of trip is this?</strong></p><div class="trip-type-chips">${TRIP_TYPE_CHIPS.map((chip) => `<button class="trip-type-chip ${state.selectedTripChips.includes(chip) ? 'is-selected' : ''}" onclick="toggleTripChip('${chip}')">${chip}</button>`).join('')}</div><div style="margin-top: var(--sp-4)"><button class="btn btn-primary" onclick="submitTripPrompt()">Ready to bounce →</button></div></div><div class="entry-response"><strong>Bounce</strong><p>${response}</p></div></section>`);
     }
 
+
+    function renderProfileScreen() {
+      const tab = PROFILE_TABS.find((item) => item.id === state.activeProfileTab) || PROFILE_TABS[0];
+      const tabButtons = PROFILE_TABS.map((item) => `<button class="profile-tab ${tab.id === item.id ? 'active' : ''}" onclick="setProfileTab('${item.id}')" aria-selected="${tab.id === item.id}">${item.label}</button>`).join('');
+      const fieldCards = tab.fields.map(([label, value]) => `<div class="profile-field"><strong>${label}</strong><span>${value}</span></div>`).join('');
+      const saveRow = !tab.readOnly ? `<div class="profile-save-row is-anchored"><span class="profile-feedback" aria-live="polite">${state.profileFeedback}</span><button class="btn btn-lime" onclick="saveProfileTab('${tab.id}')">Save changes</button></div>` : `<div class="profile-readonly-note">Past trips tab is read-only and has no save button.</div>`;
+      return renderShell(`<section class="card card-purple"><span class="tag tag-lime">Profile</span><h1>Fariz travel profile</h1><p>Tabbed profile data for the v5 L1 demo. Editable tabs keep their Save changes button anchored at the bottom.</p></section><section class="profile-layout"><aside class="profile-tabs" role="tablist" aria-label="Profile tabs">${tabButtons}</aside><article class="card profile-tab-panel" role="tabpanel"><span class="tag tag-purple">${tab.label}</span><h2>${tab.label}</h2><p class="muted">${tab.intro}</p><div class="profile-field-grid">${fieldCards}</div>${saveRow}</article></section>`);
+    }
+
     function renderTripScreen() {
       const trip = tripById(state.tripId) || DEMO_TRIPS[0];
       const wrap = WRAP_DATA[trip.id];
@@ -349,6 +394,7 @@
     function renderApp() {
       const app = document.getElementById('app');
       if (!app) return;
+      if (state.phase === 'profile') { app.innerHTML = renderProfileScreen(); return; }
       if (state.tripId) { app.innerHTML = renderTripScreen(); return; }
       if (state.phase === 'plan') { app.innerHTML = renderEntryScreen(); return; }
       if (state.phase === 'home') { app.innerHTML = renderHomeScreen(); return; }
