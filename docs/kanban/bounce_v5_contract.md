@@ -46,15 +46,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ### TODO
 
-- **BV5-015 — Local visual/responsive smoke pass**
-  - Objective: Verify the v5 prototype manually and/or through browser smoke at desktop, tablet, and mobile widths.
-  - Acceptance:
-    - 1280px+ full layout works.
-    - 900-1280px itinerary/right-rail behavior works.
-    - <900px mobile drawer and stacked layout work down to 360px.
-    - Browser console has no startup errors.
-    - Representative demo path from PRD Part 12 works end to end.
-
 ### IN_PROGRESS
 
 - None.
@@ -236,6 +227,21 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
     - Tests verify FlockMode photo sharing remains placeholder-only.
     - Tests verify the prototype contains no obvious external asset/script requests; no Babel CDN exception is used in the current L1 file.
 
+- **BV5-015 — Local visual/responsive smoke pass**
+  - Completed on 2026-06-01.
+  - Files:
+    - `docs/qa/bv5_015_visual_responsive_smoke.md`
+    - `docs/qa/assets/bv5-015/desktop-1280-home.png`
+    - `docs/qa/assets/bv5-015/tablet-1024-planning.png`
+    - `docs/qa/assets/bv5-015/mobile-360-home.png`
+    - `tests/frontend/test_bv5_015_visual_smoke.py`
+  - Acceptance met:
+    - 1280px+ desktop app shell/full layout smoke captured.
+    - 1024px tablet planning itinerary/right-rail behavior smoke captured.
+    - 360px mobile stacked layout captured; drawer open/close state verified in browser DOM smoke.
+    - Browser console had no startup or representative-path errors.
+    - Representative v5 demo path was exercised end to end.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -258,6 +264,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ## Current next card recommendation
 
-Recommended next action: **BV5-015 — Local visual/responsive smoke pass**.
+Recommended next action: **BV5-016 — Decide and perform deployment path**.
 
-Reason: the v5 L1 prototype now has automated checks guarding v5 copy, routes, CUT boundaries, placeholder-only FlockMode photo sharing, and self-contained L1 constraints. The next bounded card is the local visual/responsive smoke pass.
+Reason: the v5 L1 prototype has passed local visual/responsive smoke at desktop, tablet, and mobile widths. The next card is blocked on Fariz choosing the deployment path.

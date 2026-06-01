@@ -102,9 +102,9 @@ def test_no_obvious_external_asset_or_script_requests_except_approved_none_for_l
     assert "@import" not in html
 
 
-def test_bv5_contract_marks_automated_checks_done_and_points_to_smoke_pass():
+def test_bv5_contract_marks_automated_checks_done_with_durable_evidence():
     contract = CONTRACT.read_text(encoding="utf-8")
     assert "### DONE" in contract
     assert "- **BV5-014 — Add v5 prototype automated checks**" in contract
     assert "tests/frontend/test_bv5_014_automated_checks.py" in contract
-    assert "Recommended next action: **BV5-015 — Local visual/responsive smoke pass**" in contract
+    assert "Tests verify FlockMode photo sharing remains placeholder-only." in contract
