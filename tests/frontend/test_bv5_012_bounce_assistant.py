@@ -92,8 +92,9 @@ def test_chat_phase_and_fab_route_render_assistant_panel():
     assert "renderBounceAssistantPanel()" in script
 
 
-def test_bv5_contract_marks_assistant_done_and_points_to_judge_panel_card():
+def test_bv5_contract_marks_assistant_done_with_durable_evidence():
     contract = CONTRACT.read_text(encoding="utf-8")
     assert "### DONE" in contract
     assert "- **BV5-012 — Build Bounce assistant panel, FAB, and role labels**" in contract
-    assert "Recommended next action: **BV5-013 — Build draggable Judge / Demo Controls panel**" in contract
+    assert "tests/frontend/test_bv5_012_bounce_assistant.py" in contract
+    assert "L1 responses are deterministic and do not fetch." in contract

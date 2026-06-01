@@ -218,7 +218,11 @@
     .bounce-pill-input { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--sp-2); border-top: 1px solid var(--border-light); padding-top: var(--sp-3); }
     .bounce-pill-input input { border: 1px solid var(--border-light); border-radius: var(--r-pill); padding: 12px 14px; font: inherit; }
     .permission-label { display: inline-flex; border-radius: var(--r-pill); padding: 6px 10px; background: var(--orange-tint); color: var(--warning); font-size: var(--text-xs); font-weight: 900; }
-    .judge-panel { position: fixed; left: var(--sp-6); bottom: var(--sp-6); z-index: var(--z-judge); background: var(--purple); color: var(--text-inverse); border: 2px solid var(--lime); border-radius: var(--r-xl); padding: var(--sp-3); box-shadow: var(--shadow-float); min-width: 240px; user-select: none; }
+    .judge-panel { position: fixed; left: var(--sp-6); bottom: var(--sp-6); z-index: var(--z-judge); background: var(--purple); color: var(--text-inverse); border: 2px solid var(--lime); border-radius: var(--r-xl); padding: var(--sp-3); box-shadow: var(--shadow-float); min-width: 240px; user-select: none; touch-action: none; }
+    .judge-panel-pill { width: 100%; border: 0; border-radius: var(--r-pill); background: var(--lime); color: var(--lime-text); padding: 10px 12px; font-weight: 900; cursor: grab; display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); }
+    .judge-panel-pill:active { cursor: grabbing; }
+    .judge-panel-body { display: grid; gap: var(--sp-2); padding-top: var(--sp-3); }
+    .judge-actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); }
     .judge-panel label { display: block; margin: var(--sp-2) 0 var(--sp-1); font-size: var(--text-xs); color: rgba(255,255,255,.75); text-transform: uppercase; font-weight: 900; letter-spacing: .08em; }
     .judge-panel select { width: 100%; border-radius: var(--r-sm); border: 0; padding: var(--sp-2); }
     .user-pill { margin-top: auto; width: 100%; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); color: var(--text-inverse); border-radius: var(--r-lg); padding: var(--sp-3); display: flex; align-items: center; gap: var(--sp-3); cursor: pointer; text-align: left; }
@@ -382,7 +386,7 @@
       { id: 'past-trips', label: 'Past trips', readOnly: true, intro: 'Past trips tab is read-only so demo history stays stable.', fields: [['CDMX reunion', 'MX$37,000 · ⭐ 4.9'], ['Seoul food crawl', '₩5,900,000 · ⭐ 4.8'], ['Lisbon long weekend', '€1,160 · ⭐ 4.9']] },
       { id: 'passport-visas', label: 'Passport & visas', intro: 'Travel document reminders without exposing private document numbers.', fields: [['Passport', 'Valid through 2030'], ['Schengen', 'No visa needed for short stays'], ['Japan', 'Visa-free tourist entry']] }
     ];
-    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null, screen: 'home', user: 'maya', isDrawerOpen: false, entryPrompt: '', selectedTripChips: ['Friends reunion'], planningResponse: '', activeProfileTab: 'about-me', profileFeedback: '', activePlanningDay: 0, planningView: 'Timeline', budgetFeedback: '', activeFlock: 'main', disruptionOpen: false, expenseSplitMode: 'Equally', expenseCategory: 'Food', expenseFeedback: '', showEmptyAlerts: false, isBounceOpen: false, bounceInput: '', bounceMessages: [{ sender: 'Bounce', text: 'I can help with the current demo screen using local prototype data.' }] };
+    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null, screen: 'home', user: 'maya', isDrawerOpen: false, entryPrompt: '', selectedTripChips: ['Friends reunion'], planningResponse: '', activeProfileTab: 'about-me', profileFeedback: '', activePlanningDay: 0, planningView: 'Timeline', budgetFeedback: '', activeFlock: 'main', disruptionOpen: false, expenseSplitMode: 'Equally', expenseCategory: 'Food', expenseFeedback: '', showEmptyAlerts: false, isBounceOpen: false, bounceInput: '', bounceMessages: [{ sender: 'Bounce', text: 'I can help with the current demo screen using local prototype data.' }], isJudgeOpen: true, judgePosition: null, judgeDrag: null, judgeFeedback: 'Ready for judge walkthrough.' };
 
     function tripById(id) { return DEMO_TRIPS.find((trip) => trip.id === id) || null; }
     function parseHashRoute() {
@@ -423,6 +427,57 @@
     function setTripContext(id) { if (id === null) state.tripId = null; else state.tripId = id; const trip = tripById(id); state.phase = trip ? routeToTrip(trip) : 'home'; if (id === null) window.location.hash = 'screen=home&phase=home&user=' + encodeURIComponent(state.user); closeMobileDrawer(); renderApp(); }
     function setRole(role) { state.role = role; renderApp(); }
     function setPhase(phase) { state.phase = phase; closeMobileDrawer(); renderApp(); }
+    function setDemoPhase(phase) {
+      state.tripId = null;
+      if (phase === 'planning-itinerary') state.tripId = 'lisbon-bday';
+      if (phase === 'active-today') state.tripId = 'tokyo-live';
+      if (phase === 'wrap') state.tripId = 'cdmx-reunion';
+      state.phase = phase;
+      state.judgeFeedback = `Showing ${phase.replace(/-/g, ' ')}.`;
+      closeMobileDrawer();
+      renderApp();
+    }
+    function toggleJudgePanel() { state.isJudgeOpen = !state.isJudgeOpen; renderApp(); }
+    function triggerDemoDisruption() {
+      state.tripId = 'tokyo-live';
+      state.phase = 'active-today';
+      state.disruptionOpen = true;
+      state.judgeFeedback = 'Disruption triggered for the Tokyo active trip.';
+      renderApp();
+    }
+    function resetDemoControls() {
+      state.role = 'organiser';
+      state.tripId = null;
+      state.phase = 'home';
+      state.disruptionOpen = false;
+      state.showEmptyAlerts = false;
+      state.activeFlock = 'main';
+      state.expenseSplitMode = 'Equally';
+      state.expenseCategory = 'Food';
+      state.judgePosition = null;
+      state.isJudgeOpen = true;
+      state.judgeFeedback = 'Demo controls reset.';
+      renderApp();
+    }
+    function startJudgeDrag(event) {
+      const panel = event.currentTarget.closest('.judge-panel');
+      if (!panel) return;
+      const rect = panel.getBoundingClientRect();
+      state.judgeDrag = { offsetX: event.clientX - rect.left, offsetY: event.clientY - rect.top };
+      if (event.currentTarget.setPointerCapture) {
+        try { event.currentTarget.setPointerCapture(event.pointerId); } catch (error) { /* Synthetic smoke events may not have an active pointer capture target. */ }
+      }
+    }
+    function moveJudgeDrag(event) {
+      if (!state.judgeDrag) return;
+      const panelWidth = 260;
+      const panelHeight = state.isJudgeOpen ? 280 : 54;
+      const x = Math.max(12, Math.min(window.innerWidth - panelWidth - 12, event.clientX - state.judgeDrag.offsetX));
+      const y = Math.max(12, Math.min(window.innerHeight - panelHeight - 12, event.clientY - state.judgeDrag.offsetY));
+      state.judgePosition = { x, y };
+      renderApp();
+    }
+    function endJudgeDrag() { state.judgeDrag = null; }
     function toggleTripChip(chip) {
       state.selectedTripChips = state.selectedTripChips.includes(chip)
         ? state.selectedTripChips.filter((item) => item !== chip)
@@ -653,7 +708,10 @@
     }
 
     function renderJudgePanel() {
-      return `<aside class="judge-panel" aria-label="Demo controls"><strong>⚡ Demo controls · drag me</strong><label>Role</label><select onchange="setRole(this.value)"><option value="organiser">Organiser</option><option value="co-leader">Co-leader</option><option value="flock-leader">Flock leader</option><option value="member">Member</option></select><label>Phase</label><select onchange="setPhase(this.value)"><option value="home">Home</option><option value="planning">Planning</option><option value="active">Active</option><option value="past">Past</option></select></aside>`;
+      const positionStyle = state.judgePosition ? ` style="left: ${state.judgePosition.x}px; bottom: auto; top: ${state.judgePosition.y}px;"` : '';
+      const phases = [['home', 'Home'], ['planning-itinerary', 'Planning'], ['active-today', 'Active'], ['wrap', 'Past wrap'], ['chat', 'Chat']];
+      const phaseOptions = phases.map(([value, label]) => `<option value="${value}" ${state.phase === value ? 'selected' : ''}>${label}</option>`).join('');
+      return `<aside class="judge-panel" aria-label="Demo controls"${positionStyle} onpointermove="moveJudgeDrag(event)" onpointerup="endJudgeDrag()" onpointercancel="endJudgeDrag()"><button class="judge-panel-pill" aria-expanded="${state.isJudgeOpen}" onpointerdown="startJudgeDrag(event)" onclick="toggleJudgePanel()"><span>⚡ Demo controls</span><span>drag me</span></button>${state.isJudgeOpen ? `<div class="judge-panel-body"><strong>⚡ Demo controls · drag me</strong><label>Role</label><select onchange="setRole(this.value)"><option value="organiser" ${state.role === 'organiser' ? 'selected' : ''}>Organiser</option><option value="co-leader" ${state.role === 'co-leader' ? 'selected' : ''}>Co-leader</option><option value="flock-leader" ${state.role === 'flock-leader' ? 'selected' : ''}>Flock leader</option><option value="member" ${state.role === 'member' ? 'selected' : ''}>Member</option></select><label>Phase</label><select onchange="setDemoPhase(this.value)">${phaseOptions}</select><div class="judge-actions"><button class="btn btn-lime" onclick="triggerDemoDisruption()">Trigger disruption</button><button class="btn btn-ghost" onclick="resetDemoControls()">Reset demo controls</button></div><small aria-live="polite">${state.judgeFeedback}</small></div>` : ''}</aside>`;
     }
 
     function renderApp() {

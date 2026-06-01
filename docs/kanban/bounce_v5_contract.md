@@ -46,14 +46,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ### TODO
 
-- **BV5-013 — Build draggable Judge / Demo Controls panel**
-  - Objective: Implement the v5 judge panel as the primary demo driver.
-  - Acceptance:
-    - Panel starts bottom-left, has z-index 500, and can be dragged.
-    - Panel toggles open/collapsed with lime pill `⚡ Demo controls`.
-    - Role selector, phase selector, Trigger disruption, and Reset demo controls work visibly.
-    - Label is `⚡ Demo controls · drag me`.
-
 - **BV5-014 — Add v5 prototype automated checks**
   - Objective: Guard the v5 prototype against regressions and accidental scope violations.
   - Acceptance:
@@ -230,6 +222,17 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
     - Permission label changes for Organiser/Co-leader, Flock leader, and Member.
     - L1 responses are deterministic and do not fetch.
 
+- **BV5-013 — Build draggable Judge / Demo Controls panel**
+  - Completed on 2026-06-01.
+  - Files:
+    - `frontend/bounce_v5_prototype.html`
+    - `tests/frontend/test_bv5_013_demo_controls.py`
+  - Acceptance met:
+    - Panel starts bottom-left with z-index 500 and can be dragged with pointer events.
+    - Panel toggles open/collapsed with lime pill `⚡ Demo controls`.
+    - Role selector, phase selector, Trigger disruption, and Reset demo controls work visibly.
+    - Label is `⚡ Demo controls · drag me`.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -252,6 +255,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ## Current next card recommendation
 
-Recommended next action: **BV5-013 — Build draggable Judge / Demo Controls panel**.
+Recommended next action: **BV5-014 — Add v5 prototype automated checks**.
 
-Reason: the v5 L1 prototype now has the Bounce assistant panel, FAB behavior, role labels, and deterministic offline responses. The next bounded card is the draggable Judge / Demo Controls panel.
+Reason: the v5 L1 prototype now has the draggable Judge / Demo Controls panel as the primary demo driver. The next bounded card is the prototype automated checks card.
