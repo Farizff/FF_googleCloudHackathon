@@ -81,8 +81,9 @@ def test_demo_controls_role_phase_trigger_disruption_and_reset_actions():
         assert marker in script
 
 
-def test_demo_controls_contract_done_and_points_to_automated_checks():
+def test_demo_controls_contract_done_with_durable_evidence():
     contract = CONTRACT.read_text(encoding="utf-8")
     assert "### DONE" in contract
     assert "- **BV5-013 — Build draggable Judge / Demo Controls panel**" in contract
-    assert "Recommended next action: **BV5-014 — Add v5 prototype automated checks**" in contract
+    assert "tests/frontend/test_bv5_013_demo_controls.py" in contract
+    assert "Panel toggles open/collapsed with lime pill `⚡ Demo controls`." in contract

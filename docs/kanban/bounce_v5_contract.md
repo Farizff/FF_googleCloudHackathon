@@ -46,14 +46,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ### TODO
 
-- **BV5-014 — Add v5 prototype automated checks**
-  - Objective: Guard the v5 prototype against regressions and accidental scope violations.
-  - Acceptance:
-    - Tests verify required v5 copy, routes/hash states, nav labels, CUT placeholders, and no removed routes.
-    - Tests verify no localStorage/sessionStorage usage in the prototype.
-    - Tests verify FlockMode photo sharing remains placeholder-only.
-    - Tests verify the prototype contains no obvious external asset/script requests except any explicitly approved Babel CDN exception from PRD v5.
-
 - **BV5-015 — Local visual/responsive smoke pass**
   - Objective: Verify the v5 prototype manually and/or through browser smoke at desktop, tablet, and mobile widths.
   - Acceptance:
@@ -233,6 +225,17 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
     - Role selector, phase selector, Trigger disruption, and Reset demo controls work visibly.
     - Label is `⚡ Demo controls · drag me`.
 
+- **BV5-014 — Add v5 prototype automated checks**
+  - Completed on 2026-06-01.
+  - Files:
+    - `tests/frontend/test_bv5_014_automated_checks.py`
+    - `tests/frontend/test_bv5_013_demo_controls.py`
+  - Acceptance met:
+    - Tests verify required v5 copy, routes/hash states, nav labels, CUT placeholders, and no removed routes.
+    - Tests verify no localStorage/sessionStorage usage in the prototype.
+    - Tests verify FlockMode photo sharing remains placeholder-only.
+    - Tests verify the prototype contains no obvious external asset/script requests; no Babel CDN exception is used in the current L1 file.
+
 ### CUT — do not build without approval
 
 - FlockMode photo sharing beyond the placeholder.
@@ -255,6 +258,6 @@ Reason: v5 conflicts with the current repo baseline in a fundamental way. The cu
 
 ## Current next card recommendation
 
-Recommended next action: **BV5-014 — Add v5 prototype automated checks**.
+Recommended next action: **BV5-015 — Local visual/responsive smoke pass**.
 
-Reason: the v5 L1 prototype now has the draggable Judge / Demo Controls panel as the primary demo driver. The next bounded card is the prototype automated checks card.
+Reason: the v5 L1 prototype now has automated checks guarding v5 copy, routes, CUT boundaries, placeholder-only FlockMode photo sharing, and self-contained L1 constraints. The next bounded card is the local visual/responsive smoke pass.
