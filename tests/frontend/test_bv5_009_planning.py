@@ -81,6 +81,10 @@ def test_planning_role_aware_activity_menus_and_member_read_only_copy():
     assert "state.role !== 'member'" in script
     assert "activity-menu" in script
     assert "aria-label=\"Activity options\"" in script
+    assert "openActivityActions" in script
+    assert "Move time" in script
+    assert "Ask Bounce" in script
+    assert "Activity action ready" in script
     assert "Members can suggest changes, but organisers edit the plan." in script
     assert "Admin roles can rebalance timing, budget, and options." in script
 
@@ -133,11 +137,41 @@ def test_suggestions_have_two_pending_items_and_lime_badge_over_nav_icon():
     assert "background: var(--lime)" in css
 
 
+def test_suggestion_review_buttons_open_visible_local_review_flow():
+    script = script_text()
+    for marker in [
+        "openSuggestionReview",
+        "approveSuggestion",
+        "askGroupAboutSuggestion",
+        "dismissSuggestion",
+        "suggestion-review-panel",
+        "Approve",
+        "Ask group",
+        "Dismiss",
+        "Suggestion approved for the demo",
+    ]:
+        assert marker in script
+
+
+def test_timeline_map_toggle_changes_planning_layout_visibly():
+    script = script_text()
+    css = style_text()
+    for marker in [
+        "planning-map-first",
+        "Map view selected — showing the route first",
+        "renderPlanningTimelinePanel",
+        "renderPlanningMapFirstPanel",
+    ]:
+        assert marker in script or marker in css
+
+
 def test_planning_phases_route_to_specific_screens():
     script = script_text()
     assert "if (state.phase === 'planning-itinerary') { app.innerHTML = renderPlanningItineraryScreen(); return; }" in script
     assert "if (state.phase === 'planning-flights') { app.innerHTML = renderPlanningFlightsScreen(); return; }" in script
     assert "if (state.phase === 'planning-suggestions') { app.innerHTML = renderPlanningSuggestionsScreen(); return; }" in script
+    assert "if (state.phase === 'planning-flock') { app.innerHTML = renderPlanningFlockScreen(); return; }" in script
+    assert "Planning FlockMode" in script
 
 
 def test_bv5_contract_marks_planning_done():

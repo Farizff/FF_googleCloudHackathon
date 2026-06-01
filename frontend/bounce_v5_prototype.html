@@ -189,6 +189,12 @@
     .flight-option { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--sp-3); border: 1px solid var(--border-light); border-radius: var(--r-lg); padding: var(--sp-4); background: var(--bg-card); }
     .suggestions-list { display: grid; gap: var(--sp-3); }
     .suggestion-card { border-left: 4px solid var(--lime-dark); }
+    .action-feedback { border: 1px solid var(--lime-dark); border-radius: var(--r-lg); background: var(--lime-tint); color: var(--lime-text); padding: var(--sp-3); font-weight: 900; }
+    .activity-action-panel, .suggestion-review-panel { display: grid; gap: var(--sp-3); border: 1px solid var(--border-light); border-radius: var(--r-lg); padding: var(--sp-4); background: var(--bg-raised); }
+    .activity-action-row { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+    .planning-map-first { grid-template-columns: minmax(320px, 1fr); }
+    .planning-map-first .planning-map-card { min-height: 440px; }
+    .planning-map-first .google-map-canvas { min-height: 360px; }
     .suggestions-nav-label { position: relative; display: inline-flex; align-items: center; gap: var(--sp-2); }
     .suggestions-nav-badge { position: absolute; right: -16px; top: -10px; min-width: 20px; height: 20px; border-radius: 50%; background: var(--lime); color: var(--lime-text); display: inline-flex; align-items: center; justify-content: center; font-size: var(--text-xs); font-weight: 900; border: 1px solid var(--purple); }
 
@@ -404,7 +410,7 @@
       { id: 'past-trips', label: 'Past trips', readOnly: true, intro: 'Past trips tab is read-only so demo history stays stable.', fields: [['CDMX reunion', 'MX$37,000 · ⭐ 4.9'], ['Seoul food crawl', '₩5,900,000 · ⭐ 4.8'], ['Lisbon long weekend', '€1,160 · ⭐ 4.9']] },
       { id: 'passport-visas', label: 'Passport & visas', intro: 'Travel document reminders without exposing private document numbers.', fields: [['Passport', 'Valid through 2030'], ['Schengen', 'No visa needed for short stays'], ['Japan', 'Visa-free tourist entry']] }
     ];
-    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null, screen: 'home', user: 'maya', isDrawerOpen: false, entryPrompt: '', selectedTripChips: ['Friends reunion'], planningResponse: '', activeProfileTab: 'about-me', profileFeedback: '', activePlanningDay: 0, planningView: 'Timeline', budgetFeedback: '', activeFlock: 'main', disruptionOpen: false, expenseSplitMode: 'Equally', expenseCategory: 'Food', expenseFeedback: '', showEmptyAlerts: false, isBounceOpen: false, bounceInput: '', bounceMessages: [{ sender: 'Bounce', text: 'I can help with the current demo screen using local prototype data.' }], isJudgeOpen: true, judgePosition: null, judgeDrag: null, judgeFeedback: 'Ready for judge walkthrough.' };
+    const state = { route: '/', role: 'organiser', phase: 'home', tripId: null, screen: 'home', user: 'maya', isDrawerOpen: false, entryPrompt: '', selectedTripChips: ['Friends reunion'], planningResponse: '', activeProfileTab: 'about-me', profileFeedback: '', activePlanningDay: 0, planningView: 'Timeline', activityAction: null, suggestionReview: null, suggestionFeedback: '', budgetFeedback: '', activeFlock: 'main', disruptionOpen: false, activeActionFeedback: '', expenseSplitMode: 'Equally', expenseCategory: 'Food', expenseFeedback: '', showEmptyAlerts: false, isBounceOpen: false, bounceInput: '', bounceMessages: [{ sender: 'Bounce', text: 'I can help with the current demo screen using local prototype data.' }], isJudgeOpen: true, judgePosition: null, judgeDrag: null, judgeFeedback: 'Ready for judge walkthrough.' };
 
     function tripById(id) { return DEMO_TRIPS.find((trip) => trip.id === id) || null; }
     function parseHashRoute() {
@@ -470,6 +476,10 @@
       state.disruptionOpen = false;
       state.showEmptyAlerts = false;
       state.activeFlock = 'main';
+      state.activityAction = null;
+      state.suggestionReview = null;
+      state.suggestionFeedback = '';
+      state.activeActionFeedback = '';
       state.expenseSplitMode = 'Equally';
       state.expenseCategory = 'Food';
       state.judgePosition = null;
@@ -661,6 +671,13 @@
           if (el) el.innerHTML = renderMapFallback(points);
         }));
     }
+    function openActivityActions(title) { state.activityAction = title; renderApp(); }
+    function chooseActivityAction(action) { state.activityAction = `Activity action ready: ${action}`; renderApp(); }
+    function openSuggestionReview(title) { state.suggestionReview = title; state.suggestionFeedback = `Reviewing ${title}`; renderApp(); }
+    function approveSuggestion() { state.suggestionFeedback = 'Suggestion approved for the demo'; renderApp(); }
+    function askGroupAboutSuggestion() { state.suggestionFeedback = 'Group question drafted for this suggestion'; renderApp(); }
+    function dismissSuggestion() { state.suggestionFeedback = 'Suggestion dismissed for the demo'; state.suggestionReview = null; renderApp(); }
+    function sendLateGroupPing() { state.activeActionFeedback = 'Ping drafted: Meet at Hachikō in 10 minutes.'; renderApp(); }
     function planningTrip() { return tripById(state.tripId) || DEMO_TRIPS.find((trip) => trip.state === 'planning') || DEMO_TRIPS[0]; }
     function renderPlanningHero(title, subtitle) {
       const trip = planningTrip();
@@ -668,28 +685,47 @@
       return `<section class="card card-purple"><span class="tag tag-lime">Planning · ${trip.city}</span><h1>${title}</h1><p>${subtitle}</p><p>${roleCopy}</p></section>`;
     }
     function renderActivityCard(activity) {
-      const menu = canEditPlanning() ? `<button class="activity-menu" aria-label="Activity options">⋯</button>` : `<span class="tag tag-purple">View only</span>`;
+      const menu = canEditPlanning() ? `<button class="activity-menu" aria-label="Activity options" onclick="openActivityActions('${activity.title.replace(/'/g, "\'")}')">⋯</button>` : `<span class="tag tag-purple">View only</span>`;
       return `<article class="activity-card"><span class="activity-time">${activity.time}</span><span><strong>${activity.title}</strong><br><span class="muted">${activity.meta}</span></span>${menu}</article>`;
     }
     function renderBudgetCard() {
       const trip = planningTrip();
       return `<aside class="card budget-card"><span class="tag tag-lime">BudgetCard</span><h2>Budget</h2><p class="muted">${trip.budget.currency} ${trip.budget.total} total · ${trip.budget.currency} ${trip.budget.perDay}/person/day target</p><div class="budget-input-grid"><label><strong>Total budget</strong><input id="budget-total-input" value="${trip.budget.total}" inputmode="numeric"></label><label><strong>Per-day target</strong><input id="budget-per-day-input" value="${trip.budget.perDay}" inputmode="numeric"></label></div><div class="budget-save-row is-anchored"><span class="profile-feedback" aria-live="polite">${state.budgetFeedback}</span><button class="btn btn-lime" onclick="saveBudgetDraft()">Save budget</button></div></aside>`;
     }
+    function renderActivityActionPanel() {
+      if (!state.activityAction) return '';
+      const title = state.activityAction.startsWith('Activity action ready') ? 'Activity action ready' : `Actions for ${state.activityAction}`;
+      const body = state.activityAction.startsWith('Activity action ready') ? `<p class="action-feedback">${state.activityAction}</p>` : `<div class="activity-action-row"><button class="btn btn-lime" onclick="chooseActivityAction('Move time')">Move time</button><button class="btn btn-ghost" onclick="chooseActivityAction('Mark as fixed')">Mark as fixed</button><button class="btn btn-primary" onclick="chooseActivityAction('Ask Bounce')">Ask Bounce</button></div>`;
+      return `<section class="activity-action-panel" aria-live="polite"><strong>${title}</strong>${body}</section>`;
+    }
+    function renderPlanningTimelinePanel(activeDay, toggles) {
+      return `<section class="card"><div class="view-toggle" aria-label="Itinerary view toggle">${toggles}</div><h2>${activeDay.day}: ${activeDay.title}</h2>${activeDay.activities.map(renderActivityCard).join('')}${renderActivityActionPanel()}</section>`;
+    }
+    function renderPlanningMapFirstPanel(activeDay, toggles, planningMap) {
+      const stops = BOUNCE_MAP_POINTS.planning.map((point) => `<li>${point.label}</li>`).join('');
+      return `<section class="planning-layout planning-map-first"><section class="card"><div class="view-toggle" aria-label="Itinerary view toggle">${toggles}</div><h2>Map view selected — showing the route first</h2><p class="muted">${activeDay.day}: ${activeDay.title}</p><ol class="map-point-list">${stops}</ol></section>${planningMap}</section>`;
+    }
     function renderPlanningItineraryScreen() {
       const activeDay = PLANNING_DAYS[state.activePlanningDay] || PLANNING_DAYS[0];
       const dayRail = PLANNING_DAYS.map((day, index) => `<button class="${index === state.activePlanningDay ? 'active' : ''}" onclick="setPlanningDay(${index})">${day.day}</button>`).join('');
       const toggles = ['Timeline', 'Map'].map((view) => `<button class="${state.planningView === view ? 'active' : ''}" onclick="setPlanningView('${view}')">${view}</button>`).join('');
       const planningMap = renderGoogleMapCard('planning-google-map', 'Real Google map · Lisbon planning route', BOUNCE_MAP_POINTS.planning);
+      const mainPanel = state.planningView === 'Map' ? renderPlanningMapFirstPanel(activeDay, toggles, planningMap) : `<div class="planning-main-grid">${renderPlanningTimelinePanel(activeDay, toggles)}<div class="planning-layout">${renderBudgetCard()}${planningMap}</div></div>`;
       window.setTimeout(ensureGoogleMapsRendered, 0);
-      return renderShell(`<section class="planning-layout">${renderPlanningHero('Lisbon planning board', 'Itinerary, budget, map, flights, and suggestions for Maya’s 30th.')}<div class="planning-day-rail" aria-label="Planning day rail">${dayRail}</div><div class="planning-main-grid"><section class="card"><div class="view-toggle" aria-label="Itinerary view toggle">${toggles}</div><h2>${activeDay.day}: ${activeDay.title}</h2>${activeDay.activities.map(renderActivityCard).join('')}</section><div class="planning-layout">${renderBudgetCard()}${planningMap}</div></div></section>`);
+      return renderShell(`<section class="planning-layout">${renderPlanningHero('Lisbon planning board', 'Itinerary, budget, map, flights, and suggestions for Maya’s 30th.')}<div class="planning-day-rail" aria-label="Planning day rail">${dayRail}</div>${mainPanel}</section>`);
     }
     function renderPlanningFlightsScreen() {
       const groups = FLIGHT_GROUPS.map((group) => `<section class="card flight-group"><h2>${group.origin}</h2>${group.options.map((option) => `<article class="flight-option"><span><strong>${option.airline}</strong><br><span class="muted">${option.time} · ${option.price}</span></span><span class="tag ${option.risk === 'Low risk' ? 'tag-lime' : option.risk === 'Medium risk' ? 'tag-orange' : 'tag-purple'}">${option.risk}</span></article>`).join('')}</section>`).join('');
       return renderShell(`<section class="planning-layout">${renderPlanningHero('Flight options by origin', 'Three visible options per origin group, with demo risk labels for judge review.')}<div class="planning-layout">${groups}</div></section>`);
     }
     function renderPlanningSuggestionsScreen() {
-      const cards = SUGGESTIONS.map((item) => `<article class="card suggestion-card"><span class="tag tag-lime">${item.status}</span><h2>${item.title}</h2><p class="muted">Suggested by ${item.by}. ${item.note}</p>${canEditPlanning() ? '<button class="btn btn-primary">Review suggestion</button>' : '<span class="tag tag-purple">Waiting for organiser</span>'}</article>`).join('');
-      return renderShell(`<section class="planning-layout">${renderPlanningHero('Pending suggestions', 'Two local suggestions are ready for organiser review.')}<div class="suggestions-list">${cards}</div></section>`);
+      const cards = SUGGESTIONS.map((item) => `<article class="card suggestion-card"><span class="tag tag-lime">${item.status}</span><h2>${item.title}</h2><p class="muted">Suggested by ${item.by}. ${item.note}</p>${canEditPlanning() ? `<button class="btn btn-primary" onclick="openSuggestionReview('${item.title.replace(/'/g, "\'")}')">Review suggestion</button>` : '<span class="tag tag-purple">Waiting for organiser</span>'}</article>`).join('');
+      const review = state.suggestionReview ? `<section class="suggestion-review-panel" aria-live="polite"><strong>Reviewing ${state.suggestionReview}</strong><p class="muted">Choose a deterministic L1 outcome for the judge demo.</p><div class="activity-action-row"><button class="btn btn-lime" onclick="approveSuggestion()">Approve</button><button class="btn btn-primary" onclick="askGroupAboutSuggestion()">Ask group</button><button class="btn btn-ghost" onclick="dismissSuggestion()">Dismiss</button></div></section>` : '';
+      const feedback = state.suggestionFeedback ? `<p class="action-feedback" aria-live="polite">${state.suggestionFeedback}</p>` : '';
+      return renderShell(`<section class="planning-layout">${renderPlanningHero('Pending suggestions', 'Two local suggestions are ready for organiser review.')}<div class="suggestions-list">${cards}</div>${review}${feedback}</section>`);
+    }
+    function renderPlanningFlockScreen() {
+      return renderShell(`<section class="planning-layout">${renderPlanningHero('Planning FlockMode', 'Preview how the Lisbon group can split during planning without opening the active-trip tools.')}<section class="card"><h2>Draft Lisbon flocks</h2><p class="muted">Main group keeps the low-walking route. Food scout checks dinner options. Beach reset stays optional.</p><p class="action-feedback">Planning FlockMode is a preview only; active FlockMode stays on the Tokyo trip.</p></section></section>`);
     }
 
 
@@ -710,7 +746,8 @@
     }
     function renderActiveTodayScreen() {
       const cards = ACTIVE_TODAY.map((item) => `<article class="today-card"><span class="activity-time">${item.time}</span><span><strong>${item.title}</strong><br><span class="muted">${item.meta}</span></span></article>`).join('');
-      return renderShell(`<section class="planning-layout">${activeHero('Tokyo Day 3', 'Today keeps the active trip moving with quick local actions.')}<div class="active-today-grid"><section class="card"><h2>Today schedule</h2>${cards}</section><aside class="card"><h2>Quick actions</h2><div class="quick-action-grid"><button class="btn btn-primary">Ping late group</button><button class="btn btn-lime" onclick="setPhase('active-flock')">Open FlockMode</button><button class="btn btn-ghost" onclick="openDisruptionModal()">Trigger disruption</button></div></aside></div></section>${renderDisruptionModal()}`);
+      const feedback = state.activeActionFeedback ? `<p class="action-feedback" aria-live="polite">${state.activeActionFeedback}</p>` : '';
+      return renderShell(`<section class="planning-layout">${activeHero('Tokyo Day 3', 'Today keeps the active trip moving with quick local actions.')}<div class="active-today-grid"><section class="card"><h2>Today schedule</h2>${cards}</section><aside class="card"><h2>Quick actions</h2><div class="quick-action-grid"><button class="btn btn-primary" onclick="sendLateGroupPing()">Ping late group</button><button class="btn btn-lime" onclick="setPhase('active-flock')">Open FlockMode</button><button class="btn btn-ghost" onclick="openDisruptionModal()">Trigger disruption</button></div>${feedback}</aside></div></section>${renderDisruptionModal()}`);
     }
     function renderActiveFlockScreen() {
       const flock = FLOCKS.find((item) => item.id === state.activeFlock) || FLOCKS[0];
@@ -790,6 +827,7 @@
       if (state.phase === 'planning-itinerary') { app.innerHTML = renderPlanningItineraryScreen(); return; }
       if (state.phase === 'planning-flights') { app.innerHTML = renderPlanningFlightsScreen(); return; }
       if (state.phase === 'planning-suggestions') { app.innerHTML = renderPlanningSuggestionsScreen(); return; }
+      if (state.phase === 'planning-flock') { app.innerHTML = renderPlanningFlockScreen(); return; }
       if (state.phase === 'active-today') { app.innerHTML = renderActiveTodayScreen(); return; }
       if (state.phase === 'active-flock') { app.innerHTML = renderActiveFlockScreen(); return; }
       if (state.phase === 'active-expenses') { app.innerHTML = renderActiveExpensesScreen(); return; }
