@@ -16,11 +16,16 @@ GOOGLE_MAPS_PLACEHOLDER = "__GOOGLE_MAPS_API_KEY__"
 def render_index_html() -> bytes:
     html_text = INDEX_HTML.read_text(encoding="utf-8")
     maps_key = html.escape(os.environ.get("GOOGLE_MAPS_API_KEY", "").strip(), quote=True)
-    return html_text.replace(
-        f'content="{GOOGLE_MAPS_PLACEHOLDER}"',
-        f'content="{maps_key}"',
-        1,
-    ).encode("utf-8")
+    escaped_meta = f'content=\\"{GOOGLE_MAPS_PLACEHOLDER}\\"'
+    if escaped_meta in html_text:
+        html_text = html_text.replace(escaped_meta, f'content=\\"{maps_key}\\"', 1)
+    else:
+        html_text = html_text.replace(
+            f'content="{GOOGLE_MAPS_PLACEHOLDER}"',
+            f'content="{maps_key}"',
+            1,
+        )
+    return html_text.encode("utf-8")
 
 
 class BounceV5Handler(BaseHTTPRequestHandler):

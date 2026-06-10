@@ -73,8 +73,20 @@ def test_no_browser_storage_or_fetch_apis_in_application_source():
     assert "fetch(" not in src
 
 
+def test_google_maps_script_is_runtime_loaded_from_injected_key():
+    # WHY: the itinerary map must be a real Google Maps widget in the hosted
+    # prototype, but the browser-visible API key must still be injected by the
+    # Cloud Run server instead of committed into the static artifact.
+    src = app_source()
+    assert "getGoogleMapsApiKey" in src
+    assert "google-maps-api-key" in raw_html()
+    assert "https://maps.googleapis.com/maps/api/js" in src
+    assert "new google.maps.Map" in src
+    assert "GoogleMapCard" in src
+
+
 @pytest.mark.parametrize("path", [str(FRONTEND), str(CLOUDRUN)])
 def test_no_hardcoded_google_maps_key_in_either_build(path):
-    # WHY: the React build renders an inline SVG map, so no Maps key is needed
-    # or embedded. This guards against a real API key leaking into a public file.
+    # WHY: Google Maps uses a browser-visible key injected by Cloud Run at
+    # runtime. The committed single-file artifact must never contain a real key.
     assert "AIza" not in raw_html(path)

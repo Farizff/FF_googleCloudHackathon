@@ -1,3 +1,7 @@
+import json
+import re
+import runpy
+
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -21,14 +25,24 @@ def test_bv5_016_cloud_run_source_serves_v5_prototype_and_health():
     assert "GOOGLE_MAPS_API_KEY" in app_py
     assert "__GOOGLE_MAPS_API_KEY__" in app_py
     assert index_html == prototype_html
-    # The adopted React build is a self-contained bundler artifact: it renders
-    # an inline SVG map (no Google Maps), so the served file no longer carries a
-    # __GOOGLE_MAPS_API_KEY__ placeholder. app.py's key-injection replace is now
-    # a harmless no-op kept for the deployment contract (see kanban adopt-react
-    # note). The signature hero copy lives inside base64 assets, not plaintext,
-    # so assert the bundler structure instead of greppable copy.
+    # The adopted React build is a self-contained bundler artifact. Google Maps
+    # is loaded from decoded application source and receives its browser-visible
+    # key through Cloud Run's runtime template injection, never from a committed
+    # raw key.
     assert "__bundler/manifest" in index_html
+    assert "google-maps-api-key" in index_html
     assert "AIza" not in index_html  # no real Maps key may leak into the public file
+
+
+def test_bv5_016_cloud_run_injects_google_maps_key_into_bundled_template(monkeypatch):
+    app = runpy.run_path(str(DEPLOY_DIR / "app.py"))
+    monkeypatch.setenv("GOOGLE_MAPS_API_KEY", "TEST_MAPS_KEY")
+
+    rendered = app["render_index_html"]().decode("utf-8")
+    template = json.loads(re.search(r'<script type="__bundler/template">(.*?)</script>', rendered, re.S).group(1))
+
+    assert 'meta name="google-maps-api-key" content="TEST_MAPS_KEY"' in template
+    assert 'content="__GOOGLE_MAPS_API_KEY__"' not in template
 
 
 def test_bv5_016_contract_records_option_2_deployment_target():
