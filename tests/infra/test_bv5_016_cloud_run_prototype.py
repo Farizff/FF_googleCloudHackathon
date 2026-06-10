@@ -21,9 +21,14 @@ def test_bv5_016_cloud_run_source_serves_v5_prototype_and_health():
     assert "GOOGLE_MAPS_API_KEY" in app_py
     assert "__GOOGLE_MAPS_API_KEY__" in app_py
     assert index_html == prototype_html
-    assert "__GOOGLE_MAPS_API_KEY__" in index_html
-    assert "AIza" not in index_html
-    assert "Your trip starts here" in index_html
+    # The adopted React build is a self-contained bundler artifact: it renders
+    # an inline SVG map (no Google Maps), so the served file no longer carries a
+    # __GOOGLE_MAPS_API_KEY__ placeholder. app.py's key-injection replace is now
+    # a harmless no-op kept for the deployment contract (see kanban adopt-react
+    # note). The signature hero copy lives inside base64 assets, not plaintext,
+    # so assert the bundler structure instead of greppable copy.
+    assert "__bundler/manifest" in index_html
+    assert "AIza" not in index_html  # no real Maps key may leak into the public file
 
 
 def test_bv5_016_contract_records_option_2_deployment_target():

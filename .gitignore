@@ -35,3 +35,7 @@ Thumbs.db
 # Google Cloud / local deploy artifacts
 .gcloud/
 .cloudbuild/
+
+# QA click-through screenshots (generated evidence, not runtime assets)
+docs/qa/assets/react-build/
+scripts/qa_clickthrough.py
